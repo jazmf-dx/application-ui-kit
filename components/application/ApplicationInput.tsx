@@ -58,7 +58,9 @@ export const ApplicationInput = React.forwardRef<HTMLInputElement, ApplicationIn
         // エラー状態を支援技術にも伝える（色だけに頼らない）
         aria-invalid={error || undefined}
         className={cn(
-          "w-full rounded-lg border bg-background px-3.5 py-2.5 text-sm text-foreground transition-colors",
+          // bg-card は theme.css の `.input-field`（background-color: var(--color-card)）に合わせる。
+          // bg-background にするとダークモードだけテンプレート側と地色がズレる。
+          "w-full rounded-lg border bg-card px-3.5 py-2.5 text-sm text-foreground transition-colors",
           "placeholder:text-muted-foreground",
           "focus:outline-none focus:ring-2",
           "disabled:cursor-not-allowed disabled:bg-muted disabled:opacity-60",

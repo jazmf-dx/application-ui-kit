@@ -27,7 +27,8 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex w-full items-center justify-between gap-2 rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm text-foreground transition-colors",
+      // 地色は `select.input-field`（background-color: var(--color-card)）に合わせる。
+      "flex w-full items-center justify-between gap-2 rounded-lg border border-input bg-card px-3.5 py-2.5 text-sm text-foreground transition-colors",
       "focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring",
       "data-disabled:cursor-not-allowed data-disabled:opacity-50 data-disabled:bg-muted",
       "data-[popup-open]:border-ring",
