@@ -90,14 +90,8 @@ export type { ApplicationSpinnerProps, ApplicationSpinnerSize } from "./Applicat
 export { ApplicationProgress } from "./ApplicationProgress";
 export type { ApplicationProgressProps } from "./ApplicationProgress";
 
-export { ApplicationSidebarItem } from "./ApplicationSidebarItem";
-export type { ApplicationSidebarItemProps } from "./ApplicationSidebarItem";
-
-export { ApplicationActiveIndicator } from "./ApplicationActiveIndicator";
-export type { ApplicationActiveIndicatorProps } from "./ApplicationActiveIndicator";
-
 export { ApplicationNavItem } from "./ApplicationNavItem";
-export type { ApplicationNavItemProps, ApplicationNavItemColor } from "./ApplicationNavItem";
+export type { ApplicationNavItemProps } from "./ApplicationNavItem";
 
 export { ApplicationThemeToggle } from "./ApplicationThemeToggle";
 export type { ApplicationThemeToggleProps } from "./ApplicationThemeToggle";

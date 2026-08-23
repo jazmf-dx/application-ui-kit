@@ -98,6 +98,21 @@
   /* shadcn/ui 互換（destructive） - --color-danger と揃える */
   --color-destructive: oklch(0.637 0.237 25.331);
   --color-destructive-foreground: oklch(1 0 0);
+
+  /* ナビゲーションのアクセント色（差し込み口）
+   *
+   * `ApplicationNavItem` はこのトークンだけを見る。既定は primary。
+   *
+   * セクションごとに色を変えたい場合は、キット側ではなく **利用側アプリ** で
+   * このトークンを上書きする。CSS カスタムプロパティは継承するため、
+   * セクションのラッパーに一度当てれば中の項目すべてに効く。
+   *
+   *   .nav-section-requests { --color-nav-accent: var(--color-section-requests); }
+   *   .nav-section-masters  { --color-nav-accent: var(--color-section-masters); }
+   *
+   * セクションの集合はアプリ固有なので、ここに列挙しない
+   * （Application UI Standard §1「先行抽象化を避ける」/ §2 のToken override）。 */
+  --color-nav-accent: var(--color-primary);
 }
 
 /* ==========================================================================

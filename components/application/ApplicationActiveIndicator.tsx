@@ -1,3 +1,16 @@
+/**
+ * ApplicationNavItem の内部実装。
+ *
+ * <important>
+ * 公開 API ではない（`index.ts` から export しない）。単体では
+ * `motion.div` への素通しにすぎず、Application UI Standard §1 の
+ * 独自ラッパーの条件を満たさない。
+ * </important>
+ *
+ * 色は持たず、呼び出し側（ApplicationNavItem）が `--color-nav-accent`
+ * 由来のクラスを className で渡す。
+ */
+
 "use client";
 
 import { motion } from "framer-motion";
