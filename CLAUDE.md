@@ -34,7 +34,7 @@ Django + htmxとの汎用的な接続は `./islands` / `./islands/auto-mount` en
 - **wrapperは追加できるvalueがあるときだけ作る。** shadcn/ui相当物へvalueを追加しない場合はre-exportを優先する。
 - **見た目はSemantic Tokenを正とする。** raw colorを追加しない。Component内部skinは `tokens/components.css`、Token具体値は `tokens/theme.css` を正とする。
 - **業務domain固有UIは置かない。** Domainを所有するprojectへ置く。名前が業務語彙かどうかではなく、**ドメイン連携（マスタ取得・認証・CSRF・endpoint設定）を内部に持つか** で判断する。propsでデータを受け取るだけなら汎用Componentとしてここに置いてよい（[decisions/adr-0003](decisions/adr-0003-domain-ui-boundary.md)。提案中）。
-- 新しいUIを作る前にStorybookで既存Component / Pattern / Templateを確認する。
+- 新しいUIを作る前にStorybookで既存Component / Pattern / Templateを確認する。他repositoryのdomain UIも含めて探すときは社内UI Catalog（`ui-catalog` repository / `https://ui.internal/`）を見る。
 - Patternは「実際に一度迷い、次回も同じ判断に迷いそうか」を追加基準とし、網羅性のためだけに増やさない。
 - 共通化するComponentにはStoryを追加する。Patternは候補を比較できるCatalog Storyを優先する。
 - **branchは `upstream/main` から切り、PRはupstream宛に出す。** `main` はupstreamのmirrorとして保つ。fork運用とversionの扱いは [decisions/adr-0002](decisions/adr-0002-fork-branch-and-upstream-flow.md) を正とする。
