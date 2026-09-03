@@ -56,7 +56,7 @@ const meta = {
 
 | 場面 | 代わりに使うもの |
 |---|---|
-| テンプレート（.html）のフォーム | \`{% include 'includes/molecules/form_field.html' %}\` + \`form-validation.js\`。Foundations を参照 |
+| テンプレート（.html）のフォーム | Django Form の widget に \`input-field\`、全体エラーは \`<div class="alert alert-danger">\`（基礎/テンプレート用クラス）。項目単位のエラーは Django Form の \`errors\` をフィールド直下に描く |
 | 項目が 3 個以下の入力 | \`FormDialog\` でモーダルにする。画面遷移させるほどの内容ではない |
 | 入力項目が 20 個を超える | ステップ分割（ウィザード）を検討する。1 画面に詰め込まない |
 | 一覧の中のインライン編集 | セル内に \`Input\` を直接置く。\`FormField\` は使わない（ラベルが二重になる） |

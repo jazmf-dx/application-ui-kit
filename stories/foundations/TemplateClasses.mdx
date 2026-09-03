@@ -1,0 +1,173 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { ClassSample, SpecTable, Code } from './_parts'
+
+<Meta title="基礎/テンプレート用クラス" />
+
+# テンプレート用クラス
+
+Django テンプレートから「素の HTML + class」で使う部品の見本です。
+定義は `tokens/classes.css`（`application-ui-kit/styles.css` に含まれる）。
+ここに並ぶクラス名がパッケージの **公開契約** で、追加は MINOR、rename / 削除は MAJOR
+（`decisions/adr-0007`）。
+
+React コンポーネントの中ではこれらのクラスを書かず、対応するコンポーネントを使います。
+見た目は 1:1 に揃えてあるので、テンプレートで描いた画面と React で描いた画面が並んでも差が出ません。
+
+<SpecTable
+  head={['テンプレート用クラス', 'React', '用途']}
+  rows={[
+    [<Code>btn-primary / btn-secondary / btn-success / btn-danger</Code>, <Code>Button</Code>, '操作。サイズは btn-xs / btn-sm / btn-lg'],
+    [<Code>input-field</Code>, <Code>Input / Select / Textarea</Code>, 'フォーム入力'],
+    [<Code>card / card-sm / card-lg</Code>, <Code>Card</Code>, '面'],
+    [<Code>badge badge-{'{tone}'}</Code>, <Code>Badge tone</Code>, '状態表示'],
+    [<Code>alert alert-{'{tone}'}</Code>, <Code>Alert</Code>, '継続して伝える注意・案内'],
+    [<Code>breadcrumbs</Code>, <Code>Breadcrumbs</Code>, '現在位置'],
+    [<Code>page-header</Code>, <Code>PageHeader</Code>, '画面の見出し領域'],
+    [<Code>stat</Code>, <Code>Stat</Code>, 'KPI・統計タイル'],
+    [<Code>data-table</Code>, <Code>Table</Code>, '一覧'],
+    [<Code>disclosure</Code>, <Code>Accordion / Collapsible</Code>, '開閉（details 要素）'],
+    [<Code>avatar-sm / avatar-md / avatar-lg</Code>, '—', 'アバター（React 版は予定）'],
+  ]}
+/>
+
+- 色は Token（`var(--color-*)`）だけで書かれているので、`<html class="dark">` でも
+  `[data-theme="dark"]` で Token を差し替える方式でも、そのまま暗くなります
+- 利用側が同名のクラスを自前で定義している場合は、`styles.css` を読み込んだうえで
+  **自前の定義を削除**してください。残すと読み込み順で自前が勝ち、何も変わりません
+- 末尾にアイコンを置くときは `<svg>` を `<span>` で包みます（`:first-child` の判定のため）
+
+---
+
+## ボタン
+
+<ClassSample
+  sample={`<button type="button" class="btn-primary">保存</button>
+<button type="button" class="btn-secondary">キャンセル</button>
+<button type="button" class="btn-danger">削除</button>
+<button type="button" class="btn-primary btn-sm">小</button>
+<button type="button" class="btn-primary btn-xs">極小</button>`}
+  note="primary は 1 画面に 1 つ。キャンセルは secondary、削除は danger。"
+/>
+
+## 入力欄
+
+<ClassSample
+  sample={`<input type="text" class="input-field" placeholder="件名" style="max-width: 20rem">
+<select class="input-field" style="max-width: 12rem"><option>選択してください</option></select>`}
+/>
+
+## バッジ
+
+<ClassSample
+  sample={`<span class="badge badge-new">受付</span>
+<span class="badge badge-active">対応中</span>
+<span class="badge badge-done">完了</span>
+<span class="badge badge-warning">差戻し</span>
+<span class="badge badge-danger">却下</span>
+<span class="badge badge-pending">保留</span>
+<span class="badge badge-neutral">アーカイブ</span>`}
+  note="models.py の *_display_class プロパティは badge-active のような tone クラス名を返す。色はテンプレートに書かない。"
+/>
+
+## アラート
+
+<ClassSample
+  sample={`<div class="alert alert-warning" role="alert" style="width: 100%">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+  <div class="alert-body">
+    <p class="alert-title">通知先が設定されていません</p>
+    <p>通知先を設定するまで、担当者へメールが届きません。</p>
+    <div class="alert-actions"><a href="#" class="btn-secondary btn-sm">通知先を設定する</a></div>
+  </div>
+</div>`}
+  note="tone は alert-info / alert-success / alert-warning / alert-danger。danger と warning には role=alert、info と success には role=status。Django messages を出すときは messages.tags を tone に写す。"
+/>
+
+<ClassSample
+  sample={`<div class="alert alert-info alert-banner" role="status" style="width: 100%">
+  <div class="alert-body"><p class="alert-title">これはステージング環境です</p></div>
+</div>`}
+  note="alert-banner はページ幅のお知らせ・環境バナー。角丸と左罫線を外す。"
+/>
+
+## パンくず
+
+<ClassSample
+  sample={`<nav class="breadcrumbs" aria-label="現在位置">
+  <ol>
+    <li><a href="#">ホーム</a></li>
+    <li><a href="#">アイデア</a></li>
+    <li aria-current="page">モニターの増設</li>
+  </ol>
+</nav>`}
+  note="末尾が現在地。リンクにせず aria-current=page を付ける。ul でも ol でも当たる。"
+/>
+
+## ページ見出し
+
+<ClassSample
+  sample={`<header class="page-header" style="width: 100%">
+  <nav class="breadcrumbs" aria-label="現在位置"><ol><li><a href="#">ホーム</a></li><li aria-current="page">アイデア</li></ol></nav>
+  <div class="page-header-row">
+    <div>
+      <h1 class="page-header-title">アイデア一覧</h1>
+      <p class="page-header-description">社内から寄せられた意見・提案を確認します</p>
+    </div>
+    <div class="page-header-actions">
+      <a href="#" class="btn-secondary">CSV 出力</a>
+      <a href="#" class="btn-primary">新規作成</a>
+    </div>
+  </div>
+</header>`}
+  note="主操作は右（page-header-actions）。タブを付けるときは page-header-tabs を最後に置く。"
+/>
+
+## 統計タイル
+
+<ClassSample
+  sample={`<div class="stat" style="min-width: 12rem">
+  <div class="stat-label">未対応</div>
+  <div class="stat-value">12<span class="stat-unit">件</span></div>
+  <div class="stat-delta stat-delta-negative">+3 前週比</div>
+</div>
+<div class="stat" style="min-width: 12rem">
+  <div class="stat-label">完了率</div>
+  <div class="stat-value">86.5<span class="stat-unit">%</span></div>
+  <div class="stat-delta stat-delta-positive">+2.1pt</div>
+  <div class="stat-hint">2026-09-01 時点</div>
+</div>`}
+  note="値は intcomma / floatformat で整形して渡す。stat-delta-* は増減の色で、値には色を付けない。"
+/>
+
+## 開閉（details）
+
+<ClassSample
+  sample={`<details class="disclosure" style="width: 100%">
+  <summary>完了したコース <span class="badge badge-neutral">12</span></summary>
+  <div class="disclosure-body">…完了したコースの一覧…</div>
+</details>`}
+  note="JS 不要。htmx で中身を差し替えても壊れない。React 側は Accordion / Collapsible。"
+/>
+
+## カード
+
+<ClassSample
+  sample={`<div class="card" style="width: 16rem">
+  <h2 class="text-base font-semibold mb-2">見出し</h2>
+  <p class="text-sm text-muted-foreground">カードの本文。</p>
+</div>`}
+  note="余白と角丸は見出しの文字サイズから導出される（card-sm / card-lg で切替）。"
+/>
+
+## 一覧テーブル
+
+<ClassSample
+  sample={`<table class="data-table">
+  <thead><tr><th>申請番号</th><th>件名</th><th>ステータス</th></tr></thead>
+  <tbody>
+    <tr><td>SYS-2026-0001</td><td>備品購入（モニター 2 台）</td><td><span class="badge badge-new">未対応</span></td></tr>
+    <tr><td>SYS-2026-0002</td><td>出張費精算（大阪）</td><td><span class="badge badge-active">対応中</span></td></tr>
+  </tbody>
+</table>`}
+  note="並び替え・ページングはサーバー側。0 件のときの表示（Empty State）を必ず用意する。"
+/>

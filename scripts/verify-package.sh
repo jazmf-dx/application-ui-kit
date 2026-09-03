@@ -9,7 +9,7 @@
 # この種の宣言漏れを検出できない。
 #
 # 併せて、Tailwind の CSS が利用側へ届くことも確認する。
-#   - tokens/theme.css の @import 連鎖（motion / fonts / scale / components）
+#   - tokens/theme.css の @import 連鎖（motion / fonts / scale / tokens / components / classes）
 #   - theme.css の `@source "../components"`（パッケージ内の .tsx のクラス名）
 #
 # 使い方:
@@ -90,7 +90,10 @@ check() {
 }
 
 echo "▶ 出力 CSS の内容を確認"
-check "theme.css のテンプレート用クラスが届いている (btn-primary)" "btn-primary"
+check "classes.css のテンプレート用クラスが届いている (btn-primary)" "btn-primary"
+check "classes.css の新しいテンプレート用クラスが届いている (alert-danger)" "alert-danger"
+check "classes.css の tone クラスが届いている (badge-done)" "badge-done"
+check "tokens.css のステータス Token が届いている (--color-status-new)" "\-\-color-status-new"
 check "components.css が届いている (cn-button)" "cn-button"
 check "motion.css が届いている (--motion-duration-base)" "\-\-motion-duration-base"
 check "カラートークンが届いている (var(--color-card))" "var(--color-card)"

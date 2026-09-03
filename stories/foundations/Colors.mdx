@@ -13,8 +13,8 @@ import { ColorTable, StatusTable, SpecTable, Code, DoDont } from './_parts'
 役割で名付けておくことで、アプリごとにブランドカラーを差し替えても
 コードを書き換えずに済みます。
 
-- 値の SSOT: `tokens/theme.css` の `@theme`
-- 運用ルール: `ai-dev-standards/colors.md`
+- 値の SSOT: `tokens/tokens.css` の `@theme`（`tokens/theme.css` が入口）
+- 運用ルール: `design-system/README.md` §2 Semantic Token と、この頁
 
 <DoDont
   doText={<>意味で選ぶ。削除ボタンは <Code>btn-danger</Code> / <Code>variant="danger"</Code></>}
@@ -100,11 +100,12 @@ application では色をテンプレートに書かず、`models.py` のプロ�
 ```python
 @property
 def status_display_class(self):
+    # 値は tone 名（badge-*）。色そのものはキットの Token が持つ
     return {
-        "new": "bg-yellow-50 text-yellow-600",
-        "in_progress": "bg-sky-50 text-sky-500",
-        "closed": "bg-gray-100 text-gray-500",
-    }.get(self.status, "bg-gray-100 text-gray-400")
+        "new": "badge-new",
+        "in_progress": "badge-active",
+        "closed": "badge-neutral",
+    }.get(self.status, "badge-neutral")
 ```
 
 ```html

@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Calendar, FileText, MoreVertical, Plus, Search } from "lucide-react";
 import * as React from "react";
 import {
+  Alert,
   Badge,
+  Breadcrumbs,
   Button,
   ButtonGroup,
   Checkbox,
@@ -15,6 +17,7 @@ import {
   FormField,
   Input,
   NavItem,
+  PageHeader,
   Pagination,
   RadioGroup,
   SearchInput,
@@ -45,6 +48,7 @@ import {
   ProgressTrack,
   Separator,
   Spinner,
+  Stat,
   Textarea,
 } from "../../components/application";
 import { Cluster, Grid, Labeled, Section, Showcase, Stack } from "../_showcase";
@@ -231,8 +235,16 @@ export const AllComponents: Story = {
           </Grid>
         </Section>
 
-        <Section title="Feedback" note="結果はトースト、確認はダイアログ、進行中はスピナー。使い分けを固定する。">
+        <Section
+          title="Feedback"
+          note="結果はトースト、確認はダイアログ、進行中はスピナー、残す注意は Alert。使い分けを固定する。"
+        >
           <Grid className="sm:grid-cols-2 lg:grid-cols-3">
+            <Labeled label="Alert">
+              <Alert tone="warning" title="通知先が設定されていません">
+                設定するまで担当者へメールが届きません。
+              </Alert>
+            </Labeled>
             <Labeled label="toast">
               <Cluster>
                 <Button
@@ -291,6 +303,9 @@ export const AllComponents: Story = {
               />
             </Labeled>
             <Grid className="sm:grid-cols-3">
+              <Labeled label="Stat">
+                <Stat label="未対応" value="12" unit="件" delta="+3 前週比" tone="negative" />
+              </Labeled>
               <Labeled label="Badge">
                 <Cluster>
                   <Badge tone="new">未対応</Badge>
@@ -337,6 +352,25 @@ export const AllComponents: Story = {
 
         <Section title="Navigation" note="同一画面の切り替えはタブ、画面遷移はナビゲーション。混ぜない。">
           <Grid>
+            <Labeled label="PageHeader">
+              <PageHeader
+                headingLevel={2}
+                breadcrumbs={[{ label: "ホーム", href: "#" }, { label: "アイデア" }]}
+                title="アイデア一覧"
+                description="社内から寄せられた意見・提案"
+                actions={
+                  <Button size="sm" leftIcon={<Plus />}>
+                    新規作成
+                  </Button>
+                }
+                className="mb-0"
+              />
+            </Labeled>
+            <Labeled label="Breadcrumbs">
+              <Breadcrumbs
+                items={[{ label: "ホーム", href: "#" }, { label: "アイデア", href: "#" }, { label: "モニターの増設" }]}
+              />
+            </Labeled>
             <Labeled label="Tabs">
               <Tabs
                 items={[

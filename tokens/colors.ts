@@ -2,7 +2,7 @@
  * カラートークン定義（意味 → トークン名の対応表）
  *
  * <important>
- * ここは「値の定義」ではない。値の SSOT は tokens/theme.css の `@theme`。
+ * ここは「値の定義」ではない。値の SSOT は tokens/tokens.css の `@theme`（theme.css は入口）。
  * このファイルは Storybook の Foundations や TS 側から
  * 「どんなトークンがあり、どういう意味で、いつ使うのか」を参照するためのメタ情報。
  *
@@ -10,8 +10,8 @@
  * 実際の色は `var(--color-*)` 経由か Tailwind クラス経由で解決する。
  * </important>
  *
- * 出典: tokens/theme.css
- * ルール: design-system/colors.md
+ * 出典: tokens/tokens.css
+ * ルール: design-system/README.md §2 と Storybook「基礎/色」
  */
 
 /** セマンティックカラーの役割 */
@@ -153,24 +153,43 @@ export const BASE_COLORS: SemanticColor[] = [
 ];
 
 /**
- * ドメインステータスカラー（意味 → Tailwind パレット）
+ * ドメインステータスカラー（意味 → tone → Token）
  *
  * ステータス・優先度・種別のバッジに使う。
- * **同じ意味の状態には全アプリで同じ色を使う**（乖離すると統一コストが跳ね上がる）。
+ * **同じ意味の状態には全アプリで同じ tone を使う**（乖離すると統一コストが跳ね上がる）。
  *
- * これらはセマンティックトークンではなく Tailwind パレットを直接使う。
- * 理由: アプリごとに意味の数が違い、トークン化すると破綻するため。
- *
- * 出典: design-system/colors.md の「推奨セマンティクス」表
+ * 値は tokens/tokens.css の `--color-status-{tone}` / `-foreground`（light / dark の両方）。
+ * React は `<Badge tone="…">`、テンプレートは `class="badge badge-{tone}"` で同じ Token を引く。
+ * 以前は Tailwind パレットを直接使っていたが、テンプレート側に契約として配るために Token 化した。
  */
 export const STATUS_COLORS = [
-  { meaning: "新規・未対応・要注意", cls: "bg-yellow-50 text-yellow-600" },
-  { meaning: "進行中", cls: "bg-sky-50 text-sky-500" },
-  { meaning: "完了・解決・承認", cls: "bg-emerald-50 text-emerald-600" },
-  { meaning: "差戻し・警告", cls: "bg-orange-50 text-orange-600" },
-  { meaning: "緊急・エラー・却下", cls: "bg-rose-50 text-rose-500" },
-  { meaning: "終了・無効・アーカイブ", cls: "bg-gray-100 text-gray-500" },
-  { meaning: "検討中・保留", cls: "bg-purple-50 text-purple-600" },
+  { tone: "new", meaning: "新規・未対応・要注意", cls: "badge-new", token: "--color-status-new" },
+  { tone: "active", meaning: "進行中", cls: "badge-active", token: "--color-status-active" },
+  { tone: "done", meaning: "完了・解決・承認", cls: "badge-done", token: "--color-status-done" },
+  {
+    tone: "warning",
+    meaning: "差戻し・警告",
+    cls: "badge-warning",
+    token: "--color-status-warning",
+  },
+  {
+    tone: "danger",
+    meaning: "緊急・エラー・却下",
+    cls: "badge-danger",
+    token: "--color-status-danger",
+  },
+  {
+    tone: "pending",
+    meaning: "検討中・保留",
+    cls: "badge-pending",
+    token: "--color-status-pending",
+  },
+  {
+    tone: "neutral",
+    meaning: "終了・無効・アーカイブ",
+    cls: "badge-neutral",
+    token: "--color-status-neutral",
+  },
 ] as const;
 
 /**

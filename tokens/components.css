@@ -1482,6 +1482,221 @@
     @apply h-8 gap-1.5 px-2.5 [&>svg:not([class*='size-'])]:size-4;
   }
 
+  /* ========================================================================
+   * MARK: Alert — classes.css の .alert と同じ形状
+   *
+   * 上流（nova）の grid レイアウトは使わず、テンプレート用 .alert と同じ
+   * flex + 左罫線 + 淡い面にしてある。色は --alert-color / --alert-foreground の
+   * 2 変数に集約し、tone クラスはその差し替えだけを行う。
+   * ====================================================================== */
+
+  .cn-alert {
+    @apply flex items-start gap-3 rounded-lg px-4 py-3 text-left text-sm;
+    --alert-color: var(--color-info);
+    --alert-foreground: var(--color-info-hover);
+    color: var(--color-foreground);
+    background-color: color-mix(in oklab, var(--alert-color) 12%, var(--color-card));
+    border: 1px solid color-mix(in oklab, var(--alert-color) 35%, var(--color-card));
+    border-left: 4px solid var(--alert-color);
+  }
+  .cn-alert > svg {
+    @apply mt-0.5 shrink-0;
+    color: var(--alert-foreground);
+  }
+  .cn-alert > :where(svg:not([class*="size-"])) {
+    @apply size-4;
+  }
+
+  /* 上流互換のバリアント。application/Alert.tsx は使わず tone で塗る。 */
+  .cn-alert-variant-default {
+    --alert-color: var(--color-info);
+    --alert-foreground: var(--color-info-hover);
+  }
+  .cn-alert-variant-destructive {
+    --alert-color: var(--color-danger);
+    --alert-foreground: var(--color-danger-hover);
+  }
+
+  .cn-alert-tone-info {
+    --alert-color: var(--color-info);
+    --alert-foreground: var(--color-info-hover);
+  }
+  .cn-alert-tone-success {
+    --alert-color: var(--color-success);
+    --alert-foreground: var(--color-success-hover);
+  }
+  .cn-alert-tone-warning {
+    --alert-color: var(--color-warning);
+    --alert-foreground: var(--color-warning-hover);
+  }
+  .cn-alert-tone-danger {
+    --alert-color: var(--color-danger);
+    --alert-foreground: var(--color-danger-hover);
+  }
+
+  .cn-alert-body {
+    @apply min-w-0 flex-1 space-y-1;
+  }
+
+  .cn-alert-title {
+    @apply font-medium leading-tight;
+    color: var(--alert-foreground);
+  }
+
+  .cn-alert-description {
+    @apply text-sm [&_p:not(:last-child)]:mb-2;
+  }
+
+  .cn-alert-actions {
+    @apply mt-2 flex flex-wrap items-center gap-2;
+  }
+
+  .cn-alert-action {
+    @apply -mr-1 -mt-1 shrink-0;
+  }
+
+  .cn-alert-dismiss {
+    @apply inline-flex size-7 items-center justify-center rounded-md transition-colors;
+    color: var(--color-muted-foreground);
+    &:hover {
+      color: var(--color-foreground);
+      background-color: color-mix(in oklab, var(--alert-color) 20%, transparent);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: 2px;
+    }
+  }
+  .cn-alert-dismiss :where(svg:not([class*="size-"])) {
+    @apply size-4;
+  }
+
+  .cn-alert-banner {
+    @apply rounded-none px-6;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  /* ========================================================================
+   * MARK: Breadcrumb — classes.css の .breadcrumbs と同じ形状
+   * ====================================================================== */
+
+  .cn-breadcrumb-list {
+    @apply gap-1.5 text-sm;
+    color: var(--color-muted-foreground);
+  }
+
+  .cn-breadcrumb-item {
+    @apply gap-1.5;
+  }
+
+  .cn-breadcrumb-link {
+    @apply transition-colors;
+    &:hover {
+      color: var(--color-foreground);
+    }
+  }
+
+  .cn-breadcrumb-page {
+    @apply font-normal;
+    color: var(--color-foreground);
+  }
+
+  .cn-breadcrumb-separator {
+    @apply flex items-center opacity-70 [&>svg]:size-3.5;
+  }
+
+  .cn-breadcrumb-ellipsis {
+    @apply size-5 [&>svg]:size-4;
+  }
+
+  /* ========================================================================
+   * MARK: Page Header — classes.css の .page-header と同じ形状
+   * ====================================================================== */
+
+  .cn-page-header {
+    @apply mb-6 flex flex-col gap-3;
+  }
+
+  .cn-page-header-row {
+    @apply flex flex-wrap items-start justify-between gap-3;
+  }
+
+  .cn-page-header-heading {
+    @apply min-w-0;
+  }
+
+  .cn-page-header-title-row {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .cn-page-header-title {
+    @apply text-xl font-semibold leading-tight tracking-tight;
+    color: var(--color-foreground);
+  }
+
+  .cn-page-header-description {
+    @apply mt-1 text-sm;
+    color: var(--color-muted-foreground);
+  }
+
+  .cn-page-header-actions {
+    @apply flex shrink-0 flex-wrap items-center gap-2;
+  }
+
+  .cn-page-header-tabs {
+    @apply -mb-3;
+  }
+
+  /* ========================================================================
+   * MARK: Stat — classes.css の .stat と同じ形状
+   * ====================================================================== */
+
+  .cn-stat {
+    @apply flex flex-col gap-1 rounded-lg border p-4;
+    background-color: var(--color-card);
+    color: var(--color-card-foreground);
+    border-color: var(--color-border);
+  }
+
+  .cn-stat-label {
+    @apply flex items-center gap-1.5 text-xs font-medium;
+    color: var(--color-muted-foreground);
+  }
+  .cn-stat-label :where(svg:not([class*="size-"])) {
+    @apply size-3.5;
+  }
+
+  .cn-stat-value {
+    @apply text-2xl font-semibold leading-none tabular-nums tracking-tight;
+  }
+
+  .cn-stat-unit {
+    @apply ml-1 text-sm font-normal;
+    color: var(--color-muted-foreground);
+  }
+
+  .cn-stat-delta {
+    @apply text-xs font-medium tabular-nums;
+  }
+  .cn-stat-delta-neutral {
+    color: var(--color-muted-foreground);
+  }
+  .cn-stat-delta-positive {
+    color: var(--color-success-hover);
+  }
+  .cn-stat-delta-negative {
+    color: var(--color-danger-hover);
+  }
+  .cn-stat-delta-warning {
+    color: var(--color-warning-hover);
+  }
+
+  .cn-stat-hint {
+    @apply text-xs;
+    color: var(--color-muted-foreground);
+  }
+
   /* cn-pagination / cn-pagination-link / cn-pagination-*-text および
    * cn-field-orientation-* は .tsx 側にインラインで実体があるマーカークラス。
    * 上流も CSS 定義を持たないため、ここでも定義しない。 */

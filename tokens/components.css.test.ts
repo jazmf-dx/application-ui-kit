@@ -10,33 +10,94 @@ import { describe, expect, it } from "vitest";
  * typecheck / test / build では気づけない）。ここで宣言を固定する。
  */
 const css = readFileSync(join(process.cwd(), "tokens/components.css"), "utf-8");
+const tokensCss = readFileSync(join(process.cwd(), "tokens/tokens.css"), "utf-8");
+const classesCss = readFileSync(join(process.cwd(), "tokens/classes.css"), "utf-8");
 const themeCss = readFileSync(join(process.cwd(), "tokens/theme.css"), "utf-8");
 
-function ruleBody(selector: string): string {
-  const start = css.indexOf(`${selector} {`);
+function ruleBody(selector: string, source: string = css): string {
+  const start = source.indexOf(`${selector} {`);
   expect(start, `${selector} が見つからない`).toBeGreaterThan(-1);
-  return css.slice(start, css.indexOf("}", start));
+  return source.slice(start, source.indexOf("}", start));
 }
 
-describe("tokens/theme.css", () => {
+describe("tokens/theme.css（入口）", () => {
+  /* styles.css は theme.css を指す。分割した 3 ファイルをすべて読み込んでいないと、
+   * 利用側で Token だけ・クラスだけが欠ける。 */
+  it.each(["./tokens.css", "./components.css", "./classes.css"])(
+    "%s を @import している",
+    (file) => {
+      expect(themeCss).toContain(`@import "${file}";`);
+    },
+  );
+
+  it("@source でパッケージ内の .tsx を走査させている", () => {
+    expect(themeCss).toMatch(/@source "\.\.\/components";/);
+  });
+});
+
+describe("tokens/tokens.css", () => {
   /* Base UI は値なしの `data-selected=""` を書き、react-day-picker は
    * `data-selected="true"` を書く。`="true"` だけを見ていると Base UI の
    * Select / Combobox の選択状態に一切当たらない。 */
   it("data-selected バリアントは値なしの属性にも当たる", () => {
-    const start = themeCss.indexOf("@custom-variant data-selected");
+    const start = tokensCss.indexOf("@custom-variant data-selected");
     expect(start, "@custom-variant data-selected が見つからない").toBeGreaterThan(-1);
-    const body = themeCss.slice(start, themeCss.indexOf("@slot", start));
+    const body = tokensCss.slice(start, tokensCss.indexOf("@slot", start));
     expect(body).toMatch(/\[data-selected\]:not\(\[data-selected="false"\]\)/);
   });
 
-  it.each(["--color-disabled", "--color-disabled-foreground", "--color-disabled-border"])(
-    "%s が light / dark の両方で定義されている",
-    (token) => {
-      // @theme（light）と .dark で 1 回ずつ。値の重複定義は分裂の元なのでここで固定する。
-      const hits = themeCss.match(new RegExp(`^\\s*${token}:`, "gm")) ?? [];
-      expect(hits).toHaveLength(2);
+  const STATUS_TONES = ["new", "active", "done", "warning", "danger", "pending", "neutral"];
+
+  it.each([
+    "--color-disabled",
+    "--color-disabled-foreground",
+    "--color-disabled-border",
+    ...STATUS_TONES.map((tone) => `--color-status-${tone}`),
+    ...STATUS_TONES.map((tone) => `--color-status-${tone}-foreground`),
+  ])("%s が light / dark の両方で定義されている", (token) => {
+    // @theme（light）と .dark で 1 回ずつ。値の重複定義は分裂の元なのでここで固定する。
+    const hits = tokensCss.match(new RegExp(`^\\s*${token}:`, "gm")) ?? [];
+    expect(hits).toHaveLength(2);
+  });
+});
+
+describe("tokens/classes.css（テンプレート用クラスの公開契約）", () => {
+  /* 利用側が `.dark` でも `[data-theme]` でも --color-* を差し替えれば暗くなるように、
+   * テンプレート用クラスは raw palette と dark: ユーティリティを持たない。 */
+  it("raw palette（bg-red-50 等）を使わない", () => {
+    const rawPalette =
+      /\b(bg|text|border|ring|from|to)-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone)-\d{2,3}\b/;
+    expect(classesCss).not.toMatch(rawPalette);
+  });
+
+  it("dark: ユーティリティを使わない（Token の差し替えで暗くする）", () => {
+    expect(classesCss).not.toMatch(/\bdark:/);
+  });
+
+  it.each([
+    ".alert-danger",
+    ".badge-done",
+    ".stat-delta-negative",
+    ".page-header-title",
+    ".breadcrumbs",
+  ])("%s は Token（var(--color-*)）で色を指定する", (selector) => {
+    expect(ruleBody(selector, classesCss)).toMatch(/var\(--color-/);
+  });
+
+  /* React 側の Badge tone と同じ Token を引く。片方だけ変えると見た目が割れる。 */
+  it.each(["new", "active", "done", "warning", "danger", "pending", "neutral"])(
+    ".badge-%s は --color-status-%s を使う",
+    (tone) => {
+      const body = ruleBody(`.badge-${tone}`, classesCss);
+      expect(body).toContain(`var(--color-status-${tone})`);
+      expect(body).toContain(`var(--color-status-${tone}-foreground)`);
     },
   );
+
+  /* field-visibility Island が評価するまで data-visible-when の塊を描かない。 */
+  it("data-visible-when の FOUC 抑止ルールを持つ", () => {
+    expect(classesCss).toMatch(/\[data-visible-when\]:not\(\[data-visible-when-ready\]\)/);
+  });
 });
 
 describe("tokens/components.css", () => {
@@ -118,5 +179,20 @@ describe("tokens/components.css", () => {
         expect(body).not.toMatch(/\bleft-2\b/);
       },
     );
+  });
+
+  /* テンプレート用クラス（classes.css）と 1:1 に揃える契約。
+   * 片方だけに部品を増やすと、React 画面とテンプレート画面で見た目が割れる。 */
+  describe("classes.css との 1:1 対応", () => {
+    it.each([
+      [".cn-alert", ".alert"],
+      [".cn-alert-tone-danger", ".alert-danger"],
+      [".cn-breadcrumb-page", '.breadcrumbs [aria-current="page"]'],
+      [".cn-page-header-title", ".page-header-title"],
+      [".cn-stat-value", ".stat-value"],
+    ])("%s（React）と %s（テンプレート）の両方が定義されている", (cnSelector, templateSelector) => {
+      expect(css.includes(`${cnSelector} {`), `${cnSelector} が無い`).toBe(true);
+      expect(classesCss.includes(`${templateSelector} {`), `${templateSelector} が無い`).toBe(true);
+    });
   });
 });

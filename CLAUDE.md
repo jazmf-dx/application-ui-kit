@@ -33,7 +33,8 @@ Django + htmxとの汎用的な接続は `./islands` / `./islands/auto-mount` en
 - **Catalog** は新しいknowledge layerではなくStorybookを使った表示・比較・検証面として扱う。
 - **wrapperは追加できるvalueがあるときだけ作る。** shadcn/ui相当物へvalueを追加しない場合はre-exportを優先する。
 - **公開APIの名前に接頭辞を付けない。** `Button` / `DatePicker` のように書く。shadcn/ui由来か自前かは名前ではなく `components/application/index.ts` のsectionで表すので、**exportを追加するときは正しいsectionへ置くこと**（[decisions/adr-0006](decisions/adr-0006-drop-application-prefix.md)）。wrapper内部でshadcn/uiのprimitiveをimportするときは `Button as ButtonPrimitive` のようにエイリアスする。
-- **見た目はSemantic Tokenを正とする。** raw colorを追加しない。Component内部skinは `tokens/components.css`、Token具体値は `tokens/theme.css` を正とする。
+- **見た目はSemantic Tokenを正とする。** raw colorを追加しない。Component内部skinは `tokens/components.css`、Token具体値は `tokens/tokens.css` を正とする（`tokens/theme.css` は3ファイルを束ねる入口）。
+- **テンプレート用classは `tokens/classes.css` が公開契約。** React Componentと1:1に揃え、片方だけに部品を増やさない。色は `var(--color-*)` のみ（raw paletteと `dark` 接頭辞のユーティリティを書かない）。対応表は `design-system/README.md`、見本はStorybook「基礎/テンプレート用クラス」（[decisions/adr-0007](decisions/adr-0007-template-class-contract-and-presentation-islands.md)）。
 - **業務domain固有UIは置かない。** Domainを所有するprojectへ置く。名前が業務語彙かどうかではなく、**ドメイン連携（マスタ取得・認証・CSRF・endpoint設定）を内部に持つか** で判断する。propsでデータを受け取るだけなら汎用Componentとしてここに置いてよい（[decisions/adr-0003](decisions/adr-0003-domain-ui-boundary.md)。提案中）。
 - 新しいUIを作る前にStorybookで既存Component / Pattern / Templateを確認する。他repositoryのdomain UIも含めて探すときは社内UI Catalog（`ui-catalog` repository / `https://ui.internal/`）を見る。
 - Patternは「実際に一度迷い、次回も同じ判断に迷いそうか」を追加基準とし、網羅性のためだけに増やさない。

@@ -82,28 +82,30 @@ export interface ConfirmDialogProps {
  * タイプ別の見た目設定
  */
 const TYPE_CONFIG = {
+  /* 色は Semantic Token のみ（raw palette を使わない）。面は同じ色の 10% で導出するので
+   * light / dark の切り分けが要らない。Alert の tone と同じ対応。 */
   info: {
     icon: Info,
-    iconClassName: "text-blue-600 dark:text-blue-400",
-    iconBg: "bg-blue-50 dark:bg-blue-950/50",
+    iconClassName: "text-primary",
+    iconBg: "bg-primary/10",
     confirmVariant: "primary" as const,
   },
   warning: {
     icon: AlertTriangle,
-    iconClassName: "text-orange-600 dark:text-orange-400",
-    iconBg: "bg-orange-50 dark:bg-orange-950/50",
+    iconClassName: "text-warning-hover",
+    iconBg: "bg-warning/10",
     confirmVariant: "primary" as const,
   },
   danger: {
     icon: AlertTriangle,
-    iconClassName: "text-red-600 dark:text-red-400",
-    iconBg: "bg-red-50 dark:bg-red-950/50",
+    iconClassName: "text-danger",
+    iconBg: "bg-danger/10",
     confirmVariant: "danger" as const,
   },
   success: {
     icon: CheckCircle,
-    iconClassName: "text-emerald-600 dark:text-emerald-400",
-    iconBg: "bg-emerald-50 dark:bg-emerald-950/50",
+    iconClassName: "text-success-hover",
+    iconBg: "bg-success/10",
     confirmVariant: "success" as const,
   },
 } as const;

@@ -25,8 +25,7 @@ const meta = {
         component: `
 ## 目的
 
-application の \`includes/molecules/form_field.html\` の React 版。
-以下を 1 箇所に集約する。
+フォーム項目の「ラベル・必須・ヘルプ・エラー」の配置を 1 箇所に集約する。
 
 - **余白の固定** — ラベル下 \`mb-1.5\` / エラー上 \`mt-1.5\` / ヘルプ上 \`mt-1\`
 - **必須マーク** — \`*\`（視覚）+ \`（必須）\`（読み上げ専用）
@@ -42,7 +41,7 @@ application の \`includes/molecules/form_field.html\` の React 版。
 
 | 場面 | 代わりに使うもの |
 |---|---|
-| テンプレート（.html） | \`{% include 'includes/molecules/form_field.html' %}\` |
+| テンプレート（.html） | Django Form の \`label_tag\` / widget（\`input-field\`）/ \`errors\` を同じ順（ラベル → 入力 → エラー → ヘルプ）で描く。基礎/テンプレート用クラスを参照 |
 | ラベルが不要な入力（検索ボックス、テーブル内のインライン編集） | \`Input\` 単体 + \`aria-label\` |
 | チェックボックス | \`Checkbox\`（ラベルを自前で持っているため二重になる） |
 | グループで選ぶ入力（RadioGroup / RadioTable / ButtonGroup） | **\`FieldSet\`** |

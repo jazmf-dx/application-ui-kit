@@ -35,14 +35,16 @@ export interface BadgeProps extends React.ComponentPropsWithoutRef<"span"> {
   icon?: React.ReactNode;
 }
 
+/* 色は tokens/tokens.css の --color-status-* に集約してある（light / dark の両方を Token 側が持つ）。
+ * テンプレート側の .badge-{tone}（tokens/classes.css）と同じ Token を引くので見た目が揃う。 */
 const TONE_CLASS: Record<BadgeTone, string> = {
-  new: "bg-yellow-50 text-yellow-600 dark:bg-yellow-950/50 dark:text-yellow-400",
-  active: "bg-sky-50 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400",
-  done: "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400",
-  warning: "bg-orange-50 text-orange-600 dark:bg-orange-950/50 dark:text-orange-400",
-  danger: "bg-rose-50 text-rose-600 dark:bg-rose-950/50 dark:text-rose-400",
-  pending: "bg-purple-50 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400",
-  neutral: "bg-muted text-muted-foreground",
+  new: "bg-status-new text-status-new-foreground",
+  active: "bg-status-active text-status-active-foreground",
+  done: "bg-status-done text-status-done-foreground",
+  warning: "bg-status-warning text-status-warning-foreground",
+  danger: "bg-status-danger text-status-danger-foreground",
+  pending: "bg-status-pending text-status-pending-foreground",
+  neutral: "bg-status-neutral text-status-neutral-foreground",
 };
 
 /**

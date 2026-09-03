@@ -136,6 +136,18 @@ export type { ThemeToggleProps } from "./ThemeToggle";
 export { CopyButton, copyTextToClipboard } from "./CopyButton";
 export type { CopyButtonProps, CopyResult } from "./CopyButton";
 
+export { Alert } from "./Alert";
+export type { AlertProps, AlertTone, AlertVariant } from "./Alert";
+
+export { Breadcrumbs } from "./Breadcrumbs";
+export type { BreadcrumbsProps, BreadcrumbItem } from "./Breadcrumbs";
+
+export { PageHeader } from "./PageHeader";
+export type { PageHeaderProps } from "./PageHeader";
+
+export { Stat } from "./Stat";
+export type { StatProps, StatTone } from "./Stat";
+
 /* ==========================================================================
  * shadcn/ui をそのまま公開しているもの
  *

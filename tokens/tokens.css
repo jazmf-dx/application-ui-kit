@@ -1,0 +1,301 @@
+/* ==========================================================================
+ * Application UI Kit — デザイントークン
+ *
+ * ★ Token 具体値の Single Source of Truth（@theme / .dark / Base UI 用 variant / base 層）。
+ *
+ * theme.css（`application-ui-kit/styles.css`）がこのファイルを @import する。
+ * テンプレートから使うクラス（.btn-* / .alert / .tabs …）は classes.css に分けてある。
+ * 利用側が Token だけ・クラスだけを取り込めるようにするための分割で、
+ * `@import "application-ui-kit/styles.css"` で両方読む構成は変えていない。
+ *
+ * <important>
+ * ここを変更すると全プロジェクトの全画面に波及する。
+ * 変更したら tokens/colors.ts と Storybook の「基礎/色」（stories/foundations/Colors.mdx）も
+ * 必ず更新する。片方だけ直すと再び分裂する。
+ * </important>
+ *
+ * プロジェクト固有の CSS（flatpickr / tom-select / 実験場 等）はここに書かない。
+ * 各プロジェクトの input.css に書く。
+ * ========================================================================== */
+
+@theme {
+  --font-sans: "Inter", "IBM Plex Sans JP", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Design Tokens */
+  --radius: 0.5rem;
+
+  /* ========================================
+   * カラーパレット（プラットフォーム標準）
+   * ======================================== */
+
+  /* ベースカラー */
+  --color-background: oklch(1 0 0); /* 白背景 */
+  --color-foreground: oklch(0.2 0.014 285.938); /* ダークグレー文字 */
+
+  /* プライマリ（青） - メインアクション */
+  --color-primary: oklch(0.623 0.214 259.815); /* Blue 600 - bg-blue-600 相当 */
+  --color-primary-hover: oklch(0.566 0.212 262.881); /* Blue 700 */
+  --color-primary-active: oklch(0.506 0.205 265.755); /* Blue 800 */
+  --color-primary-foreground: oklch(1 0 0); /* 白文字 */
+
+  /* セカンダリ（グレー） - 補助アクション */
+  --color-secondary: oklch(1 0 0); /* 白背景 */
+  --color-secondary-hover: oklch(0.985 0.002 247.839); /* Gray 50 */
+  --color-secondary-active: oklch(0.968 0.007 247.896); /* Gray 100 */
+  --color-secondary-foreground: oklch(0.373 0.034 259.733); /* Gray 700 */
+  --color-secondary-border: oklch(0.872 0.01 258.338); /* Gray 300 */
+
+  /* サクセス（緑） - 成功・承認（Tailwind 500系ベース・明るく鮮やか） */
+  --color-success: oklch(0.696 0.17 162.48); /* Emerald 500 */
+  --color-success-hover: oklch(0.596 0.145 163.225); /* Emerald 600 */
+  --color-success-active: oklch(0.508 0.118 165.612); /* Emerald 700 */
+  --color-success-foreground: oklch(1 0 0); /* 白文字 */
+
+  /* デンジャー（赤） - 削除・危険（Tailwind 500系ベース・明るく鮮やか） */
+  --color-danger: oklch(0.637 0.237 25.331); /* Red 500 */
+  --color-danger-hover: oklch(0.577 0.245 27.325); /* Red 600 */
+  --color-danger-active: oklch(0.505 0.213 27.518); /* Red 700 */
+  --color-danger-foreground: oklch(1 0 0); /* 白文字 */
+
+  /* 警告（オレンジ） */
+  --color-warning: oklch(0.745 0.15 60.695); /* Orange 500 */
+  --color-warning-hover: oklch(0.688 0.164 51.439); /* Orange 600 */
+  --color-warning-foreground: oklch(1 0 0); /* 白文字 */
+
+  /* 情報（青・薄め） */
+  --color-info: oklch(0.776 0.099 238.136); /* Sky 400 */
+  --color-info-hover: oklch(0.705 0.123 239.273); /* Sky 500 */
+  --color-info-foreground: oklch(1 0 0); /* 白文字 */
+
+  /* カード・ポップオーバー */
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.2 0.014 285.938);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.2 0.014 285.938);
+
+  /* ミュート */
+  --color-muted: oklch(0.968 0.007 247.896); /* Gray 100 */
+  --color-muted-foreground: oklch(0.554 0.013 258.071); /* Gray 500 */
+
+  /* アクセント */
+  --color-accent: oklch(0.968 0.007 247.896);
+  --color-accent-foreground: oklch(0.271 0.029 256.848);
+
+  /* ボーダー・入力 */
+  --color-border: oklch(0.898 0.012 247.858); /* Gray 200 */
+  --color-input: oklch(0.898 0.012 247.858); /* Gray 200 */
+  --color-ring: oklch(0.623 0.214 259.815); /* Blue 600 */
+
+  /* 無効状態（無彩色）
+   *
+   * <important>
+   * 無効は「元の色を薄める」のではなく彩度を落として示す。opacity だけで
+   * 落とすと primary が淡い水色に、danger が淡いピンクになり、
+   * 「押せる薄い色のボタン」と読み間違えられる。
+   * muted と同値だが用途が別（muted は控えめな情報、disabled は操作不能）なので
+   * 別トークンにしてある。片方だけ調整したいことがある。
+   * </important> */
+  --color-disabled: oklch(0.968 0.007 247.896); /* Gray 100 - 面 */
+  --color-disabled-foreground: oklch(0.554 0.013 258.071); /* Gray 500 - 文字・アイコン */
+  --color-disabled-border: oklch(0.898 0.012 247.858); /* Gray 200 - 枠 */
+
+  /* shadcn/ui 互換（destructive） - --color-danger と揃える */
+  --color-destructive: oklch(0.637 0.237 25.331);
+  --color-destructive-foreground: oklch(1 0 0);
+
+  /* ドメインステータス色（Badge の tone / テンプレートの .badge-* と 1:1）
+   *
+   * 「未対応・対応中・完了…」のような業務状態の表現。淡い面 + 濃い文字の組で、
+   * primary / danger 等の「操作の色」とは役割が別なので Token を分けてある。
+   * **同じ意味の状態には全アプリで同じ tone を使う**（アプリごとに系統を変えない）。
+   * neutral は muted と同値だが、状態表現の一員として名前を持たせている。 */
+  --color-status-new: oklch(0.987 0.026 102.212); /* Yellow 50 - 新規・未対応・要注意 */
+  --color-status-new-foreground: oklch(0.681 0.162 75.834); /* Yellow 600 */
+  --color-status-active: oklch(0.977 0.013 236.62); /* Sky 50 - 進行中 */
+  --color-status-active-foreground: oklch(0.588 0.158 241.966); /* Sky 600 */
+  --color-status-done: oklch(0.979 0.021 166.113); /* Emerald 50 - 完了・解決・承認 */
+  --color-status-done-foreground: oklch(0.596 0.145 163.225); /* Emerald 600 */
+  --color-status-warning: oklch(0.98 0.016 73.684); /* Orange 50 - 差戻し・警告 */
+  --color-status-warning-foreground: oklch(0.646 0.222 41.116); /* Orange 600 */
+  --color-status-danger: oklch(0.969 0.015 12.422); /* Rose 50 - 緊急・エラー・却下 */
+  --color-status-danger-foreground: oklch(0.586 0.253 17.585); /* Rose 600 */
+  --color-status-pending: oklch(0.977 0.014 308.299); /* Purple 50 - 検討中・保留 */
+  --color-status-pending-foreground: oklch(0.558 0.288 302.321); /* Purple 600 */
+  --color-status-neutral: oklch(0.968 0.007 247.896); /* Gray 100 - 終了・無効・アーカイブ */
+  --color-status-neutral-foreground: oklch(0.554 0.013 258.071); /* Gray 500 */
+}
+
+/* ==========================================================================
+ * ダークモード（クラス方式・オプトイン）
+ *
+ * Tailwind v4 のデフォルトでは `dark:` が @media (prefers-color-scheme: dark)
+ * にコンパイルされる。それだと OS がダークモードのユーザーに対して
+ * components/ui/* の `dark:` だけが勝手に効き、テンプレート側は
+ * `bg-white` 直書きのままなので画面が半分だけ暗くなって破綻する。
+ *
+ * そこでクラス方式に変更し、`<html class="dark">` を付けたときだけ
+ * 有効になるオプトイン方式にする。付けない限り従来通りライトのまま。
+ *
+ * <important>
+ * このリポジトリのコンポーネントと共有コンポーネントクラスは、セマンティック
+ * トークン（bg-card / text-foreground / border-border）のみを使って
+ * dark-ready にしてある。生の `bg-white` / `text-gray-900` を追加してはいけない。
+ * 一方、利用側アプリのテンプレートが生の色を直書きしている場合はそこだけ
+ * 暗くならず破綻する。破綻箇所は Storybook の Dark 切替で確認できる。
+ * </important>
+ * ========================================================================== */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+  --color-background: oklch(0.208 0.014 285.938); /* Gray 900 相当 */
+  --color-foreground: oklch(0.968 0.007 247.896); /* Gray 100 */
+
+  --color-card: oklch(0.258 0.014 285.938); /* Gray 850 相当 */
+  --color-card-foreground: oklch(0.968 0.007 247.896);
+  --color-popover: oklch(0.258 0.014 285.938);
+  --color-popover-foreground: oklch(0.968 0.007 247.896);
+
+  --color-muted: oklch(0.31 0.014 285.938); /* Gray 800 相当 */
+  --color-muted-foreground: oklch(0.72 0.013 258.071); /* Gray 400 */
+
+  --color-accent: oklch(0.31 0.014 285.938);
+  --color-accent-foreground: oklch(0.968 0.007 247.896);
+
+  --color-border: oklch(0.37 0.014 285.938); /* Gray 700 相当 */
+  --color-input: oklch(0.37 0.014 285.938);
+
+  /* セカンダリボタンはダークでは暗い面 + 明るい文字にする */
+  --color-secondary: oklch(0.258 0.014 285.938);
+  --color-secondary-hover: oklch(0.31 0.014 285.938);
+  --color-secondary-active: oklch(0.37 0.014 285.938);
+  --color-secondary-foreground: oklch(0.9 0.007 247.896);
+  --color-secondary-border: oklch(0.37 0.014 285.938);
+
+  /* 無効状態。面は muted と同じ暗さ、文字は muted-foreground より一段沈める。 */
+  --color-disabled: oklch(0.31 0.014 285.938); /* Gray 800 相当 */
+  --color-disabled-foreground: oklch(0.6 0.013 258.071); /* Gray 500 相当 */
+  --color-disabled-border: oklch(0.37 0.014 285.938); /* Gray 700 相当 */
+
+  /* ドメインステータス色は暗い面 + 明るい文字に反転する（色相は変えない）。 */
+  --color-status-new: oklch(0.286 0.066 53.813); /* Yellow 950 */
+  --color-status-new-foreground: oklch(0.852 0.199 91.936); /* Yellow 400 */
+  --color-status-active: oklch(0.293 0.066 243.157); /* Sky 950 */
+  --color-status-active-foreground: oklch(0.746 0.16 232.661); /* Sky 400 */
+  --color-status-done: oklch(0.262 0.051 172.552); /* Emerald 950 */
+  --color-status-done-foreground: oklch(0.765 0.177 163.223); /* Emerald 400 */
+  --color-status-warning: oklch(0.266 0.079 36.259); /* Orange 950 */
+  --color-status-warning-foreground: oklch(0.75 0.183 55.934); /* Orange 400 */
+  --color-status-danger: oklch(0.271 0.105 12.094); /* Rose 950 */
+  --color-status-danger-foreground: oklch(0.712 0.194 13.428); /* Rose 400 */
+  --color-status-pending: oklch(0.291 0.149 302.717); /* Purple 950 */
+  --color-status-pending-foreground: oklch(0.714 0.203 305.504); /* Purple 400 */
+  --color-status-neutral: oklch(0.31 0.014 285.938); /* Gray 800 相当 */
+  --color-status-neutral-foreground: oklch(0.72 0.013 258.071); /* Gray 400 */
+
+  /* primary / success / danger / warning / info の色相は変えない。
+   * 意味と色の対応を light/dark で揃えるため（Storybook「基礎/色」の原則）。 */
+}
+
+/* ==========================================================================
+ * @base-ui/react 用のカスタムバリアント
+ * node_modules/shadcn/dist/tailwind.css から必要な 9 個だけ転記している。
+ * `@import "shadcn/tailwind.css"` は不要な @utility を大量に持ち込むためしない。
+ * ========================================================================== */
+
+@custom-variant data-open {
+  &:where([data-state="open"]),
+  &:where([data-open]:not([data-open="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-closed {
+  &:where([data-state="closed"]),
+  &:where([data-closed]:not([data-closed="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-checked {
+  &:where([data-state="checked"]),
+  &:where([data-checked]:not([data-checked="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-unchecked {
+  &:where([data-state="unchecked"]),
+  &:where([data-unchecked]:not([data-unchecked="false"])) {
+    @slot;
+  }
+}
+
+/* Base UI（Select / Combobox の Item）は値なしの `data-selected=""` を書き、
+ * react-day-picker は `data-selected="true"` を書く。両方に当てる。
+ * `="true"` だけを見ていたため、Base UI 側の選択状態に一切当たっていなかった。 */
+@custom-variant data-selected {
+  &:where([data-selected="true"]),
+  &:where([data-selected]:not([data-selected="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-disabled {
+  &:where([data-disabled="true"]),
+  &:where([data-disabled]:not([data-disabled="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-active {
+  &:where([data-state="active"]),
+  &:where([data-active]:not([data-active="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-horizontal {
+  &:where([data-orientation="horizontal"]) {
+    @slot;
+  }
+}
+
+@custom-variant data-vertical {
+  &:where([data-orientation="vertical"]) {
+    @slot;
+  }
+}
+
+/* ==========================================================================
+ * MARK: クリックできるものにはポインタカーソル
+ *
+ * Tailwind v4 の Preflight は button のカーソルを `default` にした（v3 は pointer）。
+ * このキットのボタン・タブ・トグル類はすべて素の <button> なので、
+ * 何もしないと全画面でポインタが出ない。ここで v3 相当に戻す。
+ *
+ * base レイヤーに置くのが要点で、`cursor-default` / `cursor-not-allowed` を
+ * 明示している箇所（メニュー項目、無効状態など）は components / utilities
+ * レイヤーが勝つため、この規則では上書きされない。
+ *
+ * 無効状態は 3 通りの表し方がある:
+ *   - 素の HTML / React の `disabled`
+ *   - Base UI の `aria-disabled="true"`
+ *   - Base UI の `data-disabled`（`data-disabled="false"` は無効ではない）
+ * ========================================================================== */
+
+@layer base {
+  button:not(:disabled, [aria-disabled="true"], [data-disabled]:not([data-disabled="false"])),
+  select:not(:disabled, [aria-disabled="true"]),
+  summary,
+  input:where([type="checkbox"], [type="radio"]):not(:disabled),
+  ::file-selector-button,
+  :where([role="button"], [role="tab"], [role="checkbox"], [role="radio"], [role="switch"]):not(
+      :disabled,
+      [aria-disabled="true"],
+      [data-disabled]:not([data-disabled="false"])
+    ) {
+    cursor: pointer;
+  }
+}

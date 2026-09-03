@@ -1,0 +1,599 @@
+/* ==========================================================================
+ * Application UI Kit — テンプレート用クラス（公開契約）
+ *
+ * ★ Django テンプレートから「素の HTML + class」で使う部品。このファイルの
+ *   @layer components に並ぶクラス名がパッケージの公開契約で、
+ *   追加は MINOR、rename / 削除は MAJOR（decisions/adr-0007）。
+ *
+ * React コンポーネントの中では対応するこのキットのコンポーネントを使う。
+ * 対応表は design-system/README.md「Django テンプレートから使うクラス」、
+ * 見本は Storybook「基礎/テンプレート用クラス」。
+ *
+ * <important>
+ * - 色は var(--color-*) だけを参照する。raw palette（Tailwind の色名 + 番号のユーティリティ）と
+ *   ダーク用バリアント（`dark` 接頭辞）を書かない。利用側が `.dark` でも `[data-theme]` でも、
+ *   --color-* を差し替えれば暗くなるようにするため（tokens/components.css.test.ts が検査）。
+ * - 淡い面は color-mix(in oklab, var(--color-xxx) 12%, var(--color-card)) で導出し、
+ *   面用の新 Token を増やさない。
+ * - `--lk-*`（scale.css）はここでは既存のアイコン光学補正にだけ使い、新しいクラスでは使わない。
+ *   scale.css を取り込まない利用側でも壊れないようにするため。
+ * - cn-*（components.css）と見た目を 1:1 に揃える。片方だけ直さない。
+ * </important>
+ * ========================================================================== */
+
+@layer components {
+  /* ========================================
+   * ボタンコンポーネント（カラートークン使用）
+   * ======================================== */
+
+  .btn-primary {
+    @apply h-8 px-3.5 text-sm font-medium rounded-lg
+           focus:outline-none focus:ring-2 focus:ring-offset-2
+           transition-colors inline-flex items-center justify-center cursor-pointer;
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+    &:hover {
+      background-color: var(--color-primary-hover);
+    }
+    &:active {
+      background-color: var(--color-primary-active);
+    }
+    &:focus {
+      box-shadow: 0 0 0 2px var(--color-primary);
+    }
+  }
+
+  .btn-secondary {
+    @apply h-8 px-3.5 text-sm font-medium rounded-lg
+           focus:outline-none focus:ring-2 focus:ring-offset-2
+           transition-colors inline-flex items-center justify-center cursor-pointer;
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-foreground);
+    border: 1px solid var(--color-secondary-border);
+    &:hover {
+      background-color: var(--color-secondary-hover);
+    }
+    &:active {
+      background-color: var(--color-secondary-active);
+    }
+    &:focus {
+      box-shadow: 0 0 0 2px var(--color-secondary-border);
+    }
+  }
+
+  .btn-success {
+    @apply h-8 px-3.5 text-sm font-medium rounded-lg
+           focus:outline-none focus:ring-2 focus:ring-offset-2
+           transition-colors inline-flex items-center justify-center cursor-pointer;
+    background-color: var(--color-success);
+    color: var(--color-success-foreground);
+    &:hover {
+      background-color: var(--color-success-hover);
+    }
+    &:active {
+      background-color: var(--color-success-active);
+    }
+    &:focus {
+      box-shadow: 0 0 0 2px var(--color-success);
+    }
+  }
+
+  .btn-danger {
+    @apply h-8 px-3.5 text-sm font-medium rounded-lg
+           focus:outline-none focus:ring-2 focus:ring-offset-2
+           transition-colors inline-flex items-center justify-center cursor-pointer;
+    background-color: var(--color-danger);
+    color: var(--color-danger-foreground);
+    &:hover {
+      background-color: var(--color-danger-hover);
+    }
+    &:active {
+      background-color: var(--color-danger-active);
+    }
+    &:focus {
+      box-shadow: 0 0 0 2px var(--color-danger);
+    }
+  }
+
+  /* フォーム入力フィールド */
+  .input-field {
+    @apply w-full h-8 px-3.5 text-sm rounded-lg
+           placeholder:text-muted-foreground
+           focus:outline-none focus:ring-2
+           transition-colors;
+    background-color: var(--color-card);
+    color: var(--color-foreground);
+    border: 1px solid var(--color-input);
+    &:focus {
+      border-color: var(--color-ring);
+      box-shadow: 0 0 0 2px var(--color-ring);
+    }
+  }
+
+  /* textarea は行数で高さが決まるため、.input-field の h-8 を打ち消す。 */
+  textarea.input-field {
+    @apply h-auto py-1.5;
+  }
+
+  select.input-field {
+    @apply appearance-none bg-no-repeat;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+
+  .btn-lg {
+    @apply h-10 px-4 text-base font-medium rounded-lg
+           transition-colors inline-flex items-center justify-center cursor-pointer;
+  }
+
+  .btn-sm {
+    @apply h-7 px-3 text-xs font-medium rounded-lg
+           transition-colors inline-flex items-center justify-center cursor-pointer;
+  }
+
+  .btn-xs {
+    @apply h-6 px-2.5 text-xs font-medium rounded-lg
+           transition-colors inline-flex items-center justify-center cursor-pointer;
+  }
+
+  /* テンプレート側のアイコン + 文字の光学補正
+   *
+   * cn-* と 1:1 に揃える契約（components.css 冒頭の <important> 参照）。
+   * React 側と同じ 2 規則:
+   *   アイコンがある側の padding = padX × --lk-icon-inset
+   *   gap                        = 文字サイズ × --lk-icon-gap
+   *
+   * <important>
+   * テンプレートは素の HTML なので、アイコンが先頭にあることを
+   * `svg:first-child` で判定する。ラベルを <span> で包まず
+   * `<svg/>新規申請` と書いた場合も :first-child は成立する（テキストノードは
+   * 数えられないため）。逆に `新規申請<svg/>` も :first-child になってしまうので、
+   * **末尾にアイコンを置くときは svg を <span> で包むこと**。
+   * 包めば :first-child が外れ、左余白が誤って詰まらない。
+   * </important> */
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-danger {
+    --icon-box: 1rem;
+  }
+
+  .btn-primary:has(> svg:first-child),
+  .btn-secondary:has(> svg:first-child),
+  .btn-success:has(> svg:first-child),
+  .btn-danger:has(> svg:first-child) {
+    padding-left: calc(0.875rem * var(--lk-icon-inset));
+    column-gap: calc(0.875rem * var(--lk-icon-gap));
+  }
+
+  .btn-lg {
+    --icon-box: 1.125rem;
+  }
+
+  .btn-lg:has(> svg:first-child) {
+    padding-left: calc(1rem * var(--lk-icon-inset));
+    column-gap: calc(1rem * var(--lk-icon-gap));
+  }
+
+  .btn-sm,
+  .btn-xs {
+    --icon-box: 0.875rem;
+  }
+
+  .btn-sm:has(> svg:first-child) {
+    padding-left: calc(0.75rem * var(--lk-icon-inset));
+    column-gap: calc(0.75rem * var(--lk-icon-gap));
+  }
+
+  .btn-xs:has(> svg:first-child) {
+    padding-left: calc(0.625rem * var(--lk-icon-inset));
+    column-gap: calc(0.75rem * var(--lk-icon-gap));
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+    --icon-box: 0.75rem;
+    column-gap: calc(0.75rem * var(--lk-icon-gap));
+  }
+
+  .avatar-sm {
+    @apply w-5 h-5 rounded-full flex items-center justify-center font-medium flex-shrink-0 text-[10px];
+  }
+
+  .avatar-md {
+    @apply w-7 h-7 rounded-full flex items-center justify-center font-medium flex-shrink-0 text-xs;
+  }
+
+  .avatar-lg {
+    @apply w-9 h-9 rounded-full flex items-center justify-center font-medium flex-shrink-0 text-sm;
+  }
+
+  /* 余白と角丸は「中の一番大きい文字」から導出する（.cn-card と同じ規則）。
+   *   padding = radius = --card-title-size ÷ √φ
+   * 見出しが大きいカードほど余白が広がる。固定の p-3 / p-4 / p-6 だと
+   * 中身に関係なく同じ余白になってしまう。
+   * 出典: LiftKit registry/nextjs/components/card/card.css */
+  .card,
+  .card-sm,
+  .card-lg {
+    @apply bg-card text-card-foreground shadow-sm border border-border;
+    --card-optical: calc(var(--card-title-size) / var(--lk-halfstep));
+    padding: var(--card-optical);
+    border-radius: var(--card-optical);
+  }
+
+  .card {
+    --card-title-size: 1rem; /* 見出しが text-base のカード */
+  }
+
+  .card-sm {
+    --card-title-size: 0.875rem; /* 見出しが text-sm のカード */
+  }
+
+  .card-lg {
+    --card-title-size: 1.5rem; /* 見出しが text-2xl のカード */
+  }
+
+  /* テンプレート側の一覧テーブル（レイアウト系 UI はテンプレート側が所有する方針） */
+  .data-table {
+    @apply w-full text-sm border-collapse;
+  }
+
+  .data-table thead {
+    @apply text-left text-xs font-medium text-muted-foreground uppercase;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .data-table th {
+    @apply px-4 py-2.5;
+  }
+
+  .data-table td {
+    @apply px-4 py-2.5;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .data-table tbody tr:hover {
+    background-color: var(--color-accent);
+  }
+
+  /* ========================================
+   * MARK: Badge の tone — React の <Badge tone="…"> と 1:1
+   *
+   * <span class="badge badge-done">完了</span>
+   * models.py の *_display_class プロパティはこのクラス名を返す。
+   * ======================================== */
+
+  .badge-new {
+    background-color: var(--color-status-new);
+    color: var(--color-status-new-foreground);
+  }
+  .badge-active {
+    background-color: var(--color-status-active);
+    color: var(--color-status-active-foreground);
+  }
+  .badge-done {
+    background-color: var(--color-status-done);
+    color: var(--color-status-done-foreground);
+  }
+  .badge-warning {
+    background-color: var(--color-status-warning);
+    color: var(--color-status-warning-foreground);
+  }
+  .badge-danger {
+    background-color: var(--color-status-danger);
+    color: var(--color-status-danger-foreground);
+  }
+  .badge-pending {
+    background-color: var(--color-status-pending);
+    color: var(--color-status-pending-foreground);
+  }
+  .badge-neutral {
+    background-color: var(--color-status-neutral);
+    color: var(--color-status-neutral-foreground);
+  }
+
+  /* ========================================
+   * MARK: Alert — React の <Alert tone="…"> と 1:1
+   *
+   * 継続して伝える注意・案内（Toast は一時的な通知）。
+   *
+   * <div class="alert alert-warning" role="alert">
+   *   <svg …></svg>
+   *   <div class="alert-body">
+   *     <p class="alert-title">見出し</p>
+   *     <p>本文</p>
+   *   </div>
+   *   <button type="button" class="alert-dismiss" aria-label="閉じる">…</button>
+   * </div>
+   *
+   * ページ幅のお知らせ・環境バナーは .alert-banner を足す（角丸と左罫線を外し上下罫線に）。
+   * ======================================== */
+
+  .alert {
+    @apply relative flex items-start gap-3 rounded-lg px-4 py-3 text-sm;
+    --alert-color: var(--color-info);
+    --alert-foreground: var(--color-info-hover);
+    color: var(--color-foreground);
+    background-color: color-mix(in oklab, var(--alert-color) 12%, var(--color-card));
+    border: 1px solid color-mix(in oklab, var(--alert-color) 35%, var(--color-card));
+    border-left: 4px solid var(--alert-color);
+  }
+
+  .alert > svg {
+    @apply mt-0.5 size-4 shrink-0;
+    color: var(--alert-foreground);
+  }
+
+  .alert-info {
+    --alert-color: var(--color-info);
+    --alert-foreground: var(--color-info-hover);
+  }
+  .alert-success {
+    --alert-color: var(--color-success);
+    --alert-foreground: var(--color-success-hover);
+  }
+  .alert-warning {
+    --alert-color: var(--color-warning);
+    --alert-foreground: var(--color-warning-hover);
+  }
+  .alert-danger {
+    --alert-color: var(--color-danger);
+    --alert-foreground: var(--color-danger-hover);
+  }
+
+  .alert-body {
+    @apply min-w-0 flex-1 space-y-1;
+  }
+
+  .alert-title {
+    @apply font-medium leading-tight;
+    color: var(--alert-foreground);
+  }
+
+  .alert-actions {
+    @apply mt-2 flex flex-wrap items-center gap-2;
+  }
+
+  .alert-dismiss {
+    @apply -mr-1 -mt-1 inline-flex size-7 shrink-0 items-center justify-center rounded-md;
+    color: var(--color-muted-foreground);
+    &:hover {
+      color: var(--color-foreground);
+      background-color: color-mix(in oklab, var(--alert-color) 20%, transparent);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: 2px;
+    }
+  }
+
+  .alert-banner {
+    @apply rounded-none px-6;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  /* ========================================
+   * MARK: Breadcrumbs — React の <Breadcrumbs> と 1:1
+   *
+   * <nav class="breadcrumbs" aria-label="現在位置">
+   *   <ol>
+   *     <li><a href="/">ホーム</a></li>
+   *     <li><a href="/ideas/">アイデア</a></li>
+   *     <li aria-current="page">詳細</li>
+   *   </ol>
+   * </nav>
+   *
+   * <ul> でも <ol> でも当たる（既存テンプレートが <ul> を使っているため）。
+   * 区切りは li + li::before の chevron。文字色は Token を mask で塗る。
+   * ======================================== */
+
+  .breadcrumbs {
+    @apply text-sm;
+    color: var(--color-muted-foreground);
+  }
+
+  .breadcrumbs > :is(ul, ol) {
+    @apply m-0 flex flex-wrap items-center gap-1.5 p-0;
+    list-style: none;
+  }
+
+  .breadcrumbs > :is(ul, ol) > li {
+    @apply inline-flex items-center gap-1.5;
+  }
+
+  .breadcrumbs > :is(ul, ol) > li + li::before {
+    content: "";
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    background-color: var(--color-muted-foreground);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    opacity: 0.7;
+  }
+
+  .breadcrumbs a {
+    @apply transition-colors;
+    &:hover {
+      color: var(--color-foreground);
+    }
+  }
+
+  .breadcrumbs [aria-current="page"] {
+    color: var(--color-foreground);
+  }
+
+  /* ========================================
+   * MARK: Page Header — React の <PageHeader> と 1:1
+   *
+   * <header class="page-header">
+   *   <nav class="breadcrumbs" …>…</nav>
+   *   <div class="page-header-row">
+   *     <div>
+   *       <h1 class="page-header-title">見出し</h1>
+   *       <p class="page-header-description">説明</p>
+   *     </div>
+   *     <div class="page-header-actions"><a class="btn-primary">新規作成</a></div>
+   *   </div>
+   *   <div class="page-header-tabs">…</div>
+   * </header>
+   *
+   * 主操作は右（Application UI Standard §7）。
+   * ======================================== */
+
+  .page-header {
+    @apply mb-6 flex flex-col gap-3;
+  }
+
+  .page-header-row {
+    @apply flex flex-wrap items-start justify-between gap-3;
+  }
+
+  .page-header-title {
+    @apply text-xl font-semibold leading-tight tracking-tight;
+    color: var(--color-foreground);
+  }
+
+  .page-header-description {
+    @apply mt-1 text-sm;
+    color: var(--color-muted-foreground);
+  }
+
+  .page-header-actions {
+    @apply flex shrink-0 flex-wrap items-center gap-2;
+  }
+
+  .page-header-tabs {
+    @apply -mb-3;
+  }
+
+  /* ========================================
+   * MARK: Stat — React の <Stat> と 1:1（KPI・統計タイル）
+   *
+   * <div class="stat">
+   *   <div class="stat-label">未対応</div>
+   *   <div class="stat-value">12<span class="stat-unit">件</span></div>
+   *   <div class="stat-delta stat-delta-negative">+3 前週比</div>
+   *   <div class="stat-hint">2026-09-01 時点</div>
+   * </div>
+   *
+   * 数値は tabular-nums で桁を揃える。
+   * ======================================== */
+
+  .stat {
+    @apply flex flex-col gap-1 rounded-lg border p-4;
+    background-color: var(--color-card);
+    color: var(--color-card-foreground);
+    border-color: var(--color-border);
+  }
+
+  .stat-label {
+    @apply text-xs font-medium;
+    color: var(--color-muted-foreground);
+  }
+
+  .stat-value {
+    @apply text-2xl font-semibold leading-none tabular-nums tracking-tight;
+  }
+
+  .stat-unit {
+    @apply ml-1 text-sm font-normal;
+    color: var(--color-muted-foreground);
+  }
+
+  .stat-delta {
+    @apply text-xs font-medium tabular-nums;
+    color: var(--color-muted-foreground);
+  }
+
+  .stat-delta-positive {
+    color: var(--color-success-hover);
+  }
+  .stat-delta-negative {
+    color: var(--color-danger-hover);
+  }
+  .stat-delta-warning {
+    color: var(--color-warning-hover);
+  }
+  .stat-delta-neutral {
+    color: var(--color-muted-foreground);
+  }
+
+  .stat-hint {
+    @apply text-xs;
+    color: var(--color-muted-foreground);
+  }
+
+  /* ========================================
+   * MARK: Disclosure — <details> 用（JS 不要）
+   *
+   * <details class="disclosure">
+   *   <summary>完了したコース <span class="badge badge-neutral">12</span></summary>
+   *   <div class="disclosure-body">…</div>
+   * </details>
+   *
+   * React 側は Accordion / Collapsible（components/ui）。
+   * ======================================== */
+
+  .disclosure {
+    @apply rounded-lg border;
+    border-color: var(--color-border);
+    background-color: var(--color-card);
+  }
+
+  .disclosure > summary {
+    @apply flex items-center gap-2 px-4 py-2.5 text-sm font-medium;
+    list-style: none;
+    &::-webkit-details-marker {
+      display: none;
+    }
+    &::after {
+      content: "";
+      margin-left: auto;
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      background-color: var(--color-muted-foreground);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+        center / contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+        center / contain no-repeat;
+      transition: transform var(--motion-duration-fast) var(--motion-ease-default);
+    }
+    &:hover {
+      background-color: var(--color-accent);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: -2px;
+    }
+  }
+
+  .disclosure[open] > summary {
+    border-bottom: 1px solid var(--color-border);
+    &::after {
+      transform: rotate(180deg);
+    }
+  }
+
+  .disclosure-body {
+    @apply px-4 py-3 text-sm;
+  }
+
+  /* ========================================
+   * MARK: field-visibility Island の初期描画（FOUC 抑止）
+   *
+   * data-visible-when を持つ塊は、Island が条件を評価して
+   * data-visible-when-ready を付けるまで描かない。全部の入力欄が一瞬見えるのを防ぐ。
+   * ======================================== */
+
+  [data-visible-when]:not([data-visible-when-ready]) {
+    display: none !important;
+  }
+}

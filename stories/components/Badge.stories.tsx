@@ -34,7 +34,7 @@ const meta = {
 
 | 場面 | 代わりに使うもの |
 |---|---|
-| テンプレート（.html） | \`badge {{ obj.status_display_class }}\`（\`models.py\` の \`*_display_class\` と組み合わせる） |
+| テンプレート（.html） | \`<span class="badge badge-{tone}">\`。\`models.py\` の \`*_display_class\` が \`badge-active\` 等の tone クラス名を返す（基礎/テンプレート用クラス） |
 | クリックできる操作 | \`Button\`（バッジはクリック不可の表示専用） |
 | 数値のカウント表示（未読件数等） | 別途 \`avatar-*\` 系のドット表示を検討 |
 
