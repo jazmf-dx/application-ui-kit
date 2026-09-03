@@ -28,7 +28,7 @@ const PERIODS = [
  * </important>
  */
 const meta = {
-  title: "Components/FieldSet",
+  title: "コンポーネント/FieldSet",
   component: FieldSet,
   parameters: {
     layout: "padded",

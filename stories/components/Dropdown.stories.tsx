@@ -19,7 +19,7 @@ import { Labeled, Section, Showcase } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Components/Dropdown",
+  title: "コンポーネント/Dropdown",
   component: Dropdown,
   parameters: {
     layout: "padded",

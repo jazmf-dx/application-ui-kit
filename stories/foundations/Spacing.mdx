@@ -2,7 +2,7 @@ import { Meta } from '@storybook/addon-docs/blocks'
 import { SPACING_SCALE, SPACING_RULES } from '../../tokens/spacing'
 import { SpecTable, Code, DoDont } from './_parts'
 
-<Meta title="Foundations/Spacing" />
+<Meta title="基礎/余白" />
 
 # Spacing
 
@@ -132,7 +132,7 @@ Tailwind の 0.25rem 刻みという上の方針はそのまま維持してい�
 同じ `gap` を指定しても、`Plus` は `Download` より 1.33px 広く見えます。
 そこで各アイコンの空きを**片側 1px に正規化**しています。字形もストロークの
 太さも変えず、レイアウト箱だけを詰めます。実測値は
-`tokens/icon-metrics.generated.ts`、一覧は Foundations/Icons を参照してください。
+`tokens/icon-metrics.generated.ts`、一覧は 基礎/アイコン を参照してください。
 
 **アイコンにサイズを手で指定しないでください。** `size="sm"` のボタンに
 `<Plus className="w-4 h-4" />` と書くと、補正の計算基準（`--icon-box`）と

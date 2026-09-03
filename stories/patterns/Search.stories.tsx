@@ -30,7 +30,7 @@ import { Section, Showcase } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Patterns/Search",
+  title: "パターン/検索",
   parameters: {
     layout: "padded",
     docs: {

@@ -29,7 +29,7 @@ import { Section, Showcase } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Patterns/ErrorState",
+  title: "パターン/エラー表示",
   parameters: {
     layout: "padded",
     docs: {

@@ -69,12 +69,12 @@ const preview: Preview = {
     options: {
       /*
        * サイドバーの並び。
-       * Getting Started → Foundations → Components → Patterns → Templates → Gallery の順に置く。
+       * はじめに → 基礎 → コンポーネント → パターン → テンプレート → ギャラリー の順に置く。
        *
        * <important>
        * 各コンポーネント内で Overview が先頭に来るのは、**Story ファイルの先頭に
        * Overview を書いているから**。ここに列挙しているのはセクションの順序だけで、
-       * 一覧にない名前（Components 配下の各コンポーネント、各ファイルの Story）は
+       * 一覧にない名前（コンポーネント配下の各コンポーネント、各ファイルの Story）は
        * Storybook が収集した順（ファイル名の昇順、ファイル内では定義順）のまま並ぶ。
        * Overview を先頭に出したいときは、比較関数ではなくファイル内の位置で表現する。
        * </important>
@@ -91,14 +91,15 @@ const preview: Preview = {
        */
       storySort: {
         order: [
-          'Getting Started',
-          'Foundations',
-          ['Colors', 'Typography', 'Spacing', 'Radius & Shadow', 'Icons'],
-          'Components',
-          'Patterns',
-          'Templates',
+          'はじめに',
+          ['概要', 'Django Islands'],
+          '基礎',
+          ['色', '文字', '余白', '角丸と影', 'アイコン'],
+          'コンポーネント',
+          'パターン',
+          'テンプレート',
           '*',
-          'Gallery',
+          'ギャラリー',
         ],
       },
     },

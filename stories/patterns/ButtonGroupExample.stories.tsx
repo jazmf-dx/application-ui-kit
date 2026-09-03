@@ -18,7 +18,7 @@ import {
  * </important>
  */
 const meta = {
-  title: "Patterns/ButtonGroupExample",
+  title: "パターン/ボタングループ",
   parameters: {
     layout: "padded",
     docs: {

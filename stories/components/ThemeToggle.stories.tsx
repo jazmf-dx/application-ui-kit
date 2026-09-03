@@ -3,7 +3,7 @@ import { ThemeToggle } from "../../components/application/ThemeToggle";
 import { Labeled, Section, Showcase } from "../_showcase";
 
 const meta = {
-  title: "Components/ThemeToggle",
+  title: "コンポーネント/ThemeToggle",
   component: ThemeToggle,
   parameters: {
     layout: "padded",

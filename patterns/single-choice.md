@@ -62,4 +62,4 @@
 
 ## Catalog
 
-Storybookの `Patterns/Single Choice` で主要な候補を同一画面上で比較します。
+Storybookの `パターン/単一選択` で主要な候補を同一画面上で比較します。

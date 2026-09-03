@@ -22,7 +22,7 @@ import {
  * </important>
  */
 const meta = {
-  title: "Patterns/DataTable",
+  title: "パターン/一覧表",
   parameters: {
     layout: "padded",
     docs: {

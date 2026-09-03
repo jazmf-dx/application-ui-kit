@@ -13,7 +13,7 @@ import { Labeled, Section, Showcase, Stack } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Components/Input",
+  title: "コンポーネント/Input",
   component: Input,
   parameters: {
     layout: "padded",

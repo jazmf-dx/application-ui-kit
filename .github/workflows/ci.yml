@@ -50,6 +50,24 @@ jobs:
       - name: build-storybook
         run: bun run build-storybook
 
+      # main へ入ったものだけ成果物として置く。社内 UI Catalog の /core/latest/ になる。
+      #
+      # <important>
+      # ここから社内サーバーへ push しない。GitHub のホストランナーからは社内へ
+      # 届かないため、配信サーバー側が取りに来る（ui-catalog の
+      # scripts/pull-storybooks.sh）。
+      # 名前を storybook-static から変えるときは ui-catalog/registry.json の
+      # artifact も一緒に変えること。
+      # </important>
+      - name: Storybook の静的成果物をアップロード（main のみ）
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: storybook-static
+          retention-days: 30
+          if-no-files-found: error
+
       # 上の build はこのリポジトリの node_modules を使うため、
       # 宣言漏れの依存 (phantom dependency) を検出できない。
       # 利用側を模した非巻き上げレイアウトでビルドし直して確認する。

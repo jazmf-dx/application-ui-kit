@@ -14,7 +14,7 @@ import { Labeled, Section, Showcase, Stack } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Components/DatePicker",
+  title: "コンポーネント/DatePicker",
   component: DatePicker,
   parameters: {
     layout: "padded",

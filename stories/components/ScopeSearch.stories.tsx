@@ -105,7 +105,7 @@ const RECENT = ["10166", "d3", "s1"];
  * </important>
  */
 const meta = {
-  title: "Components/ScopeSearch",
+  title: "コンポーネント/ScopeSearch",
   component: ScopeSearch,
   parameters: {
     layout: "padded",

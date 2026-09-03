@@ -16,7 +16,7 @@ import { Labeled, Section, Showcase, Stack } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Components/FormField",
+  title: "コンポーネント/FormField",
   component: FormField,
   parameters: {
     layout: "padded",

@@ -35,7 +35,7 @@ const SHIPPING: RadioGroupItem[] = [
  * </important>
  */
 const meta = {
-  title: "Components/RadioGroup",
+  title: "コンポーネント/RadioGroup",
   component: RadioGroup,
   parameters: {
     layout: "padded",

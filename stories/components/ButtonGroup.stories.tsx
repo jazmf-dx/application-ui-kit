@@ -25,7 +25,7 @@ const PERIODS: ButtonGroupItem[] = [
  * </important>
  */
 const meta = {
-  title: "Components/ButtonGroup",
+  title: "コンポーネント/ButtonGroup",
   component: ButtonGroup,
   parameters: {
     layout: "padded",

@@ -12,7 +12,7 @@ import { Labeled, Section, Showcase, Stack } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Components/Pagination",
+  title: "コンポーネント/Pagination",
   component: Pagination,
   parameters: {
     layout: "padded",

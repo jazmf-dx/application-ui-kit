@@ -5,7 +5,7 @@ import { NavItem } from "../../components/application/NavItem";
 import { Section, Showcase } from "../_showcase";
 
 const meta = {
-  title: "Components/NavItem",
+  title: "コンポーネント/NavItem",
   component: NavItem,
   parameters: {
     layout: "padded",

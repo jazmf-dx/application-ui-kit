@@ -24,7 +24,7 @@ const DEPARTMENTS = [
 ];
 
 const meta = {
-  title: "Patterns/Single Choice",
+  title: "パターン/単一選択",
   parameters: {
     layout: "padded",
     controls: { disable: true },

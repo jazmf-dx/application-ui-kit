@@ -24,7 +24,7 @@ import {
  * </important>
  */
 const meta = {
-  title: "Patterns/Form",
+  title: "パターン/フォーム",
   parameters: {
     layout: "padded",
     docs: {

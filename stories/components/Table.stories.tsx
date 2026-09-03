@@ -95,7 +95,7 @@ const COLUMNS: TableColumn<Request>[] = [
  * </important>
  */
 const meta = {
-  title: "Components/Table",
+  title: "コンポーネント/Table",
   component: Table,
   parameters: {
     layout: "padded",

@@ -73,7 +73,7 @@ const CATEGORIES: TreeSelectItem[] = [
  * </important>
  */
 const meta = {
-  title: "Components/TreeSelect",
+  title: "コンポーネント/TreeSelect",
   component: TreeSelect,
   parameters: {
     layout: "padded",

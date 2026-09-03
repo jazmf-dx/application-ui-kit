@@ -59,7 +59,7 @@ import { Cluster, Grid, Labeled, Section, Showcase, Stack } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Gallery/All Components",
+  title: "ギャラリー/全コンポーネント",
   parameters: {
     layout: "padded",
     // 一覧のため Props を 1 つ変えても全体に効かない。Controls は出さない。

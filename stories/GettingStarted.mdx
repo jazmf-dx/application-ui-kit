@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/addon-docs/blocks'
 import { SpecTable, Code, DoDont } from './foundations/_parts'
 
-<Meta title="Getting Started" />
+<Meta title="はじめに/概要" />
 
 # UI Platform Catalog
 
@@ -12,12 +12,12 @@ Story を増やすこと自体ではなく、UI を探す・比較する・理�
 <SpecTable
   head={['できること', 'どこで']}
   rows={[
-    ['使える UI を一覧で把握する', 'Gallery'],
+    ['使える UI を一覧で把握する', 'ギャラリー'],
     ['1 つの部品のバリエーションと状態を並べて比べる', '各 Component の Overview'],
     ['操作する・Props を変える・テストする', '各 Component の個別 Story'],
-    ['UX 上の問題に対する複数の解決候補を比較する', 'Patterns'],
-    ['画面レベルの構成例を見る', 'Templates'],
-    ['色・文字・余白のトークンを確認する', 'Foundations'],
+    ['UX 上の問題に対する複数の解決候補を比較する', 'パターン'],
+    ['画面レベルの構成例を見る', 'テンプレート'],
+    ['色・文字・余白のトークンを確認する', '基礎'],
   ]}
 />
 
@@ -28,14 +28,14 @@ Story を増やすこと自体ではなく、UI を探す・比較する・理�
 目的に応じて入口を選びます。
 
 ```
-Gallery              使える部品を俯瞰する
+ギャラリー           使える部品を俯瞰する
 Component Overview   1つの部品の種類・状態を比較する
 Individual Story     実際の挙動を確認する
-Patterns             UX上の問題に対する候補を比較する
-Templates            画面レベルの構成例を見る
+パターン             UX上の問題に対する候補を比較する
+テンプレート         画面レベルの構成例を見る
 ```
 
-Component を利用するときは、Gallery → Overview → Individual Story の順に見ると、探す → 比べる → 確かめるの粒度で確認できます。
+Component を利用するときは、ギャラリー → Overview → Individual Story の順に見ると、探す → 比べる → 確かめるの粒度で確認できます。
 
 実装時は、必要に応じて Pattern / Template も先に確認してください。UI設計の候補を比較したい場合は Pattern、画面全体の構成を参考にしたい場合は Template を使います。
 
@@ -54,36 +54,41 @@ import 'application-ui-kit/styles.css'
 ## 構成
 
 ```
-Getting Started      このページ
+はじめに
+  概要                 このページ
+  Django Islands       Django へ React を埋め込む
 
-Foundations          色・文字・余白などのトークン
-  Colors
-  Typography
-  Spacing
-  Radius & Shadow
-  Icons
+基礎                   色・文字・余白などのトークン
+  色
+  文字
+  余白
+  角丸と影
+  アイコン
 
-Components           部品 1 つずつ
+コンポーネント          部品 1 つずつ
   Button
-    Overview         variant / size / 状態の比較
-    Primary          個別 Story
+    Overview           variant / size / 状態の比較
+    Primary            個別 Story
     Secondary
     ...
   Input
   ...
 
-Patterns             UX上の問題ごとに解決候補を比較
-  Single Choice
+パターン               UX上の問題ごとに解決候補を比較
+  単一選択
   ...
 
-Templates            複数のPattern / Componentを組み合わせた画面構成例
+テンプレート           複数のPattern / Componentを組み合わせた画面構成例
   ...
 
-Gallery              全体の俯瞰
-  All Components
+ギャラリー             全体の俯瞰
+  全コンポーネント
 ```
 
-Foundations は**実装時に確認が必要な情報だけ**を置きます。
+サイドバーの見出しは日本語にしています。**コンポーネント名は import 名なので訳しません**
+（`Button` はそのまま）。
+
+基礎は**実装時に確認が必要な情報だけ**を置きます。
 Storybook を独立した巨大なデザインシステムにはしません。
 
 Pattern は Component 名ではなく設計上の問題を単位にし、複数の有力な解決候補と選択条件を比較します。一般的な UI Pattern を網羅するためだけには増やしません。
@@ -133,7 +138,7 @@ Pattern / Template は実案件で同じ設計判断や画面構成に再び迷�
 <SpecTable
   head={['決めごと', 'ルール']}
   rows={[
-    ['title', <><Code>Components/*</Code> / <Code>Patterns/*</Code> / <Code>Templates/*</Code> / <Code>Foundations/*</Code> / <Code>Gallery/*</Code></>],
+    ['title', <><Code>コンポーネント/*</Code> / <Code>パターン/*</Code> / <Code>テンプレート/*</Code> / <Code>基礎/*</Code> / <Code>ギャラリー/*</Code>。区分は日本語、コンポーネント名は import 名のまま</>],
     ['Overview', <>Componentではファイルの<strong>先頭</strong>に置く。コンポーネント内の並びは定義順のままなので、書いた位置がそのままサイドバーの位置になる</>],
     ['一覧 Story', <><Code>parameters: {'{'} controls: {'{'} disable: true {'}'} {'}'}</Code> を付ける（Props を 1 つ変えても全体に効かないため）</>],
     ['見本の並べ方', <><Code>stories/_showcase.tsx</Code> の <Code>Showcase</Code> / <Code>Section</Code> / <Code>Cluster</Code> を使う</>],

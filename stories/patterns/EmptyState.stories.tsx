@@ -29,7 +29,7 @@ import { Section, Showcase } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Patterns/EmptyState",
+  title: "パターン/空の状態",
   parameters: {
     layout: "padded",
     docs: {

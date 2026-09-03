@@ -12,7 +12,7 @@ import { Labeled, Section, Showcase, Stack } from "../_showcase";
  * </important>
  */
 const meta = {
-  title: "Components/SearchInput",
+  title: "コンポーネント/SearchInput",
   component: SearchInput,
   parameters: {
     layout: "padded",

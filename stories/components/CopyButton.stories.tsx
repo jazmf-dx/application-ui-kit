@@ -11,7 +11,7 @@ import { Labeled, Section, Showcase, Stack } from "../_showcase";
  * CopyButton は「画面に出した値を持ち帰らせる」ためのコピーボタン。
  */
 const meta = {
-  title: "Components/CopyButton",
+  title: "コンポーネント/CopyButton",
   component: CopyButton,
   parameters: {
     layout: "padded",
