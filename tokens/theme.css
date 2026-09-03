@@ -105,6 +105,19 @@
   --color-input: oklch(0.898 0.012 247.858); /* Gray 200 */
   --color-ring: oklch(0.623 0.214 259.815); /* Blue 600 */
 
+  /* 無効状態（無彩色）
+   *
+   * <important>
+   * 無効は「元の色を薄める」のではなく彩度を落として示す。opacity だけで
+   * 落とすと primary が淡い水色に、danger が淡いピンクになり、
+   * 「押せる薄い色のボタン」と読み間違えられる。
+   * muted と同値だが用途が別（muted は控えめな情報、disabled は操作不能）なので
+   * 別トークンにしてある。片方だけ調整したいことがある。
+   * </important> */
+  --color-disabled: oklch(0.968 0.007 247.896); /* Gray 100 - 面 */
+  --color-disabled-foreground: oklch(0.554 0.013 258.071); /* Gray 500 - 文字・アイコン */
+  --color-disabled-border: oklch(0.898 0.012 247.858); /* Gray 200 - 枠 */
+
   /* shadcn/ui 互換（destructive） - --color-danger と揃える */
   --color-destructive: oklch(0.637 0.237 25.331);
   --color-destructive-foreground: oklch(1 0 0);
@@ -157,6 +170,11 @@
   --color-secondary-foreground: oklch(0.9 0.007 247.896);
   --color-secondary-border: oklch(0.37 0.014 285.938);
 
+  /* 無効状態。面は muted と同じ暗さ、文字は muted-foreground より一段沈める。 */
+  --color-disabled: oklch(0.31 0.014 285.938); /* Gray 800 相当 */
+  --color-disabled-foreground: oklch(0.6 0.013 258.071); /* Gray 500 相当 */
+  --color-disabled-border: oklch(0.37 0.014 285.938); /* Gray 700 相当 */
+
   /* primary / success / danger / warning / info の色相は変えない。
    * 意味と色の対応を light/dark で揃えるため（design-system/colors.md の原則）。 */
 }
@@ -195,8 +213,12 @@
   }
 }
 
+/* Base UI（Select / Combobox の Item）は値なしの `data-selected=""` を書き、
+ * react-day-picker は `data-selected="true"` を書く。両方に当てる。
+ * `="true"` だけを見ていたため、Base UI 側の選択状態に一切当たっていなかった。 */
 @custom-variant data-selected {
-  &:where([data-selected="true"]) {
+  &:where([data-selected="true"]),
+  &:where([data-selected]:not([data-selected="false"])) {
     @slot;
   }
 }

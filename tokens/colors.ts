@@ -106,7 +106,7 @@ export const BASE_COLORS: SemanticColor[] = [
     name: "muted",
     bgClass: "bg-muted",
     token: "--color-muted",
-    usage: "控えめな背景（無効状態・ヘッダー行）",
+    usage: "控えめな背景（表のヘッダー行・補足の帯）",
   },
   {
     name: "muted-foreground",
@@ -131,6 +131,24 @@ export const BASE_COLORS: SemanticColor[] = [
     bgClass: "bg-ring",
     token: "--color-ring",
     usage: "フォーカスリング",
+  },
+  {
+    name: "disabled",
+    bgClass: "bg-disabled",
+    token: "--color-disabled",
+    usage: "無効なコントロールの面。バリアント色を薄めずこれに差し替える",
+  },
+  {
+    name: "disabled-foreground",
+    bgClass: "bg-disabled-foreground",
+    token: "--color-disabled-foreground",
+    usage: "無効なコントロールの文字・アイコン",
+  },
+  {
+    name: "disabled-border",
+    bgClass: "bg-disabled-border",
+    token: "--color-disabled-border",
+    usage: "無効なコントロールの枠",
   },
 ];
 

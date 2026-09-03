@@ -26,13 +26,16 @@
    * ====================================================================== */
 
   /* アイコンのサイズと --icon-box はサイズクラス側が持つ（.cn-button-size-*）。
-   * ここで size-4 を固定すると xs/sm（text-xs）でアイコンだけが大きくなる。 */
+   * ここで size-4 を固定すると xs/sm（text-xs）でアイコンだけが大きくなる。
+   *
+   * 無効時の opacity はここでは持たない。バリアント色を薄めるのではなく
+   * 無彩色へ差し替える（下の「MARK: Button の無効状態」を参照）。 */
   .cn-button {
     @apply relative inline-flex items-center justify-center gap-2 whitespace-nowrap
            rounded-lg text-sm font-medium transition-colors outline-none
            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
-           disabled:pointer-events-none disabled:opacity-50
-           data-disabled:pointer-events-none data-disabled:opacity-50
+           disabled:pointer-events-none
+           data-disabled:pointer-events-none
            [&_svg]:pointer-events-none [&_svg]:shrink-0;
   }
 
@@ -167,6 +170,50 @@
   /* success は shadcn 標準にないバリアント。btn-success（theme.css）と色を揃える。 */
   .cn-button-variant-success {
     @apply bg-success text-success-foreground shadow-sm;
+  }
+
+  /* ========================================================================
+   * MARK: Button の無効状態 — バリアント色を捨てて無彩色にする
+   * ======================================================================
+   *
+   * <important>
+   * 以前は `disabled:opacity-50` だけだったため、primary が淡い水色・danger が
+   * 淡いピンクになっていた。彩度が残っていると「無効」ではなく「そういう色の
+   * 押せるボタン」に読める。無効は明度ではなく彩度を落として示す。
+   * </important>
+   *
+   * loading（Button が付ける aria-busy="true"）は除外する。処理中は一時的に
+   * 押せないだけで使えないわけではないので、アクションの色は保ったまま
+   * スピナーで状態を示す。無彩色にすると「送信できないボタン」に見える。
+   *
+   * 無効の表し方が 2 系統ある（素の `disabled` と Base UI の `data-disabled`）
+   * ため、セレクタもそれぞれ書く。@apply ではなく生の宣言なのは、
+   * この 2 系統 x loading 除外を 1 か所にまとめるため。 */
+
+  /* 面を持つバリアント（default / destructive / success / outline / secondary）:
+   * 面・枠・文字をすべて disabled トークンへ差し替える。 */
+  .cn-button:disabled:not([aria-busy="true"], .cn-button-variant-ghost, .cn-button-variant-link),
+  .cn-button[data-disabled]:not(
+      [data-disabled="false"],
+      [aria-busy="true"],
+      .cn-button-variant-ghost,
+      .cn-button-variant-link
+    ) {
+    background-color: var(--color-disabled);
+    border-color: var(--color-disabled-border);
+    color: var(--color-disabled-foreground);
+    box-shadow: none;
+  }
+
+  /* 面を持たないバリアント（ghost / link）: 面を塗ると無効なのに箱が現れる。
+   * 文字色だけ落とし、link は下線も出さない。 */
+  .cn-button-variant-ghost:disabled:not([aria-busy="true"]),
+  .cn-button-variant-link:disabled:not([aria-busy="true"]),
+  .cn-button-variant-ghost[data-disabled]:not([data-disabled="false"], [aria-busy="true"]),
+  .cn-button-variant-link[data-disabled]:not([data-disabled="false"], [aria-busy="true"]) {
+    background-color: transparent;
+    color: var(--color-disabled-foreground);
+    text-decoration-line: none;
   }
 
   /* サイズはテンプレートの .btn-* と 1:1 で対応させる（実測で一致を確認済み）。
@@ -434,23 +481,41 @@
   /* Base UI の Checkbox.Root は <span role="checkbox"> を描画するため、display を
    * 明示しないと inline のままになり size-4 が効かず、幅が border だけの線になる。
    * ラベル付き（flex 子）では blockify されて偶然直るので、ここで必ず指定する。 */
-  /* 角丸は rounded-sm（4px）で固定する。@theme の --radius が 0.5rem のため
-   * 素の `rounded` は 8px になり、16px の箱では円と区別が付かず
-   * ラジオボタンと見分けられなくなる。 */
+  /* 角丸は rounded-xs（2px）で固定する。
+   *
+   * <important>
+   * @theme の --radius が 0.5rem のため素の `rounded` は 8px になり、16px の箱では
+   * ほぼ円になってラジオボタンと見分けられない（実際に「丸いとラジオボタンだと
+   * 勘違いされる」と指摘を受けた）。rounded-sm（4px）でも 16px の箱では角丸が
+   * 1/4 を占めて丸く見えるため 2px まで落とす。
+   * チェックボックス = 四角 / ラジオ = 円 は形だけが手がかりなので、
+   * ここを緩めてはいけない。--radius に追従させてもいけない。
+   * </important> */
   /* aria-invalid は shadcn/ui のエラー表現の片方（もう片方は Field の data-invalid）。
    * 移設時にこの変種を落としており、「コントロールへ aria-invalid を付ける」という
    * 上流の指示が無反応になっていた。.cn-input と同じ danger トークンで戻す。 */
   .cn-checkbox {
     @apply inline-flex items-center justify-center
-           size-4 shrink-0 rounded-sm border border-input bg-background transition-colors
+           size-4 shrink-0 rounded-xs border border-input bg-background transition-colors
            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
            data-checked:border-primary data-checked:bg-primary
            data-checked:text-primary-foreground
            data-indeterminate:border-primary data-indeterminate:bg-primary
            data-indeterminate:text-primary-foreground
            aria-invalid:border-danger aria-invalid:focus-visible:ring-danger
-           disabled:cursor-not-allowed disabled:opacity-50
-           data-disabled:cursor-not-allowed data-disabled:opacity-50;
+           disabled:cursor-not-allowed
+           data-disabled:cursor-not-allowed;
+  }
+
+  /* 無効はボタンと同じ考え方で無彩色にする。opacity で落とすだけだと
+   * チェック済みが淡い水色になり、「無効」ではなく「薄い色のチェック」に見える。
+   * data-checked:bg-primary 等は :where() 経由で特定度 0 なので、
+   * このブロックが後勝ちする。 */
+  .cn-checkbox:disabled,
+  .cn-checkbox[data-disabled]:not([data-disabled="false"]) {
+    border-color: var(--color-disabled-border);
+    background-color: var(--color-disabled);
+    color: var(--color-disabled-foreground);
   }
 
   .cn-checkbox-indicator {
@@ -490,8 +555,15 @@
            focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
            data-checked:border-primary
            aria-invalid:border-danger aria-invalid:focus-visible:ring-danger
-           disabled:cursor-not-allowed disabled:opacity-50
-           data-disabled:cursor-not-allowed data-disabled:opacity-50;
+           disabled:cursor-not-allowed
+           data-disabled:cursor-not-allowed;
+  }
+
+  /* cn-checkbox と同じ理由で無彩色にする（中の点は下の指示子側で落とす）。 */
+  .cn-radio-group-item:disabled,
+  .cn-radio-group-item[data-disabled]:not([data-disabled="false"]) {
+    border-color: var(--color-disabled-border);
+    background-color: var(--color-disabled);
   }
 
   /* aria-invalid はグループ（role="radiogroup"）側に付く（ラジオ 1 つ 1 つが
@@ -507,6 +579,11 @@
 
   .cn-radio-group-indicator-icon {
     @apply block size-2 rounded-full bg-primary;
+  }
+
+  .cn-radio-group-item:disabled .cn-radio-group-indicator-icon,
+  .cn-radio-group-item[data-disabled]:not([data-disabled="false"]) .cn-radio-group-indicator-icon {
+    background-color: var(--color-disabled-foreground);
   }
 
   /* ========================================================================
@@ -687,11 +764,51 @@
     @apply px-2 py-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground;
   }
 
+  /* ========================================================================
+   * MARK: 選択状態（Select / Combobox の Item）
+   * ======================================================================
+   *
+   * <important>
+   * 選択は「左のチェック」ではなく面と文字で示す。
+   * 以前は pl-8 でチェック用の溝を左に空けていたが、未選択のリストでは
+   * その溝が最初から最後まで空で、ラベルだけが右へずれて見えた
+   * （選択肢が 1 つも選ばれていない状態が既定なので、空の溝が既定になる）。
+   *
+   *   - 左は詰めてラベルの頭を揃える（pl-2）
+   *   - 選択は primary の淡い面 + primary の文字 + font-medium で示す
+   *   - チェックは行末に絶対配置で残す（pr-8 の余白の中）
+   *
+   * チェックを絶対配置のまま右へ回すのが要点。行の流れに入れる（ml-auto）と
+   * 選択中の行だけ末尾のバッジがチェックの分だけ左へずれ、バッジの列が
+   * 揃わなくなる。右の余白は全行同じ幅なので何も動かない。
+   *
+   * highlighted（hover / キーボード移動）とは色の系統で区別する:
+   *   highlighted = 無彩色の面（bg-accent）
+   *   selected    = primary の淡い面 + primary の文字
+   * 両方が立つときは selected を優先しつつ面を一段濃くして移動先が分かるようにする。
+   * </important>
+   *
+   * 選択状態は @apply では書かない。data-highlighted は Tailwind 組込みの
+   * data-* バリアント（特定度 +1）だが data-selected は theme.css の
+   * @custom-variant（:where() なので特定度 +0）で、@apply の中に混ぜると
+   * highlighted が常に勝ってしまう。生のセレクタで特定度を明示する。 */
+
   .cn-select-item {
-    @apply relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2
+    @apply relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8
            text-sm outline-none transition-colors
            data-highlighted:bg-accent data-highlighted:text-accent-foreground
            data-disabled:pointer-events-none data-disabled:opacity-50;
+  }
+
+  .cn-select-item[data-selected]:not([data-selected="false"]) {
+    background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  .cn-select-item[data-selected]:not([data-selected="false"])[data-highlighted] {
+    background-color: color-mix(in oklab, var(--color-primary) 18%, transparent);
+    color: var(--color-primary);
   }
 
   .cn-select-item-text {
@@ -699,7 +816,7 @@
   }
 
   .cn-select-item-indicator {
-    @apply absolute left-2 flex size-3.5 items-center justify-center;
+    @apply absolute right-2 flex size-3.5 items-center justify-center text-primary;
   }
 
   .cn-select-item-indicator-icon {
@@ -842,15 +959,27 @@
     @apply px-2 py-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground;
   }
 
+  /* 選択状態の考え方は Select と同じ（上の「MARK: 選択状態」を参照）。 */
   .cn-combobox-item {
-    @apply relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2
+    @apply relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8
            text-sm outline-none transition-colors
            data-highlighted:bg-accent data-highlighted:text-accent-foreground
            data-disabled:pointer-events-none data-disabled:opacity-50;
   }
 
+  .cn-combobox-item[data-selected]:not([data-selected="false"]) {
+    background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  .cn-combobox-item[data-selected]:not([data-selected="false"])[data-highlighted] {
+    background-color: color-mix(in oklab, var(--color-primary) 18%, transparent);
+    color: var(--color-primary);
+  }
+
   .cn-combobox-item-indicator {
-    @apply absolute left-2 flex size-3.5 items-center justify-center;
+    @apply absolute right-2 flex size-3.5 items-center justify-center text-primary;
   }
 
   .cn-combobox-item-indicator-icon {
