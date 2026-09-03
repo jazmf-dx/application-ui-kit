@@ -31,7 +31,7 @@ Claude Design 等の AI や人間が**画面をデザインするとき**に渡�
 - 装飾だけを目的とした色や Animation
 - 業務画面に適さない Landing Page 風の表現
 
-**実装前提:** shadcn/ui + Tailwind CSS v4。このキットの部品（`Application*`）と
+**実装前提:** shadcn/ui + Tailwind CSS v4。このキットの部品と
 semantic token で実装できる構成にする。shadcn/ui で表現できるものを独自 Component 化しない。
 Django + React Islands で実装困難な構成を避ける。
 
@@ -66,25 +66,27 @@ Django + React Islands で実装困難な構成を避ける。
 まず既存の部品を使う。ここにないものは shadcn/ui → それでもなければ新規検討の順。
 仕様・状態・使用例は Storybook の各 Overview を参照。
 
-**このキットが API を設計した部品（`Application*`）:**
+**このキットが API を設計した部品**（仕様は Storybook を正とする）:
 
 | 部品 | 使う場面 |
 |---|---|
-| ApplicationButton / ApplicationButtonGroup | 操作。variant = primary / secondary / danger / success |
-| ApplicationInput / ApplicationSearchInput / ApplicationCheckbox / ApplicationRadioGroup / ApplicationSelect / ApplicationCombobox / ApplicationDatePicker | フォーム入力。Combobox は検索・新規作成つき選択。説明を見比べて選ばせるなら RadioGroup の `variant="cards"` |
-| ApplicationScopeSearch | 画面上部の共通検索。1 本の入力で複数種別を横断し、種別ごとのグループで候補を出す |
-| ApplicationFormField | ラベル・必須表示・エラー配置の統一 |
-| ApplicationDialog / ApplicationConfirmDialog / ApplicationFormDialog | ダイアログ。破壊的操作の確認は ConfirmDialog（`confirm()` を使わない） |
-| ApplicationToast | 補助的なフィードバック（`alert()` を使わない） |
-| ApplicationTable | 一覧。空状態が必須の API |
-| ApplicationRadioTable | 表から1行を選ばせる。プラン・送付先など列で比較して決める選択 |
-| ApplicationTabs / ApplicationPagination / ApplicationNavItem | 画面内の切替・送り・ナビゲーション |
-| ApplicationBadge / ApplicationActiveIndicator | 状態表示 |
-| ApplicationDropdown | メニュー |
-| ApplicationThemeToggle | ライト/ダーク切替 |
+| Button / ButtonGroup | 操作。variant = primary / secondary / danger / success |
+| Input / SearchInput / Checkbox / RadioGroup / Select / Combobox / DatePicker | フォーム入力。Combobox は検索・新規作成つき選択。説明を見比べて選ばせるなら RadioGroup の `variant="cards"` |
+| ScopeSearch | 画面上部の共通検索。1 本の入力で複数種別を横断し、種別ごとのグループで候補を出す |
+| FormField / FieldSet | ラベル・必須表示・エラー配置の統一。単一のコントロールは FormField、ラジオ・ボタングループのようなグループ入力は FieldSet |
+| Dialog / ConfirmDialog / FormDialog | ダイアログ。破壊的操作の確認は ConfirmDialog（`confirm()` を使わない） |
+| toast | 補助的なフィードバック（`alert()` を使わない） |
+| Table | 一覧。空状態が必須の API |
+| RadioTable | 表から1行を選ばせる。プラン・送付先など列で比較して決める選択 |
+| Tabs / Pagination / NavItem | 画面内の切替・送り・ナビゲーション |
+| Badge / ActiveIndicator | 状態表示 |
+| Dropdown | メニュー |
+| ThemeToggle | ライト/ダーク切替 |
 
 **shadcn/ui をそのまま公開している部品:** Card / Spinner / Textarea / Progress /
 Empty / Item / Field / Label / Separator（API は shadcn/ui のドキュメントと同じ）。
+`FieldSet` はこちらではなく上の表にある。グループ入力のラベル・エラー配置を
+引き受ける実装をこのキットが持つため。
 
 **置いていないもの:** 社員選択・組織ツリーなどの業務ドメイン UI（ドメインを所有する
 プロジェクト側）。チャート・地図・動画などは利用側で選定する。

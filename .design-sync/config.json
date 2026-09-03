@@ -8,15 +8,15 @@
   "buildCmd": "bun run build",
   "readmeHeader": ".design-sync/conventions.md",
   "overrides": {
-    "ApplicationPagination": { "cardMode": "column" },
-    "ApplicationTable": { "viewport": "900x1150" },
-    "ApplicationNavItem": { "viewport": "900x1100" },
-    "ApplicationFormField": { "viewport": "900x1020" },
-    "ApplicationInput": { "viewport": "900x980" },
-    "ApplicationButtonGroup": { "viewport": "900x900" },
-    "ApplicationCombobox": { "viewport": "900x870" },
-    "ApplicationDatePicker": { "viewport": "900x870" },
-    "ApplicationRadioGroup": { "viewport": "900x850" },
-    "ApplicationSelect": { "viewport": "900x780" }
+    "Pagination": { "cardMode": "column" },
+    "Table": { "viewport": "900x1150" },
+    "NavItem": { "viewport": "900x1100" },
+    "FormField": { "viewport": "900x1020" },
+    "Input": { "viewport": "900x980" },
+    "ButtonGroup": { "viewport": "900x900" },
+    "Combobox": { "viewport": "900x870" },
+    "DatePicker": { "viewport": "900x870" },
+    "RadioGroup": { "viewport": "900x850" },
+    "Select": { "viewport": "900x780" }
   }
 }

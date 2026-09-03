@@ -263,9 +263,9 @@
  * 共有コンポーネントクラス
  *
  * テンプレートから使う「素の HTML + class」の部品。
- * React コンポーネントの中では対応する Application コンポーネントを使う。
- *   btn-primary  ↔ <ApplicationButton variant="primary">
- *   input-field  ↔ <ApplicationInput>
+ * React コンポーネントの中では対応するこのキットのコンポーネントを使う。
+ *   btn-primary  ↔ <Button variant="primary">
+ *   input-field  ↔ <Input>
  *   card         ↔ <Card>（shadcn/ui の Card を re-export したもの）
  *
  * 見本は Storybook の Foundations を参照。

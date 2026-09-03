@@ -41,7 +41,7 @@
 
 import { useEffect, useState } from "react";
 import type { DateRange } from "react-day-picker";
-import { ApplicationDatePicker } from "../application/ApplicationDatePicker";
+import { DatePicker } from "../application/DatePicker";
 
 function parseIsoDate(value?: string): Date | undefined {
   if (!value) return undefined;
@@ -150,7 +150,7 @@ export function DatePickerIsland({
 
   if (mode === "range") {
     return (
-      <ApplicationDatePicker
+      <DatePicker
         mode="range"
         value={range}
         onChange={(v) => setRange(v as DateRange | undefined)}
@@ -162,7 +162,7 @@ export function DatePickerIsland({
   }
 
   return (
-    <ApplicationDatePicker
+    <DatePicker
       mode="single"
       value={singleDate}
       onChange={(v) => setSingleDate(v as Date | undefined)}

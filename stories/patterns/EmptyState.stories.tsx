@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FileText, Inbox, Lock, Plus, SearchX } from "lucide-react";
 import * as React from "react";
 import {
-  ApplicationButton,
-  ApplicationSearchInput,
-  ApplicationTable,
-  type ApplicationTableColumn,
+  Button,
+  SearchInput,
+  Table,
+  type TableColumn,
   Card,
   CardContent,
   CardHeader,
@@ -58,7 +58,7 @@ const meta = {
 |---|---|
 | 読み込み中 | スケルトンかスピナー。空状態を出すと「無い」と誤解される |
 | 読み込みに失敗した | \`Patterns/ErrorState\`。原因と再試行手段が必要 |
-| テーブルの 0 件 | \`ApplicationTable\` の \`emptyMessage\` / \`emptySubMessage\`（外枠とヘッダーを保つ） |
+| テーブルの 0 件 | \`Table\` の \`emptyMessage\` / \`emptySubMessage\`（外枠とヘッダーを保つ） |
 
 ## 注意事項
 
@@ -78,7 +78,7 @@ type Story = StoryObj<typeof meta>;
 
 type Request = { id: number; code: string; title: string; applicant: string };
 
-const COLUMNS: ApplicationTableColumn<Request>[] = [
+const COLUMNS: TableColumn<Request>[] = [
   { key: "code", header: "申請番号", className: "w-36", cell: (r) => r.code },
   { key: "title", header: "件名", cell: (r) => r.title },
   { key: "applicant", header: "申請者", className: "w-32", cell: (r) => r.applicant },
@@ -107,7 +107,7 @@ export const Overview: Story = {
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
-                <ApplicationButton leftIcon={<Plus className="w-4 h-4" />}>新規申請</ApplicationButton>
+                <Button leftIcon={<Plus className="w-4 h-4" />}>新規申請</Button>
               </EmptyContent>
             </Empty>
           </CardContent>
@@ -128,7 +128,7 @@ export const Overview: Story = {
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
-                <ApplicationButton variant="secondary">検索条件をクリア</ApplicationButton>
+                <Button variant="secondary">検索条件をクリア</Button>
               </EmptyContent>
             </Empty>
           </CardContent>
@@ -157,7 +157,7 @@ export const Overview: Story = {
         title="テーブルの 0 件"
         note="外枠とヘッダーを残す。列が見えていれば、何の一覧なのかが分かる。"
       >
-        <ApplicationTable<Request>
+        <Table<Request>
           columns={COLUMNS}
           rows={[]}
           emptyMessage="申請がありません"
@@ -192,7 +192,7 @@ export const NoData: Story = {
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
-            <ApplicationButton leftIcon={<Plus className="w-4 h-4" />}>新規申請</ApplicationButton>
+            <Button leftIcon={<Plus className="w-4 h-4" />}>新規申請</Button>
           </EmptyContent>
         </Empty>
       </CardContent>
@@ -214,7 +214,7 @@ export const NoSearchResults: Story = {
       <div className="max-w-2xl space-y-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="max-w-xs flex-1">
-            <ApplicationSearchInput
+            <SearchInput
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onClear={() => setKeyword("")}
@@ -239,9 +239,9 @@ export const NoSearchResults: Story = {
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
-                <ApplicationButton variant="secondary" onClick={() => setKeyword("")}>
+                <Button variant="secondary" onClick={() => setKeyword("")}>
                   検索条件をクリア
-                </ApplicationButton>
+                </Button>
               </EmptyContent>
             </Empty>
           </CardContent>
@@ -273,8 +273,8 @@ export const WithAction: Story = {
           </EmptyHeader>
           <EmptyContent>
             <div className="flex flex-wrap items-center justify-center gap-2">
-              <ApplicationButton leftIcon={<Plus className="w-4 h-4" />}>取引先を登録</ApplicationButton>
-              <ApplicationButton variant="secondary">CSV から取り込む</ApplicationButton>
+              <Button leftIcon={<Plus className="w-4 h-4" />}>取引先を登録</Button>
+              <Button variant="secondary">CSV から取り込む</Button>
             </div>
           </EmptyContent>
         </Empty>
@@ -286,12 +286,12 @@ export const WithAction: Story = {
 /**
  * テーブルの 0 件。
  *
- * `ApplicationTable` は `emptyMessage` を持つため、`Empty` を自分で組む必要はない。
+ * `Table` は `emptyMessage` を持つため、`Empty` を自分で組む必要はない。
  * ヘッダーが残るので「何の一覧が 0 件なのか」が伝わる。
  */
 export const InTable: Story = {
   render: () => (
-    <ApplicationTable<Request>
+    <Table<Request>
       columns={COLUMNS}
       rows={[]}
       emptyMessage="申請がありません"

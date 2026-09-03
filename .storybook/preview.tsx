@@ -1,6 +1,6 @@
 import * as React from 'react'
 import type { Preview, Decorator } from '@storybook/react-vite'
-import { ApplicationToaster } from '../components/application'
+import { Toaster } from '../components/application'
 import './storybook.css'
 
 const withTheme: Decorator = (Story, context) => {
@@ -19,7 +19,7 @@ const withTheme: Decorator = (Story, context) => {
     <div className="app-preview font-sans p-6">
       <Story />
       {/* トーストは常時マウントが前提（実アプリではルートレイアウトに 1 つ） */}
-      <ApplicationToaster />
+      <Toaster />
     </div>
   )
 }

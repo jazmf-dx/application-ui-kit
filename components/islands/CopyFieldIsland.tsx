@@ -21,11 +21,8 @@
  */
 
 import { useRef, useState } from "react";
-import {
-  ApplicationCopyButton,
-  type ApplicationCopyResult,
-} from "../application/ApplicationCopyButton";
-import { ApplicationInput } from "../application/ApplicationInput";
+import { CopyButton, type CopyResult } from "../application/CopyButton";
+import { Input } from "../application/Input";
 
 export interface CopyFieldIslandProps {
   /** コピーする値。入力欄にそのまま表示される */
@@ -62,7 +59,7 @@ export function CopyFieldIsland({
   // 値は常に文字列として扱う
   const text = String(value);
 
-  const handleCopyResult = (result: ApplicationCopyResult) => {
+  const handleCopyResult = (result: CopyResult) => {
     // 成功はボタン自身が「コピーしました」に変わって伝える（aria-live 込み）。
     // ここで同じ文言を重ねると読み上げが二重になるため、案内行は
     // 手動コピーへの引き継ぎだけを担う。
@@ -72,7 +69,7 @@ export function CopyFieldIsland({
   return (
     <div>
       <div className="flex items-center gap-2">
-        <ApplicationInput
+        <Input
           ref={inputRef}
           type="text"
           readOnly
@@ -80,7 +77,7 @@ export function CopyFieldIsland({
           aria-label={inputAriaLabel}
           className="font-mono"
         />
-        <ApplicationCopyButton
+        <CopyButton
           className="shrink-0"
           value={text}
           label={copyLabel}

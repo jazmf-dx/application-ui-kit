@@ -19,7 +19,7 @@
 >
 > `CheckboxRoot.js:234` / `RadioRoot.js:191` も同じ。したがって
 > **フォーカスの行き止まりが起きるのは、このリポジトリが手書きした隠し input を
-> 持つ 2 部品（ApplicationTreeSelect / ApplicationButtonGroup）だけ**であり、
+> 持つ 2 部品（TreeSelect / ButtonGroup）だけ**であり、
 > そちらは「決定 1」で対応済み。
 >
 > Base UI 由来の 4 部品に残っていたのは「可視コントロールに `aria-invalid` と
@@ -56,8 +56,8 @@ required,
 
 | 経路 | 内容 |
 |---|---|
-| `Patterns/Search` ではなく `Patterns/Form` の推奨形 | 「フォーム全体を `<form>` で包み `type="submit"` を使う」。見本自体が `ApplicationSelect ... required` を含む |
-| `ApplicationFormDialog` | `formRef.current.requestSubmit()`。`requestSubmit()` は `submit()` と違い対話的な制約検証を走らせる |
+| `Patterns/Search` ではなく `Patterns/Form` の推奨形 | 「フォーム全体を `<form>` で包み `type="submit"` を使う」。見本自体が `Select ... required` を含む |
+| `FormDialog` | `formRef.current.requestSubmit()`。`requestSubmit()` は `submit()` と違い対話的な制約検証を走らせる |
 
 ### Base UI 側の設計
 
@@ -85,7 +85,7 @@ props: [{
 ### このキットの現状
 
 - `components/ui/field.tsx` は **Base UI の `Field` ではなく** shadcn の素の markup（`fieldset` / `div` / `label` + `cn-field-*`）
-- `ApplicationFormField` は props で受けたエラーを `id` / `aria-describedby` / `aria-invalid` へ結線する**表示部品**
+- `FormField` は props で受けたエラーを `id` / `aria-describedby` / `aria-invalid` へ結線する**表示部品**
 - `Form` 相当は存在しない
 
 つまり **「Base UI から隠し input のパターンだけを受け取り、その前提である `Form` / `Field` 層を持たないまま、ネイティブ検証を推奨している」** 状態です。Base UI の欠陥ではなく、組み合わせの選択の帰結です。
@@ -96,7 +96,7 @@ props: [{
 
 ### 1. 当面（実施済み）
 
-`ApplicationTreeSelect` と `ApplicationButtonGroup` で、送信用 input の `invalid` イベントを横取りします。
+`TreeSelect` と `ButtonGroup` で、送信用 input の `invalid` イベントを横取りします。
 
 ```tsx
 onInvalid={(event) => {
@@ -133,12 +133,12 @@ HTML 仕様上、`invalid` をキャンセルするとその要素は "unhandled
 
 このキットはその**両方を使えていなかった**。
 
-- `ApplicationFormField` が `data-invalid` を渡しておらず、`.cn-field` の規則が死んでいた
+- `FormField` が `data-invalid` を渡しておらず、`.cn-field` の規則が死んでいた
 - `.cn-label` が独自に `text-foreground` を持ち（上流は色を指定しない）、
   `data-invalid` を直しても色が継承されなかった
 - `.cn-checkbox` / `.cn-radio-group-item` / `.cn-combobox-chips` は移設時に上流の
   `aria-invalid` 変種を落としており、`aria-invalid` を付けても無反応だった
-- `ApplicationFormField` が独自 prop の `error` を注入しており、受け取らない子では
+- `FormField` が独自 prop の `error` を注入しており、受け取らない子では
   DOM へ漏れて React が毎レンダー警告していた
 - グループ部品へ `<label for>` を当てており、アクセシブル名が付いていなかった
   （上流はグループに `FieldSet` + `FieldLegend` を使う）
@@ -147,7 +147,7 @@ HTML 仕様上、`invalid` をキャンセルするとその要素は "unhandled
 
 **(b) 非公開 API への依存が要る。**
 
-`ApplicationTreeSelect` / `ApplicationButtonGroup` のような「単一のフォームコントロールを
+`TreeSelect` / `ButtonGroup` のような「単一のフォームコントロールを
 持たない部品」を Base UI の `Field` に参加させるには、`@base-ui/react/internals/*`
 （`field-root-context` / `field-register-control`）が要る。これは Base UI 自身の Select が
 使っている経路だが、ドキュメントにも CHANGELOG にも記載が無く、マイナーで消え得る。
@@ -162,14 +162,14 @@ Base UI 由来の 4 部品でネイティブ検証が弾いたとき、ブラウ
 吹き出しだけで、`aria-describedby` では結ばれない。
 
 これを閉じるには `Form` 層（= 却下した案 2）が要る。**既知の未解決事項として残す。**
-アプリ側で検証してエラー文言を `ApplicationFormField error` / `ApplicationFieldSet error`
+アプリ側で検証してエラー文言を `FormField error` / `FieldSet error`
 へ渡す場合は、この経路を通らないため影響しない。
 
 ## 結果
 
-- 1 により、`ApplicationTreeSelect` / `ApplicationButtonGroup` は「未選択で送信 → 可視コントロールにフォーカスとエラー」が成立する
+- 1 により、`TreeSelect` / `ButtonGroup` は「未選択で送信 → 可視コントロールにフォーカスとエラー」が成立する
 - 2 により、エラー状態の伝達経路が `data-invalid` + `aria-invalid` の 2 本に揃い、独自 prop が消えた。上流の指示どおりに書けば全部品で同じように効く
-- グループ部品は `ApplicationFieldSet` を使う。`ApplicationFormField` をグループへ使うと名前が付かないことを、Story とテストで固定した
+- グループ部品は `FieldSet` を使う。`FormField` をグループへ使うと名前が付かないことを、Story とテストで固定した
 - Base UI へ依存する変更は入れていない。`@base-ui/react/internals/*` への依存も無い
 - 残る制約は「3. 残る制約」のとおり
 

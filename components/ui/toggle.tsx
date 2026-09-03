@@ -7,7 +7,7 @@ import { cn } from "../../lib/utils"
 
 // <important>
 // shadcn/ui (base) の toggle をそのまま取り込んだもの。唯一の差分は `primary`
-// バリアントの追加。ApplicationButtonGroup が「選択中を primary 色で塗る」
+// バリアントの追加。ButtonGroup が「選択中を primary 色で塗る」
 // segmented control を提供するために必要で、上流の default/outline では出せない。
 // 上流を取り込み直すときは、この 1 行だけ再適用すること。
 // </important>

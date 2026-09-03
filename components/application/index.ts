@@ -3,15 +3,20 @@
  *
  * shadcn/ui（Base UI ベース / gen3）を土台にした共有 UI コンポーネント群です。
  *
- * 公開 API は 2 種類あります。
+ * 名前は接頭辞なしで統一しています（`Button` / `DatePicker` …）。
+ * 由来は名前ではなく、下の 2 つのセクションで表します。
  *
- *   1. Application* — このリポジトリが API を設計したもの。
+ *   1. このリポジトリが API を設計したもの。
  *      items 配列や columns/rows のような props API、非同期ダイアログ、
  *      日本語の既定ラベルなど、shadcn/ui にない value を持つものだけを置きます。
+ *      仕様は Storybook を正とします。
  *
- *   2. shadcn/ui の名前のまま re-export しているもの（Card / Spinner / Textarea 等）。
+ *   2. shadcn/ui をそのまま re-export しているもの（Card / Spinner / Textarea 等）。
  *      ラップする理由がないため、素の shadcn/ui をそのまま公開しています。
- *      使い方は https://ui.shadcn.com/docs/components を参照してください。
+ *      **こちらは https://ui.shadcn.com/docs/components がそのまま使えます。**
+ *
+ * どちらのセクションにあるかは実装の内部事情なので、必要になれば 2 から 1 へ
+ * 移します。名前が由来を持たないため、その移動で利用側は壊れません。
  *
  * 各コンポーネントの仕様・使用例・使わない場面は Storybook を参照してください。
  *   bun run storybook
@@ -24,117 +29,124 @@
  */
 
 /* ==========================================================================
- * Application* — このリポジトリが API を設計したもの
+ * このリポジトリが API を設計したもの
+ *
+ * 仕様は Storybook を正とします。shadcn/ui のドキュメントとは props が違います。
  * ========================================================================== */
 
-export { ApplicationButton } from "./ApplicationButton";
-export type { ApplicationButtonProps, ApplicationButtonVariant } from "./ApplicationButton";
+export { Button } from "./Button";
+export type { ButtonProps, ButtonVariant } from "./Button";
 
-export { ApplicationDialog } from "./ApplicationDialog";
-export type { ApplicationDialogProps } from "./ApplicationDialog";
+export { Dialog } from "./Dialog";
+export type { DialogProps } from "./Dialog";
 
-export { ApplicationConfirmDialog } from "./ApplicationConfirmDialog";
-export type { ApplicationConfirmDialogProps } from "./ApplicationConfirmDialog";
+export { ConfirmDialog } from "./ConfirmDialog";
+export type { ConfirmDialogProps } from "./ConfirmDialog";
 
-export { ApplicationFormDialog } from "./ApplicationFormDialog";
-export type { ApplicationFormDialogProps } from "./ApplicationFormDialog";
+export { FormDialog } from "./FormDialog";
+export type { FormDialogProps } from "./FormDialog";
 
-export { ApplicationToast, ApplicationToaster } from "./ApplicationToast";
-export type { ApplicationToastOptions, ApplicationToastType } from "./ApplicationToast";
+export { toast, Toaster } from "./Toast";
+export type { ToastOptions, ToastType } from "./Toast";
 
-export { ApplicationDropdown } from "./ApplicationDropdown";
-export type { ApplicationDropdownProps, ApplicationDropdownItem } from "./ApplicationDropdown";
+export { Dropdown } from "./Dropdown";
+export type { DropdownProps, DropdownItem } from "./Dropdown";
 
-export { ApplicationDatePicker } from "./ApplicationDatePicker";
+export { DatePicker } from "./DatePicker";
 export type {
-  ApplicationDatePickerProps,
-  ApplicationDatePickerMode,
-  ApplicationDatePickerValue,
-} from "./ApplicationDatePicker";
+  DatePickerProps,
+  DatePickerMode,
+  DatePickerValue,
+} from "./DatePicker";
 
-export { ApplicationInput } from "./ApplicationInput";
-export type { ApplicationInputProps } from "./ApplicationInput";
+export { Input } from "./Input";
+export type { InputProps } from "./Input";
 
-export { ApplicationSelect } from "./ApplicationSelect";
-export type { ApplicationSelectProps, ApplicationSelectItem } from "./ApplicationSelect";
+export { Select } from "./Select";
+export type { SelectProps, SelectItem } from "./Select";
 
 export {
-  ApplicationCombobox,
-  APPLICATION_COMBOBOX_CREATE_PREFIX,
+  Combobox,
+  COMBOBOX_CREATE_PREFIX,
   splitCreatedValues,
-} from "./ApplicationCombobox";
-export type { ApplicationComboboxProps, ApplicationComboboxItem } from "./ApplicationCombobox";
+} from "./Combobox";
+export type { ComboboxProps, ComboboxItem } from "./Combobox";
 
-export { ApplicationTreeSelect, findTreePath } from "./ApplicationTreeSelect";
+export { TreeSelect, findTreePath } from "./TreeSelect";
 export type {
-  ApplicationTreeSelectProps,
-  ApplicationTreeSelectItem,
-} from "./ApplicationTreeSelect";
+  TreeSelectProps,
+  TreeSelectItem,
+} from "./TreeSelect";
 
-export { ApplicationCheckbox } from "./ApplicationCheckbox";
-export type { ApplicationCheckboxProps } from "./ApplicationCheckbox";
+export { Checkbox } from "./Checkbox";
+export type { CheckboxProps } from "./Checkbox";
 
-export { ApplicationButtonGroup } from "./ApplicationButtonGroup";
+export { ButtonGroup } from "./ButtonGroup";
 export type {
-  ApplicationButtonGroupProps,
-  ApplicationButtonGroupItem,
-} from "./ApplicationButtonGroup";
+  ButtonGroupProps,
+  ButtonGroupItem,
+} from "./ButtonGroup";
 
-export { ApplicationTable } from "./ApplicationTable";
-export type { ApplicationTableProps, ApplicationTableColumn } from "./ApplicationTable";
+export { Table } from "./Table";
+export type { TableProps, TableColumn } from "./Table";
 
-export { ApplicationFormField } from "./ApplicationFormField";
-export type { ApplicationFormFieldProps } from "./ApplicationFormField";
+export { FormField } from "./FormField";
+export type { FormFieldProps } from "./FormField";
 
-export { ApplicationFieldSet } from "./ApplicationFieldSet";
-export type { ApplicationFieldSetProps } from "./ApplicationFieldSet";
+export { FieldSet } from "./FieldSet";
+export type { FieldSetProps } from "./FieldSet";
 
-export { ApplicationTabs } from "./ApplicationTabs";
-export type { ApplicationTabsProps, ApplicationTabItem } from "./ApplicationTabs";
+export { Tabs } from "./Tabs";
+export type { TabsProps, TabItem } from "./Tabs";
 
-export { ApplicationPagination } from "./ApplicationPagination";
-export type { ApplicationPaginationProps } from "./ApplicationPagination";
+export { Pagination } from "./Pagination";
+export type { PaginationProps } from "./Pagination";
 
-export { ApplicationBadge } from "./ApplicationBadge";
-export type { ApplicationBadgeProps, ApplicationBadgeTone } from "./ApplicationBadge";
+export { Badge } from "./Badge";
+export type { BadgeProps, BadgeTone } from "./Badge";
 
-export { ApplicationRadioGroup } from "./ApplicationRadioGroup";
+export { RadioGroup } from "./RadioGroup";
 export type {
-  ApplicationRadioGroupProps,
-  ApplicationRadioGroupItem,
-  ApplicationRadioGroupVariant,
-} from "./ApplicationRadioGroup";
+  RadioGroupProps,
+  RadioGroupItem,
+  RadioGroupVariant,
+} from "./RadioGroup";
 
-export { ApplicationRadioTable } from "./ApplicationRadioTable";
-export type { ApplicationRadioTableProps } from "./ApplicationRadioTable";
+export { RadioTable } from "./RadioTable";
+export type { RadioTableProps } from "./RadioTable";
 
-export { ApplicationSearchInput } from "./ApplicationSearchInput";
-export type { ApplicationSearchInputProps } from "./ApplicationSearchInput";
+export { SearchInput } from "./SearchInput";
+export type { SearchInputProps } from "./SearchInput";
 
-export { ApplicationScopeSearch } from "./ApplicationScopeSearch";
+export { ScopeSearch } from "./ScopeSearch";
 export type {
-  ApplicationScopeSearchProps,
-  ApplicationScopeSearchItem,
-} from "./ApplicationScopeSearch";
+  ScopeSearchProps,
+  ScopeSearchItem,
+} from "./ScopeSearch";
 
-export { ApplicationNavItem } from "./ApplicationNavItem";
-export type { ApplicationNavItemProps, ApplicationNavItemColor } from "./ApplicationNavItem";
+export { NavItem } from "./NavItem";
+export type { NavItemProps, NavItemColor } from "./NavItem";
 
-export { ApplicationActiveIndicator } from "./ApplicationActiveIndicator";
-export type { ApplicationActiveIndicatorProps } from "./ApplicationActiveIndicator";
+export { ActiveIndicator } from "./ActiveIndicator";
+export type { ActiveIndicatorProps } from "./ActiveIndicator";
 
-export { ApplicationThemeToggle } from "./ApplicationThemeToggle";
-export type { ApplicationThemeToggleProps } from "./ApplicationThemeToggle";
+export { ThemeToggle } from "./ThemeToggle";
+export type { ThemeToggleProps } from "./ThemeToggle";
 
-export { ApplicationCopyButton, copyTextToClipboard } from "./ApplicationCopyButton";
-export type { ApplicationCopyButtonProps, ApplicationCopyResult } from "./ApplicationCopyButton";
+export { CopyButton, copyTextToClipboard } from "./CopyButton";
+export type { CopyButtonProps, CopyResult } from "./CopyButton";
 
 /* ==========================================================================
  * shadcn/ui をそのまま公開しているもの
  *
  * ラップしても足せる value がないため、素の shadcn/ui を re-export します。
  * ここに並ぶものは https://ui.shadcn.com/docs/components と同じ API です。
- * 独自の振る舞いが必要になった時点で Application* に昇格させてください。
+ *
+ * 独自の振る舞いが必要になったら、上のセクションへ移してください。
+ * 名前は変わらないので、利用側の import はそのまま動きます。
+ *
+ * `FieldSet` はここにありません。グループ入力のラベル・必須・エラー配置を
+ * 引き受ける実装を上のセクションで公開しているためです。
  * ========================================================================== */
 
 export {
@@ -177,7 +189,6 @@ export {
 } from "../ui/item";
 export {
   Field,
-  FieldSet,
   FieldLegend,
   FieldGroup,
   FieldLabel,
@@ -189,3 +200,12 @@ export {
 } from "../ui/field";
 export { Label } from "../ui/label";
 export { Separator } from "../ui/separator";
+
+/* ==========================================================================
+ * 旧名（Application* 接頭辞つき）の後方互換エイリアス
+ *
+ * v6.2.0 を非破壊にするためだけに残しています。**v7.0.0 で削除します。**
+ * 新しい export はここではなく上のセクションへ接頭辞なしで追加してください。
+ * ========================================================================== */
+
+export * from "./legacy-names";

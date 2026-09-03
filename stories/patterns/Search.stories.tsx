@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SearchX } from "lucide-react";
 import * as React from "react";
 import {
-  ApplicationBadge,
-  ApplicationButton,
-  ApplicationSearchInput,
-  ApplicationSelect,
-  ApplicationTable,
-  type ApplicationTableColumn,
+  Badge,
+  Button,
+  SearchInput,
+  Select,
+  Table,
+  type TableColumn,
   Card,
   CardContent,
   Empty,
@@ -47,8 +47,8 @@ const meta = {
 | 検索中 | 結果領域だけを差し替える。**検索欄は操作できるまま**にする |
 | 0 件 | \`Patterns/EmptyState\` の「検索結果 0 件」。条件のクリア手段を置く |
 | クリア | \`onClear\` を渡す（値があるときだけ × が出る） |
-| 絞り込みの併用 | キーワード + \`ApplicationSelect\`。選択中の条件は結果の上に出す |
-| 探す対象が一覧の外にもある | 一覧の絞り込みではなく \`ApplicationScopeSearch\`（種別横断）を検討する |
+| 絞り込みの併用 | キーワード + \`Select\`。選択中の条件は結果の上に出す |
+| 探す対象が一覧の外にもある | 一覧の絞り込みではなく \`ScopeSearch\`（種別横断）を検討する |
 
 ## 使う場面
 
@@ -59,9 +59,9 @@ const meta = {
 
 | 場面 | 代わりに使うもの |
 |---|---|
-| 候補から 1 つ選ぶ（社員・取引先など） | \`ApplicationCombobox\` |
-| 選択肢が固定の絞り込みだけ | \`ApplicationSelect\` 単体。検索欄は要らない |
-| 全画面横断の検索（人も組織も探す） | \`ApplicationScopeSearch\`。画面上部の共通検索はこちら |
+| 候補から 1 つ選ぶ（社員・取引先など） | \`Combobox\` |
+| 選択肢が固定の絞り込みだけ | \`Select\` 単体。検索欄は要らない |
+| 全画面横断の検索（人も組織も探す） | \`ScopeSearch\`。画面上部の共通検索はこちら |
 
 ## 注意事項
 
@@ -101,7 +101,7 @@ const ROWS: Request[] = [
   { id: 5, code: "SYS-2026-0005", title: "名刺の追加発注", applicant: "山田 太郎", status: "done" },
 ];
 
-const COLUMNS: ApplicationTableColumn<Request>[] = [
+const COLUMNS: TableColumn<Request>[] = [
   { key: "code", header: "申請番号", className: "w-36", cell: (r) => r.code },
   { key: "title", header: "件名", cell: (r) => r.title },
   { key: "applicant", header: "申請者", className: "w-32", cell: (r) => r.applicant },
@@ -109,7 +109,7 @@ const COLUMNS: ApplicationTableColumn<Request>[] = [
     key: "status",
     header: "ステータス",
     className: "w-28",
-    cell: (r) => <ApplicationBadge tone={r.status}>{STATUS_LABEL[r.status]}</ApplicationBadge>,
+    cell: (r) => <Badge tone={r.status}>{STATUS_LABEL[r.status]}</Badge>,
   },
 ];
 
@@ -129,11 +129,11 @@ export const Overview: Story = {
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-3">
             <div className="max-w-xs flex-1">
-              <ApplicationSearchInput placeholder="件名で検索" aria-label="件名で検索" />
+              <SearchInput placeholder="件名で検索" aria-label="件名で検索" />
             </div>
             <span className="text-xs text-muted-foreground">{ROWS.length} 件</span>
           </div>
-          <ApplicationTable<Request>
+          <Table<Request>
             columns={COLUMNS}
             rows={ROWS.slice(0, 3)}
             rowKey={(r) => r.id}
@@ -146,7 +146,7 @@ export const Overview: Story = {
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-3">
             <div className="max-w-xs flex-1">
-              <ApplicationSearchInput
+              <SearchInput
                 defaultValue="備品"
                 placeholder="件名で検索"
                 aria-label="件名で検索（検索中）"
@@ -170,7 +170,7 @@ export const Overview: Story = {
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-3">
             <div className="max-w-xs flex-1">
-              <ApplicationSearchInput
+              <SearchInput
                 defaultValue="モニター 3 台"
                 placeholder="件名で検索"
                 aria-label="件名で検索（0 件）"
@@ -189,7 +189,7 @@ export const Overview: Story = {
                   <EmptyDescription>条件を変えて検索してください。</EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
-                  <ApplicationButton variant="secondary">検索条件をクリア</ApplicationButton>
+                  <Button variant="secondary">検索条件をクリア</Button>
                 </EmptyContent>
               </Empty>
             </CardContent>
@@ -220,7 +220,7 @@ export const Default: Story = {
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="max-w-xs flex-1">
-            <ApplicationSearchInput
+            <SearchInput
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onClear={() => setKeyword("")}
@@ -232,7 +232,7 @@ export const Default: Story = {
         </div>
 
         {rows.length > 0 ? (
-          <ApplicationTable<Request>
+          <Table<Request>
             columns={COLUMNS}
             rows={rows}
             rowKey={(r) => r.id}
@@ -252,9 +252,9 @@ export const Default: Story = {
                   </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
-                  <ApplicationButton variant="secondary" onClick={() => setKeyword("")}>
+                  <Button variant="secondary" onClick={() => setKeyword("")}>
                     検索条件をクリア
-                  </ApplicationButton>
+                  </Button>
                 </EmptyContent>
               </Empty>
             </CardContent>
@@ -286,7 +286,7 @@ export const Searching: Story = {
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="max-w-xs flex-1">
-            <ApplicationSearchInput
+            <SearchInput
               value={keyword}
               onChange={(e) => {
                 setKeyword(e.target.value);
@@ -318,7 +318,7 @@ export const Searching: Story = {
             </span>
           </div>
         ) : (
-          <ApplicationTable<Request>
+          <Table<Request>
             columns={COLUMNS}
             rows={ROWS.slice(0, 1)}
             rowKey={(r) => r.id}
@@ -344,7 +344,7 @@ export const NoResults: Story = {
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="max-w-xs flex-1">
-            <ApplicationSearchInput
+            <SearchInput
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onClear={() => setKeyword("")}
@@ -369,9 +369,9 @@ export const NoResults: Story = {
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
-                <ApplicationButton variant="secondary" onClick={() => setKeyword("")}>
+                <Button variant="secondary" onClick={() => setKeyword("")}>
                   検索条件をクリア
-                </ApplicationButton>
+                </Button>
               </EmptyContent>
             </Empty>
           </CardContent>
@@ -405,7 +405,7 @@ export const WithFilters: Story = {
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="max-w-xs flex-1">
-            <ApplicationSearchInput
+            <SearchInput
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onClear={() => setKeyword("")}
@@ -414,7 +414,7 @@ export const WithFilters: Story = {
             />
           </div>
           <div className="w-40">
-            <ApplicationSelect
+            <Select
               items={STATUS_ITEMS}
               value={status}
               onValueChange={setStatus}
@@ -428,12 +428,12 @@ export const WithFilters: Story = {
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
             <span>絞り込み中:</span>
             {status !== "all" && (
-              <ApplicationBadge tone="neutral">
+              <Badge tone="neutral">
                 ステータス: {STATUS_ITEMS.find((i) => i.value === status)?.label}
-              </ApplicationBadge>
+              </Badge>
             )}
-            {normalized !== "" && <ApplicationBadge tone="neutral">キーワード: {keyword}</ApplicationBadge>}
-            <ApplicationButton
+            {normalized !== "" && <Badge tone="neutral">キーワード: {keyword}</Badge>}
+            <Button
               variant="link"
               size="sm"
               onClick={() => {
@@ -442,11 +442,11 @@ export const WithFilters: Story = {
               }}
             >
               条件をクリア
-            </ApplicationButton>
+            </Button>
           </div>
         )}
 
-        <ApplicationTable<Request>
+        <Table<Request>
           columns={COLUMNS}
           rows={rows}
           rowKey={(r) => r.id}

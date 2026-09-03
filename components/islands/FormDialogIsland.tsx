@@ -52,8 +52,8 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { ApplicationDialog } from "../application/ApplicationDialog";
-import { ApplicationToast } from "../application/ApplicationToast";
+import { Dialog } from "../application/Dialog";
+import { toast } from "../application/Toast";
 import "./types";
 
 export interface FormDialogIslandProps {
@@ -188,7 +188,7 @@ export function FormDialogIsland({
     // 成功イベント（Django View が HX-Trigger で返す）
     const handleSuccess = () => {
       if (successMessage) {
-        ApplicationToast.success(successMessage);
+        toast.success(successMessage);
       }
       setOpen(false);
       if (redirectUrl) {
@@ -230,7 +230,7 @@ export function FormDialogIsland({
   }, [open, successEvent, successMessage, reloadOnSuccess, redirectUrl]);
 
   return (
-    <ApplicationDialog
+    <Dialog
       open={open}
       onOpenChange={setOpen}
       title={title}
@@ -243,6 +243,6 @@ export function FormDialogIsland({
       <div ref={bodyRef} className="application-form-dialog-body">
         {loading && <p className="text-sm text-muted-foreground">読み込み中...</p>}
       </div>
-    </ApplicationDialog>
+    </Dialog>
   );
 }

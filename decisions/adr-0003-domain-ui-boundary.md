@@ -33,7 +33,7 @@ UI Platformへ置けるかどうかを、名前ではなく **ドメイン連携
 | B | Domain ComponentもUI Platformから配布する | 却下 |
 | C | ドメイン連携を内部に持つかで分ける | 採用 |
 
-案Aは名前を基準にするため、`ApplicationTreeSelect` のような業務domainを持たない実装まで各projectへ散ります。重複を止められません。
+案Aは名前を基準にするため、`TreeSelect` のような業務domainを持たない実装まで各projectへ散ります。重複を止められません。
 
 案Bは§6が明示的に禁じます。componentへ認証・CSRF・endpointを焼き込んで配布すると、利用側すべてがそのdomain連携を引き受けることになります。
 
@@ -41,7 +41,7 @@ UI Platformへ置けるかどうかを、名前ではなく **ドメイン連携
 
 ## 結果
 
-- UI Platformは業務domainを知らないまま、階層選択のような複雑なUIを引き受けられる。最初の適用が `ApplicationTreeSelect` である。
+- UI Platformは業務domainを知らないまま、階層選択のような複雑なUIを引き受けられる。最初の適用が `TreeSelect` である。
 - domain所有projectはwrapperの分だけcodeを持つが、見た目・Token・a11yの更新はUI Platform側の1箇所で済む。
 - 「UI Platformに置くか」の議論が、componentが何をimportしているかの確認に変わる。
 - 制約として、propsで渡す形へ落とせないUI（サーバー側の検索を前提とする無限スクロール等）はこの分割ができない。その場合はdomain所有projectが全体を持つ。

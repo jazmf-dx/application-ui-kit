@@ -46,14 +46,14 @@ Tailwind のデフォルトスケール（**0.25rem = 4px 刻み**）をその�
   rows={SPACING_RULES.map((r) => [r.context, <Code>{r.value}</Code>, r.note || '—'])}
 />
 
-React では `ApplicationFormField` がこの余白を内部で適用するため、
+React では `FormField` がこの余白を内部で適用するため、
 **フォームを組むときは自分で余白を書かないでください**。
 
 ```tsx
-{/* ✓ 余白は ApplicationFormField が持つ */}
+{/* ✓ 余白は FormField が持つ */}
 <div className="space-y-4">
-  <ApplicationFormField label="件名" required><ApplicationInput /></ApplicationFormField>
-  <ApplicationFormField label="担当者"><ApplicationSelect items={users} /></ApplicationFormField>
+  <FormField label="件名" required><Input /></FormField>
+  <FormField label="担当者"><Select items={users} /></FormField>
 </div>
 ```
 
@@ -73,7 +73,7 @@ CSS クラスと Application コンポーネントで対応しています。
     ['ボタン（小・28px）', <Code>btn-sm</Code>, <Code>{'size="sm"'}</Code>, <Code>h-7 px-3</Code>],
     ['ボタン（標準・32px）', <Code>btn-primary</Code>, '省略時', <Code>h-8 px-3.5</Code>],
     ['ボタン（大・40px）', <Code>btn-lg</Code>, <Code>{'size="lg"'}</Code>, <Code>h-10 px-4</Code>],
-    ['入力欄（32px）', <Code>input-field</Code>, <Code>ApplicationInput</Code>, <Code>h-8 px-3.5</Code>],
+    ['入力欄（32px）', <Code>input-field</Code>, <Code>Input</Code>, <Code>h-8 px-3.5</Code>],
     ['バッジ', <Code>badge</Code>, '—', <Code>px-2 py-0.5</Code>],
   ]}
 />
@@ -113,7 +113,7 @@ Tailwind の 0.25rem 刻みという上の方針はそのまま維持してい�
 
 <DoDont
   doText={<>アイコンは <Code>leftIcon</Code> / <Code>rightIcon</Code> に渡す（補正が自動で効く）</>}
-  dontText={<><Code>{'<ApplicationButton><Plus />新規申請</ApplicationButton>'}</Code>（children に直接置くと、どちら側のアイコンか判別できず補正されない）</>}
+  dontText={<><Code>{'<Button><Plus />新規申請</Button>'}</Code>（children に直接置くと、どちら側のアイコンか判別できず補正されない）</>}
 />
 
 ### アイコンの箱の補正
@@ -139,8 +139,8 @@ Tailwind の 0.25rem 刻みという上の方針はそのまま維持してい�
 実際のサイズがずれます。サイズはボタンのサイズクラスが持っています。
 
 <DoDont
-  doText={<><Code>{'<ApplicationButton size="sm" leftIcon={<Plus />}>'}</Code></>}
-  dontText={<><Code>{'<ApplicationButton size="sm" leftIcon={<Plus className="w-4 h-4" />}>'}</Code></>}
+  doText={<><Code>{'<Button size="sm" leftIcon={<Plus />}>'}</Code></>}
+  dontText={<><Code>{'<Button size="sm" leftIcon={<Plus className="w-4 h-4" />}>'}</Code></>}
 />
 
 コントロールの高さは **24 / 28 / 32 / 40px** の4段階で、ボタンと入力欄は同じ高さに揃えています。
@@ -197,7 +197,7 @@ Tailwind の 0.25rem 刻みという上の方針はそのまま維持してい�
 ### 注意事項
 
 - **横スクロールを発生させない**。テーブルは親を `overflow-x-auto` で包みます
-  （`ApplicationTable` は内部で対応済み）
+  （`Table` は内部で対応済み）
 - **タップ領域は最低 44×44px** を確保します。`btn-xs` を並べる場合は
   周囲に余白を取ってください（`ai-dev-standards/accessibility.md`）
 - モバイルで `px-8` のような大きい左右余白を使うと本文幅が足りなくなります。

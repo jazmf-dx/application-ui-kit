@@ -2,15 +2,15 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PackageCheck, Store, Truck } from "lucide-react";
 import * as React from "react";
 import {
-  ApplicationButtonGroup,
-  type ApplicationButtonGroupItem,
+  ButtonGroup,
+  type ButtonGroupItem,
   Card,
-  ApplicationFormField,
+  FormField,
 } from "../../components/application";
 
 /**
  * Tailwind Plus の Radio groups パターンのうち「Button group」表現を
- * `ApplicationButtonGroup` で再現した実装例。
+ * `ButtonGroup` で再現した実装例。
  *
  * <important>
  * これは Tailwind Plus のデザインをそのまま追従するものではない **スナップショット**。
@@ -30,7 +30,7 @@ const meta = {
 
 ## 目的
 
-「隣接ボタンの並びで排他選択を表す」パターンを、\`ApplicationButtonGroup\` + \`ApplicationFormField\` の
+「隣接ボタンの並びで排他選択を表す」パターンを、\`ButtonGroup\` + \`FormField\` の
 組み合わせだけで再現できることを示す。新しい CSS やマークアップは持ち込まない。
 
 ## 使う場面
@@ -41,7 +41,7 @@ const meta = {
 
 - Tailwind Plus の元デザインをピクセル単位で再現したものではない。
   **配色・余白は \`ai-dev-standards/*.md\` のトークンに従う**（Tailwind Plus のデフォルト配色は使わない）
-- 選択肢ごとに料金・説明などの補足を出したい場合は、\`ApplicationButtonGroup\` の対象外
+- 選択肢ごとに料金・説明などの補足を出したい場合は、\`ButtonGroup\` の対象外
   （\`item.label\` は短いテキスト1行を想定）。カード型の選択 UI が必要なら別コンポーネントを検討する
         `,
       },
@@ -52,7 +52,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const SHIPPING_ITEMS: ApplicationButtonGroupItem[] = [
+const SHIPPING_ITEMS: ButtonGroupItem[] = [
   { value: "standard", label: "通常配送", icon: <Truck /> },
   { value: "pickup", label: "店舗受取", icon: <Store /> },
   { value: "express", label: "速達", icon: <PackageCheck /> },
@@ -61,7 +61,7 @@ const SHIPPING_ITEMS: ApplicationButtonGroupItem[] = [
 /**
  * 配送方法の選択。
  *
- * `ApplicationFormField` でラベルを付け、`ApplicationButtonGroup` にはアイコン付きの選択肢を渡す。
+ * `FormField` でラベルを付け、`ButtonGroup` にはアイコン付きの選択肢を渡す。
  */
 export const ShippingMethod: Story = {
   render: () => {
@@ -70,14 +70,14 @@ export const ShippingMethod: Story = {
     return (
       <Card title="配送方法">
         <div className="max-w-md space-y-3">
-          <ApplicationFormField label="配送方法" required>
-            <ApplicationButtonGroup
+          <FormField label="配送方法" required>
+            <ButtonGroup
               items={SHIPPING_ITEMS}
               value={value}
               onValueChange={setValue}
               name="shipping_method"
             />
-          </ApplicationFormField>
+          </FormField>
 
           <p className="text-sm text-muted-foreground">
             選択中: <code className="rounded bg-muted px-1.5 py-0.5 text-xs">{value}</code>
@@ -88,7 +88,7 @@ export const ShippingMethod: Story = {
   },
 };
 
-const SIZE_ITEMS: ApplicationButtonGroupItem[] = [
+const SIZE_ITEMS: ButtonGroupItem[] = [
   { value: "s", label: "S" },
   { value: "m", label: "M" },
   { value: "l", label: "L" },
@@ -106,8 +106,8 @@ export const SizeSelector: Story = {
     return (
       <Card title="サイズを選択">
         <div className="max-w-md space-y-3">
-          <ApplicationFormField label="サイズ" required helpText="XL は現在欠品中です">
-            <ApplicationButtonGroup
+          <FormField label="サイズ" required helpText="XL は現在欠品中です">
+            <ButtonGroup
               items={SIZE_ITEMS}
               value={value}
               onValueChange={setValue}
@@ -115,7 +115,7 @@ export const SizeSelector: Story = {
               size="sm"
               name="size"
             />
-          </ApplicationFormField>
+          </FormField>
         </div>
       </Card>
     );

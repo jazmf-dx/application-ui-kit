@@ -104,7 +104,7 @@
     opacity: 0;
   }
 
-  /* ApplicationButton がアイコン枠に付ける印。どちら側にアイコンがあるかを
+  /* Button がアイコン枠に付ける印。どちら側にアイコンがあるかを
    * CSS から見るためだけのもので、レイアウト上の箱は作らない。
    * display: contents なので svg がそのまま flex アイテムになり、
    * gap も icon-metrics の margin-inline もこれまでどおり svg に効く。 */
@@ -114,7 +114,7 @@
 
   /* loading 中は元のアイコンを場所取りとして残し（隠すだけ）、スピナーを重ねる。
    * アイコンごとに光学補正の量が違うので、DOM から外すと文字が横に飛ぶ。
-   * 詳細は ApplicationButton.tsx のコメント。 */
+   * 詳細は Button.tsx のコメント。 */
   [data-slot="button-icon"][data-loading] {
     position: relative;
     display: inline-flex;
@@ -475,7 +475,7 @@
     @apply block;
   }
 
-  /* 並び方向は利用側（ApplicationRadioGroup の orientation）が決めるため、
+  /* 並び方向は利用側（RadioGroup の orientation）が決めるため、
    * ここでは方向を固定しない。上流も同様。 */
   .cn-radio-group {
     @apply w-full;
@@ -995,7 +995,7 @@
     @apply text-muted-foreground px-2;
   }
 
-  /* .cn-field と対にする。グループ（ApplicationFieldSet）でも error のとき
+  /* .cn-field と対にする。グループ（FieldSet）でも error のとき
    * legend と説明が destructive 色になるようにする。 */
   .cn-field-set {
     @apply data-[invalid=true]:text-destructive
@@ -1044,7 +1044,7 @@
   }
 
   /* ========================================================================
-   * MARK: Nav Item — ApplicationNavItem
+   * MARK: Nav Item — NavItem
    *
    * ここはアイコンが先頭かどうかを判別できる。ラベルが常に <span> で包まれて
    * いるため、svg が :first-child になるのはアイコンがあるときだけ。
@@ -1249,7 +1249,7 @@
    *   このリポジトリに移行前の相当物がなかったため、上流の見た目をそのまま採用する。
    * ====================================================================== */
 
-  /* nova の素の表ではなく、移行前の ApplicationTable の見た目
+  /* nova の素の表ではなく、移行前の Table の見た目
    * （rounded-xl の枠 + bg-muted のヘッダー + px-4 py-2.5 のセル）に揃える。
    * 行のホバーは onRowClick があるときだけ付けたいので、ここでは付けない。 */
   .cn-table {
@@ -1301,7 +1301,7 @@
     @apply rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)];
   }
 
-  /* ApplicationButtonGroup は aria-invalid をグループへ付ける（フォーカスできる
+  /* ButtonGroup は aria-invalid をグループへ付ける（フォーカスできる
    * 単一のコントロールが無いため）。.cn-toggle の aria-invalid はアイテム自身に
    * 付いたときしか効かないので、グループ側から拾う変種を足す。 */
   .cn-toggle-group-item {
@@ -1309,7 +1309,7 @@
            group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pr-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:pl-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg;
   }
 
-  /* padX は .cn-button-size-* と同値。ApplicationButtonGroup と ApplicationButton が
+  /* padX は .cn-button-size-* と同値。ButtonGroup と Button が
    * 横に並んだときに段差が出ないため。 */
   .cn-toggle-size-default {
     @apply h-8 min-w-8 px-3.5 text-sm;
@@ -1323,7 +1323,7 @@
 
   /* サイズは nova ではなく、このリポジトリのボタンスケール
    * （.cn-button-size-* と同じ 28/32/40px）に揃える。
-   * ApplicationButtonGroup と ApplicationButton が並んだときに段差が出ないため。 */
+   * ButtonGroup と Button が並んだときに段差が出ないため。 */
   .cn-toggle-size-sm {
     @apply h-7 min-w-7 px-3 text-xs [&_svg:not([class*='size-'])]:size-3.5;
     --icon-box: 0.875rem;
@@ -1334,7 +1334,7 @@
   }
 
   /* 上流にはないバリアント。選択中を primary 色で塗る segmented control 用。
-   * ApplicationButtonGroup の variant="primary" が使う。 */
+   * ButtonGroup の variant="primary" が使う。 */
   .cn-toggle-variant-primary {
     @apply border border-input bg-background
            hover:bg-accent hover:text-accent-foreground

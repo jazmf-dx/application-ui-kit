@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertTriangle, Lock, RefreshCw, ServerCrash } from "lucide-react";
 import * as React from "react";
 import {
-  ApplicationBadge,
-  ApplicationButton,
-  ApplicationTable,
-  type ApplicationTableColumn,
+  Badge,
+  Button,
+  Table,
+  type TableColumn,
   Card,
   CardContent,
   CardHeader,
@@ -45,7 +45,7 @@ const meta = {
 | 画面全体が表示できない | 画面中央に \`Empty\` + 再読み込み | 一覧の取得に失敗 |
 | 一部だけ失敗した | そのカード・領域の中だけをエラーに置き換える | ダッシュボードの 1 枚 |
 | 行・セル単位の失敗 | 該当行にバッジ・注記を出し、他の行は通常表示 | 一部レコードの集計失敗 |
-| 入力内容の誤り | エラーではなく検証。\`ApplicationFormField\` の \`error\` | 必須項目の未入力 |
+| 入力内容の誤り | エラーではなく検証。\`FormField\` の \`error\` | 必須項目の未入力 |
 
 ## 使う場面
 
@@ -56,9 +56,9 @@ const meta = {
 
 | 場面 | 代わりに使うもの |
 |---|---|
-| 入力内容の検証エラー | \`ApplicationFormField\` の \`error\`（Patterns/Form の \`ValidationError\`） |
+| 入力内容の検証エラー | \`FormField\` の \`error\`（Patterns/Form の \`ValidationError\`） |
 | データが 0 件 | \`Patterns/EmptyState\`。失敗ではない |
-| 保存操作の失敗（画面は生きている） | \`ApplicationToast\` の error + 画面内に状態を残す |
+| 保存操作の失敗（画面は生きている） | \`toast\` の error + 画面内に状態を残す |
 
 ## 注意事項
 
@@ -85,7 +85,7 @@ const ROWS: Request[] = [
   { id: 3, code: "SYS-2026-0003", title: "書籍購入", amount: 4800 },
 ];
 
-const COLUMNS: ApplicationTableColumn<Request>[] = [
+const COLUMNS: TableColumn<Request>[] = [
   { key: "code", header: "申請番号", className: "w-36", cell: (r) => r.code },
   { key: "title", header: "件名", cell: (r) => r.title },
   {
@@ -95,7 +95,7 @@ const COLUMNS: ApplicationTableColumn<Request>[] = [
     className: "w-32",
     cell: (r) =>
       r.amount === null ? (
-        <ApplicationBadge tone="warning">取得失敗</ApplicationBadge>
+        <Badge tone="warning">取得失敗</Badge>
       ) : (
         `${r.amount.toLocaleString()} 円`
       ),
@@ -121,9 +121,9 @@ export const Overview: Story = {
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
-                <ApplicationButton leftIcon={<RefreshCw className="w-4 h-4" />}>
+                <Button leftIcon={<RefreshCw className="w-4 h-4" />}>
                   再読み込み
-                </ApplicationButton>
+                </Button>
                 <p className="mt-2 text-xs text-muted-foreground">エラー ID: 8f21c0</p>
               </EmptyContent>
             </Empty>
@@ -151,13 +151,13 @@ export const Overview: Story = {
                 <AlertTriangle className="mt-0.5 w-4 h-4 shrink-0 text-danger" />
                 <div className="space-y-2">
                   <p>集計を読み込めませんでした。</p>
-                  <ApplicationButton
+                  <Button
                     variant="secondary"
                     size="sm"
                     leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
                   >
                     再試行
-                  </ApplicationButton>
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -166,7 +166,7 @@ export const Overview: Story = {
       </Section>
 
       <Section title="行・セル単位" note="失敗した値だけをバッジに置き換える。表そのものは読めるままにする。">
-        <ApplicationTable<Request>
+        <Table<Request>
           columns={COLUMNS}
           rows={ROWS}
           rowKey={(r) => r.id}
@@ -204,7 +204,7 @@ export const Overview: Story = {
                   </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
-                  <ApplicationButton variant="secondary">申請一覧へ戻る</ApplicationButton>
+                  <Button variant="secondary">申請一覧へ戻る</Button>
                 </EmptyContent>
               </Empty>
             </CardContent>
@@ -228,7 +228,7 @@ export const PageError: Story = {
 
     if (recovered) {
       return (
-        <ApplicationTable<Request>
+        <Table<Request>
           columns={COLUMNS}
           rows={ROWS}
           rowKey={(r) => r.id}
@@ -252,7 +252,7 @@ export const PageError: Story = {
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <ApplicationButton
+              <Button
                 loading={retrying}
                 leftIcon={retrying ? undefined : <RefreshCw className="w-4 h-4" />}
                 onClick={() => {
@@ -264,7 +264,7 @@ export const PageError: Story = {
                 }}
               >
                 {retrying ? "再読み込み中..." : "再読み込み"}
-              </ApplicationButton>
+              </Button>
               <p className="mt-2 text-xs text-muted-foreground">エラー ID: 8f21c0</p>
             </EmptyContent>
           </Empty>
@@ -329,7 +329,7 @@ export const PartialError: Story = {
                 <AlertTriangle className="mt-0.5 w-4 h-4 shrink-0 text-danger" />
                 <div className="space-y-2">
                   <p>集計を読み込めませんでした。</p>
-                  <ApplicationButton
+                  <Button
                     variant="secondary"
                     size="sm"
                     leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
@@ -342,7 +342,7 @@ export const PartialError: Story = {
                     }}
                   >
                     再試行
-                  </ApplicationButton>
+                  </Button>
                 </div>
               </div>
             )}
@@ -361,7 +361,7 @@ export const PartialError: Story = {
  */
 export const RowLevelError: Story = {
   render: () => (
-    <ApplicationTable<Request>
+    <Table<Request>
       columns={COLUMNS}
       rows={ROWS}
       rowKey={(r) => r.id}
@@ -391,7 +391,7 @@ export const Forbidden: Story = {
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
-            <ApplicationButton variant="secondary">申請一覧へ戻る</ApplicationButton>
+            <Button variant="secondary">申請一覧へ戻る</Button>
           </EmptyContent>
         </Empty>
       </CardContent>

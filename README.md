@@ -62,10 +62,12 @@ Componentではraw colorではなく `bg-primary`、`text-foreground`、`border-
 
 `components/ui/` はshadcn/uiを基礎とするPrimitiveです。独自wrapperは **追加できるvalueがある場合だけ** 作ります。
 
-公開APIは次の2種類です。
+公開APIの名前は接頭辞なしで統一します（`Button` / `DatePicker`）。由来は名前ではなく [components/application/index.ts](components/application/index.ts) のsectionで表します。
 
-- `Application*`: UI Platformが独自のAPIや振る舞いを追加したComponent。
-- shadcn/ui名のままre-exportするComponent: 独自wrapperを作る理由がないもの。
+- UI Platformが独自のAPIや振る舞いを追加したComponent。仕様はStorybookを正とします。
+- shadcn/uiをそのままre-exportするComponent。独自wrapperを作る理由がないもの。こちらは [shadcn/uiのドキュメント](https://ui.shadcn.com/docs/components) がそのまま使えます。
+
+どちらのsectionにあるかは実装の内部事情です。必要になれば後者から前者へ移しますが、名前が由来を持たないため利用側は壊れません（[decisions/adr-0006](decisions/adr-0006-drop-application-prefix.md)）。
 
 名前を付け替えるだけのwrapperは作りません。
 
@@ -88,10 +90,10 @@ GitHub Packagesへpublishされる実package名は `@<owner>/application-ui-kit`
 Application codeでは固定aliasを使います。
 
 ```tsx
-import { ApplicationButton } from 'application-ui-kit'
+import { Button } from 'application-ui-kit'
 import 'application-ui-kit/styles.css'
 
-<ApplicationButton variant="primary">保存</ApplicationButton>
+<Button variant="primary">保存</Button>
 ```
 
 `application-ui-kit` の公開versionは、このrepositoryの `package.json` をSource of Truthとします。各Applicationが実際に利用するversionは、そのApplicationの `package.json` / lockfileをSource of Truthとします。

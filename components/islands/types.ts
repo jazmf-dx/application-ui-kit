@@ -18,8 +18,15 @@ export interface HtmxApi {
 declare global {
   interface Window {
     htmx?: HtmxApi;
-    /** ToastListenerIsland が登録する。素の JS / htmx から window.ApplicationToast.success(...) で呼ぶ */
-    ApplicationToast?: typeof import("../application/ApplicationToast").ApplicationToast;
+    /**
+     * ToastListenerIsland が登録する。素の JS / htmx から
+     * window.ApplicationToast.success(...) で呼ぶ。
+     *
+     * package の export 名は `toast` だが、グローバルは名前空間を持たせるため
+     * `ApplicationToast` のまま据え置く。Django テンプレート側との実行時契約で、
+     * 型では守られないため改名しない。
+     */
+    ApplicationToast?: typeof import("../application/Toast").toast;
     /** ConfirmDialogIsland が id ごとに登録する開閉トリガー */
     openConfirmDialog?: Record<string, () => void>;
     /** FormDialogIsland が id ごとに登録する開閉トリガー */

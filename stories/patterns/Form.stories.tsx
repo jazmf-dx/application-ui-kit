@@ -2,17 +2,17 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
 import {
-  ApplicationButton,
+  Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  ApplicationCheckbox,
-  ApplicationDatePicker,
-  ApplicationFormField,
-  ApplicationInput,
-  ApplicationSelect,
-  ApplicationToast,
+  Checkbox,
+  DatePicker,
+  FormField,
+  Input,
+  Select,
+  toast,
 } from "../../components/application";
 
 /**
@@ -38,12 +38,12 @@ const meta = {
 |---|---|
 | 縦の間隔 | 各項目に \`mb-*\` を付けず、**親に \`space-y-4\`** |
 | セクション分け | \`Card\` の \`title\` で区切る。項目が 6 個を超えたら分ける |
-| 必須表示 | \`ApplicationFormField required\`（\`*\` + \`（必須）\`）。「任意」は \`helpText\` に書く |
+| 必須表示 | \`FormField required\`（\`*\` + \`（必須）\`）。「任意」は \`helpText\` に書く |
 | ボタンの位置 | 最下部・右寄せ。**キャンセルが左、主アクションが右** |
 | ボタンの区切り | \`border-t border-border pt-4\` |
-| エラー | 全体は先頭のアラート、項目単位は \`ApplicationFormField error\` |
+| エラー | 全体は先頭のアラート、項目単位は \`FormField error\` |
 | エラーの伝え方 | \`Field\` の \`data-invalid\`（見た目）+ コントロールの \`aria-invalid\`（支援技術）。両方必要 |
-| グループ項目 | ラジオ・ボタングループは \`ApplicationFieldSet\`（\`ApplicationFormField\` では名前が付かない） |
+| グループ項目 | ラジオ・ボタングループは \`FieldSet\`（\`FormField\` では名前が付かない） |
 | 幅 | 1 カラムは \`max-w-2xl\` 程度。**画面幅いっぱいに伸ばさない**（1 行が長いと読み返せない） |
 | 送信中 | ボタンを \`loading\`、フォーム全体を \`<fieldset disabled>\` |
 
@@ -57,9 +57,9 @@ const meta = {
 | 場面 | 代わりに使うもの |
 |---|---|
 | テンプレート（.html）のフォーム | \`{% include 'includes/molecules/form_field.html' %}\` + \`form-validation.js\`。Foundations を参照 |
-| 項目が 3 個以下の入力 | \`ApplicationFormDialog\` でモーダルにする。画面遷移させるほどの内容ではない |
+| 項目が 3 個以下の入力 | \`FormDialog\` でモーダルにする。画面遷移させるほどの内容ではない |
 | 入力項目が 20 個を超える | ステップ分割（ウィザード）を検討する。1 画面に詰め込まない |
-| 一覧の中のインライン編集 | セル内に \`ApplicationInput\` を直接置く。\`ApplicationFormField\` は使わない（ラベルが二重になる） |
+| 一覧の中のインライン編集 | セル内に \`Input\` を直接置く。\`FormField\` は使わない（ラベルが二重になる） |
 
 ## 注意事項
 
@@ -68,10 +68,10 @@ const meta = {
 - **エラーは送信後に消さない。** 直すべき箇所が分からなくなる。
   該当項目を再入力したときにその項目のエラーだけ消す
 - **バリデーションエラーをトーストで出さない。** どの項目が悪いか伝わらない
-  （Components/ApplicationToast の \`NotForValidation\` を参照）
-- **グループ（ラジオ・ボタングループ）には \`ApplicationFormField\` を使わない。**
+  （Components/toast の \`NotForValidation\` を参照）
+- **グループ（ラジオ・ボタングループ）には \`FormField\` を使わない。**
   \`<label for>\` はグループ要素に効かないため、ラベルが見えていても
-  支援技術からは名前の無いグループになる。\`ApplicationFieldSet\` を使う
+  支援技術からは名前の無いグループになる。\`FieldSet\` を使う
 - 送信中は \`<fieldset disabled>\` で囲む。ボタンを無効化するだけでは
   入力が編集され続けてしまう
 - \`autoComplete\` を適切に設定する（\`name\` / \`email\` / \`tel\` 等）。
@@ -110,43 +110,43 @@ const DEPARTMENT_ITEMS = [
 export const StandardForm: Story = {
   render: () => (
     <form className="max-w-2xl space-y-4">
-      <ApplicationFormField label="件名" required helpText="50 文字以内で入力してください">
-        <ApplicationInput name="title" placeholder="例: 備品購入の申請" autoComplete="off" required />
-      </ApplicationFormField>
+      <FormField label="件名" required helpText="50 文字以内で入力してください">
+        <Input name="title" placeholder="例: 備品購入の申請" autoComplete="off" required />
+      </FormField>
 
-      <ApplicationFormField label="申請部署" required>
-        <ApplicationSelect
+      <FormField label="申請部署" required>
+        <Select
           name="department"
           items={DEPARTMENT_ITEMS}
           placeholder="部署を選択"
           required
         />
-      </ApplicationFormField>
+      </FormField>
 
-      <ApplicationFormField label="優先度" required helpText="後から変更できます">
-        <ApplicationSelect name="priority" items={PRIORITY_ITEMS} defaultValue="mid" />
-      </ApplicationFormField>
+      <FormField label="優先度" required helpText="後から変更できます">
+        <Select name="priority" items={PRIORITY_ITEMS} defaultValue="mid" />
+      </FormField>
 
-      <ApplicationFormField label="金額" required helpText="税込で入力してください">
-        <ApplicationInput name="amount" type="number" min={0} placeholder="0" required />
-      </ApplicationFormField>
+      <FormField label="金額" required helpText="税込で入力してください">
+        <Input name="amount" type="number" min={0} placeholder="0" required />
+      </FormField>
 
-      <ApplicationFormField label="備考" helpText="任意">
+      <FormField label="備考" helpText="任意">
         <textarea
           name="note"
           rows={4}
           placeholder="補足があれば記入してください"
           className="w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
         />
-      </ApplicationFormField>
+      </FormField>
 
       <div className="flex items-center justify-end gap-2 border-t border-border pt-4">
-        <ApplicationButton variant="secondary" type="button">
+        <Button variant="secondary" type="button">
           キャンセル
-        </ApplicationButton>
-        <ApplicationButton variant="primary" type="submit">
+        </Button>
+        <Button variant="primary" type="submit">
           申請する
-        </ApplicationButton>
+        </Button>
       </div>
     </form>
   ),
@@ -167,17 +167,17 @@ export const WithSections: Story = {
         </CardHeader>
         <CardContent>
         <div className="space-y-4">
-          <ApplicationFormField label="件名" required helpText="50 文字以内">
-            <ApplicationInput name="title" placeholder="例: 備品購入の申請" required />
-          </ApplicationFormField>
+          <FormField label="件名" required helpText="50 文字以内">
+            <Input name="title" placeholder="例: 備品購入の申請" required />
+          </FormField>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <ApplicationFormField label="申請部署" required>
-              <ApplicationSelect name="department" items={DEPARTMENT_ITEMS} placeholder="部署を選択" />
-            </ApplicationFormField>
-            <ApplicationFormField label="優先度" required>
-              <ApplicationSelect name="priority" items={PRIORITY_ITEMS} defaultValue="mid" />
-            </ApplicationFormField>
+            <FormField label="申請部署" required>
+              <Select name="department" items={DEPARTMENT_ITEMS} placeholder="部署を選択" />
+            </FormField>
+            <FormField label="優先度" required>
+              <Select name="priority" items={PRIORITY_ITEMS} defaultValue="mid" />
+            </FormField>
           </div>
         </div>
       </CardContent>
@@ -190,16 +190,16 @@ export const WithSections: Story = {
         <CardContent>
         <div className="space-y-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <ApplicationFormField label="金額" required helpText="税込">
-              <ApplicationInput name="amount" type="number" min={0} placeholder="0" required />
-            </ApplicationFormField>
-            <ApplicationFormField label="希望納期">
-              <ApplicationInput name="due" type="date" />
-            </ApplicationFormField>
+            <FormField label="金額" required helpText="税込">
+              <Input name="amount" type="number" min={0} placeholder="0" required />
+            </FormField>
+            <FormField label="希望納期">
+              <Input name="due" type="date" />
+            </FormField>
           </div>
-          <ApplicationFormField label="発注先">
-            <ApplicationInput name="vendor" placeholder="例: 〇〇商事" />
-          </ApplicationFormField>
+          <FormField label="発注先">
+            <Input name="vendor" placeholder="例: 〇〇商事" />
+          </FormField>
         </div>
       </CardContent>
       </Card>
@@ -210,12 +210,12 @@ export const WithSections: Story = {
         </CardHeader>
         <CardContent>
         <div className="space-y-3">
-          <ApplicationCheckbox
+          <Checkbox
             name="notify_approver"
             label="承認者へメールで通知する"
             defaultChecked
           />
-          <ApplicationCheckbox
+          <Checkbox
             name="notify_self"
             label="自分にも控えを送る"
             description="申請内容を記載したメールが登録アドレスに届きます。"
@@ -225,16 +225,16 @@ export const WithSections: Story = {
       </Card>
 
       <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
-        <ApplicationButton variant="ghost" type="button">
+        <Button variant="ghost" type="button">
           下書き保存
-        </ApplicationButton>
+        </Button>
         <div className="flex gap-2">
-          <ApplicationButton variant="secondary" type="button">
+          <Button variant="secondary" type="button">
             キャンセル
-          </ApplicationButton>
-          <ApplicationButton variant="primary" type="submit">
+          </Button>
+          <Button variant="primary" type="submit">
             申請する
-          </ApplicationButton>
+          </Button>
         </div>
       </div>
     </form>
@@ -258,31 +258,31 @@ export const TwoColumn: Story = {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <ApplicationFormField label="件名" required>
-              <ApplicationInput name="title" defaultValue="備品購入（モニター 2 台）" required />
-            </ApplicationFormField>
-            <ApplicationFormField label="金額" required helpText="税込">
-              <ApplicationInput name="amount" type="number" defaultValue={78000} min={0} />
-            </ApplicationFormField>
-            <ApplicationFormField label="理由" required>
+            <FormField label="件名" required>
+              <Input name="title" defaultValue="備品購入（モニター 2 台）" required />
+            </FormField>
+            <FormField label="金額" required helpText="税込">
+              <Input name="amount" type="number" defaultValue={78000} min={0} />
+            </FormField>
+            <FormField label="理由" required>
               <textarea
                 name="reason"
                 rows={5}
                 className="w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
                 defaultValue="開発チームの増員に伴い、作業用モニターが不足しているため。"
               />
-            </ApplicationFormField>
+            </FormField>
           </div>
         </CardContent>
       </Card>
 
         <div className="flex items-center justify-end gap-2 border-t border-border pt-4">
-          <ApplicationButton variant="secondary" type="button">
+          <Button variant="secondary" type="button">
             キャンセル
-          </ApplicationButton>
-          <ApplicationButton variant="primary" type="submit">
+          </Button>
+          <Button variant="primary" type="submit">
             申請する
-          </ApplicationButton>
+          </Button>
         </div>
       </div>
 
@@ -331,7 +331,7 @@ export const TwoColumn: Story = {
 /**
  * エラー表示のパターン。
  *
- * 全体エラーは先頭のアラート、項目エラーは `ApplicationFormField` の `error`。
+ * 全体エラーは先頭のアラート、項目エラーは `FormField` の `error`。
  * **両方を出す。** 全体だけでは直す場所が分からず、
  * 項目だけでは画面外の項目に気付けない。
  */
@@ -346,30 +346,30 @@ export const ValidationError: Story = {
         </ul>
       </div>
 
-      <ApplicationFormField label="件名" required>
-        <ApplicationInput name="title" defaultValue="研修参加費" required />
-      </ApplicationFormField>
+      <FormField label="件名" required>
+        <Input name="title" defaultValue="研修参加費" required />
+      </FormField>
 
-      <ApplicationFormField label="申請部署" required error="申請部署を選択してください">
-        <ApplicationSelect name="department" items={DEPARTMENT_ITEMS} placeholder="部署を選択" />
-      </ApplicationFormField>
+      <FormField label="申請部署" required error="申請部署を選択してください">
+        <Select name="department" items={DEPARTMENT_ITEMS} placeholder="部署を選択" />
+      </FormField>
 
-      <ApplicationFormField
+      <FormField
         label="金額"
         required
         error="上限額（100,000 円）を超えています"
         helpText="税込で入力してください"
       >
-        <ApplicationInput name="amount" type="number" defaultValue={120000} min={0} />
-      </ApplicationFormField>
+        <Input name="amount" type="number" defaultValue={120000} min={0} />
+      </FormField>
 
       <div className="flex items-center justify-end gap-2 border-t border-border pt-4">
-        <ApplicationButton variant="secondary" type="button">
+        <Button variant="secondary" type="button">
           キャンセル
-        </ApplicationButton>
-        <ApplicationButton variant="primary" type="submit">
+        </Button>
+        <Button variant="primary" type="submit">
           申請する
-        </ApplicationButton>
+        </Button>
       </div>
     </form>
   ),
@@ -379,7 +379,7 @@ export const ValidationError: Story = {
  * 送信までの一連の流れ。
  *
  * 送信中は `<fieldset disabled>` で**入力そのものを無効化**し、
- * ボタンは `loading` にする。結果は `ApplicationToast` で伝える。
+ * ボタンは `loading` にする。結果は `toast` で伝える。
  * 送信すると 1.5 秒後にサーバーエラーが返る（項目エラーが表示される）。
  */
 export const Submitting: Story = {
@@ -403,7 +403,7 @@ export const Submitting: Story = {
         await new Promise((resolve) => window.setTimeout(resolve, 1500));
         // サーバーからのバリデーションエラーを想定
         setErrors({ amount: "上限額（100,000 円）を超えています" });
-        ApplicationToast.error("保存できませんでした", "入力内容を確認してください。");
+        toast.error("保存できませんでした", "入力内容を確認してください。");
       } finally {
         setLoading(false);
       }
@@ -413,12 +413,12 @@ export const Submitting: Story = {
       <form className="max-w-2xl space-y-4" onSubmit={handleSubmit}>
         {/* 送信中は入力自体を無効化する（ボタンだけの無効化では不十分） */}
         <fieldset disabled={loading} className="space-y-4">
-          <ApplicationFormField label="件名" required>
-            <ApplicationInput name="title" defaultValue="研修参加費" required />
-          </ApplicationFormField>
+          <FormField label="件名" required>
+            <Input name="title" defaultValue="研修参加費" required />
+          </FormField>
 
-          <ApplicationFormField label="対象期間" required error={errors.period}>
-            <ApplicationDatePicker
+          <FormField label="対象期間" required error={errors.period}>
+            <DatePicker
               mode="range"
               value={range}
               onChange={(v) => {
@@ -428,20 +428,20 @@ export const Submitting: Story = {
               placeholder="期間を選択"
               className="w-full"
             />
-          </ApplicationFormField>
+          </FormField>
 
-          <ApplicationFormField label="金額" required error={errors.amount} helpText="税込">
-            <ApplicationInput name="amount" type="number" defaultValue={120000} min={0} />
-          </ApplicationFormField>
+          <FormField label="金額" required error={errors.amount} helpText="税込">
+            <Input name="amount" type="number" defaultValue={120000} min={0} />
+          </FormField>
         </fieldset>
 
         <div className="flex items-center justify-end gap-2 border-t border-border pt-4">
-          <ApplicationButton variant="secondary" type="button" disabled={loading}>
+          <Button variant="secondary" type="button" disabled={loading}>
             キャンセル
-          </ApplicationButton>
-          <ApplicationButton variant="primary" type="submit" loading={loading}>
+          </Button>
+          <Button variant="primary" type="submit" loading={loading}>
             申請する
-          </ApplicationButton>
+          </Button>
         </div>
       </form>
     );

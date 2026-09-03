@@ -43,10 +43,10 @@ Component を利用するときは、Gallery → Overview → Individual Story �
 実パッケージの scope は publish 元で変わりますが、利用側 `package.json` の npm alias によりコード上の名前は固定します。
 
 ```tsx
-import { ApplicationButton } from 'application-ui-kit'
+import { Button } from 'application-ui-kit'
 import 'application-ui-kit/styles.css'
 
-<ApplicationButton variant="primary">保存</ApplicationButton>
+<Button variant="primary">保存</Button>
 ```
 
 ---
@@ -64,12 +64,12 @@ Foundations          色・文字・余白などのトークン
   Icons
 
 Components           部品 1 つずつ
-  ApplicationButton
+  Button
     Overview         variant / size / 状態の比較
     Primary          個別 Story
     Secondary
     ...
-  ApplicationInput
+  Input
   ...
 
 Patterns             UX上の問題ごとに解決候補を比較
@@ -133,7 +133,7 @@ Pattern / Template は実案件で同じ設計判断や画面構成に再び迷�
 <SpecTable
   head={['決めごと', 'ルール']}
   rows={[
-    ['title', <><Code>Components/Application*</Code> / <Code>Patterns/*</Code> / <Code>Templates/*</Code> / <Code>Foundations/*</Code> / <Code>Gallery/*</Code></>],
+    ['title', <><Code>Components/*</Code> / <Code>Patterns/*</Code> / <Code>Templates/*</Code> / <Code>Foundations/*</Code> / <Code>Gallery/*</Code></>],
     ['Overview', <>Componentではファイルの<strong>先頭</strong>に置く。コンポーネント内の並びは定義順のままなので、書いた位置がそのままサイドバーの位置になる</>],
     ['一覧 Story', <><Code>parameters: {'{'} controls: {'{'} disable: true {'}'} {'}'}</Code> を付ける（Props を 1 つ変えても全体に効かないため）</>],
     ['見本の並べ方', <><Code>stories/_showcase.tsx</Code> の <Code>Showcase</Code> / <Code>Section</Code> / <Code>Cluster</Code> を使う</>],

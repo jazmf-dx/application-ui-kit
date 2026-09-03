@@ -34,8 +34,8 @@
 
 import { useEffect, useState } from "react";
 import { getCsrfHeaders } from "../../lib/csrf";
-import { ApplicationConfirmDialog } from "../application/ApplicationConfirmDialog";
-import { ApplicationToast } from "../application/ApplicationToast";
+import { ConfirmDialog } from "../application/ConfirmDialog";
+import { toast } from "../application/Toast";
 import "./types";
 
 export interface ConfirmDialogIslandProps {
@@ -177,12 +177,12 @@ export function ConfirmDialogIsland({
     // URL が指定されていない場合は単に閉じる
     if (!url) {
       if (successMessage) {
-        ApplicationToast.success(successMessage);
+        toast.success(successMessage);
       }
       return;
     }
 
-    // fetch でリクエストを送信（reject すると ApplicationConfirmDialog が
+    // fetch でリクエストを送信（reject すると ConfirmDialog が
     // ダイアログ内にエラーを表示する）
     const response = await fetch(url, {
       method,
@@ -199,7 +199,7 @@ export function ConfirmDialogIsland({
     }
 
     if (successMessage) {
-      ApplicationToast.success(successMessage);
+      toast.success(successMessage);
     }
 
     if (htmxTrigger && typeof window.htmx !== "undefined") {
@@ -214,7 +214,7 @@ export function ConfirmDialogIsland({
   };
 
   return (
-    <ApplicationConfirmDialog
+    <ConfirmDialog
       open={open}
       onOpenChange={setOpen}
       type={type}

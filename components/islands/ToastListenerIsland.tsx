@@ -1,13 +1,15 @@
 /**
  * ToastListenerIsland - 全ページ共通のトースト通知ハブ（Django テンプレート用）
  *
- * base.html に 1 つだけ置くことで、プロジェクト全体の通知が ApplicationToast に
+ * base.html に 1 つだけ置くことで、プロジェクト全体の通知が toast に
  * 一本化されます。責務は次の 3 つ:
  *
- * 1. ApplicationToaster（トーストの表示領域）をマウントする
+ * 1. Toaster（トーストの表示領域）をマウントする
  *    → 表示領域はページに 1 つだけ。他の Island は表示領域を持たず、ここに相乗りする
  * 2. window.ApplicationToast をグローバル登録する
  *    → 素の JS・htmx から window.ApplicationToast.success(...) で呼べる
+ *    → package の export 名は `toast` だが、グローバルは名前空間を持たせるため
+ *      `ApplicationToast` のまま据え置く（Django テンプレートとの実行時契約）
  * 3. Django messages を初期表示する
  *    → data-messages に渡された messages.success()/error() をトースト化
  *
@@ -26,16 +28,12 @@
  */
 
 import { useEffect } from "react";
-import {
-  ApplicationToast,
-  type ApplicationToastType,
-  ApplicationToaster,
-} from "../application/ApplicationToast";
+import { type ToastType, Toaster, toast } from "../application/Toast";
 import "./types";
 
 interface DjangoMessage {
   text: string;
-  type: ApplicationToastType;
+  type: ToastType;
 }
 
 export interface ToastListenerIslandProps {
@@ -46,7 +44,7 @@ export interface ToastListenerIslandProps {
 export function ToastListenerIsland({ messages }: ToastListenerIslandProps) {
   // グローバル関数を登録（一度だけ）
   useEffect(() => {
-    window.ApplicationToast = ApplicationToast;
+    window.ApplicationToast = toast;
   }, []);
 
   // Django messages を初期表示（複数は少しずつずらして表示）
@@ -54,14 +52,14 @@ export function ToastListenerIsland({ messages }: ToastListenerIslandProps) {
     if (!messages || messages.length === 0) return;
     const timers = messages.map((msg, index) =>
       window.setTimeout(() => {
-        const type: ApplicationToastType =
+        const type: ToastType =
           msg.type === "success" ||
           msg.type === "error" ||
           msg.type === "warning" ||
           msg.type === "info"
             ? msg.type
             : "info";
-        ApplicationToast[type](msg.text);
+        toast[type](msg.text);
       }, index * 200),
     );
     return () => {
@@ -71,5 +69,5 @@ export function ToastListenerIsland({ messages }: ToastListenerIslandProps) {
     };
   }, [messages]);
 
-  return <ApplicationToaster />;
+  return <Toaster />;
 }

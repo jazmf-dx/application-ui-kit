@@ -4,7 +4,7 @@
  * <important>
  * 「非標準の prop が DOM へ漏れている」「制御/非制御が切り替わった」といった不具合は
  * console.error に出るだけで、typecheck も lint も test も素通りする。実際に
- * ApplicationFormField が注入していた独自 prop `error` が Textarea / Checkbox /
+ * FormField が注入していた独自 prop `error` が Textarea / Checkbox /
  * SearchInput / ButtonGroup の DOM へ漏れ、毎レンダー警告を出していたのを
  * 長期間見逃していた。ここで落とす。
  *

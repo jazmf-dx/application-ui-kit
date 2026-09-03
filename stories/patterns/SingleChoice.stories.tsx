@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
 import {
-  ApplicationButtonGroup,
-  ApplicationCombobox,
-  ApplicationRadioGroup,
-  ApplicationRadioTable,
-  ApplicationSelect,
-  type ApplicationTableColumn,
+  ButtonGroup,
+  Combobox,
+  RadioGroup,
+  RadioTable,
+  Select,
+  type TableColumn,
 } from "../../components/application";
 
 const CHOICES = [
@@ -45,8 +45,8 @@ const meta = {
 - **Select**: やや多い候補を省スペースで選ぶ
 - **Combobox**: 候補が多く検索が必要
 - **Button Group**: 短いモード・表示切替
-- **Card Choice**（\`ApplicationRadioGroup variant="cards"\`）: 候補ごとの説明や違いを比較したい
-- **Radio Table**（\`ApplicationRadioTable\`）: 候補を複数の属性（人数・金額など）で並べて比較したい
+- **Card Choice**（\`RadioGroup variant="cards"\`）: 候補ごとの説明や違いを比較したい
+- **Radio Table**（\`RadioTable\`）: 候補を複数の属性（人数・金額など）で並べて比較したい
         `,
       },
     },
@@ -84,7 +84,7 @@ const PLANS: Plan[] = [
   { id: "enterprise", name: "エンタープライズ", users: 300, price: 98000 },
 ];
 
-const PLAN_COLUMNS: ApplicationTableColumn<Plan>[] = [
+const PLAN_COLUMNS: TableColumn<Plan>[] = [
   { key: "name", header: "プラン", cell: (plan) => plan.name },
   { key: "users", header: "利用人数", align: "right", cell: (plan) => `${plan.users} 人` },
   {
@@ -100,11 +100,11 @@ export const Comparison: Story = {
   render: () => (
     <div className="mx-auto max-w-4xl space-y-5">
       <ExampleSection title="Radio" guidance="2〜5件程度。候補を常に見せ、比較しながら選ばせたい場合。">
-        <ApplicationRadioGroup items={CHOICES} defaultValue="standard" name="radio-example" />
+        <RadioGroup items={CHOICES} defaultValue="standard" name="radio-example" />
       </ExampleSection>
 
       <ExampleSection title="Select" guidance="候補がやや多く、常時表示する必要がない場合。">
-        <ApplicationSelect
+        <Select
           items={CHOICES.map(({ value, label }) => ({ value, label }))}
           defaultValue="standard"
           placeholder="登録方法を選択"
@@ -113,7 +113,7 @@ export const Comparison: Story = {
       </ExampleSection>
 
       <ExampleSection title="Combobox" guidance="部署・社員など候補が多く、入力して絞り込みたい場合。">
-        <ApplicationCombobox
+        <Combobox
           items={DEPARTMENTS}
           placeholder="部署を検索"
           clearable
@@ -122,7 +122,7 @@ export const Comparison: Story = {
       </ExampleSection>
 
       <ExampleSection title="Button Group" guidance="2〜4件程度の短いモード・表示切替。長い説明を伴うフォーム選択には使わない。">
-        <ApplicationButtonGroup
+        <ButtonGroup
           items={[
             { value: "day", label: "日" },
             { value: "week", label: "週" },
@@ -133,8 +133,8 @@ export const Comparison: Story = {
         />
       </ExampleSection>
 
-      <ExampleSection title="Card Choice" guidance="各候補の違いや説明を見比べて選ぶこと自体に価値がある場合。ApplicationRadioGroup の cards バリアント。">
-        <ApplicationRadioGroup
+      <ExampleSection title="Card Choice" guidance="各候補の違いや説明を見比べて選ぶこと自体に価値がある場合。RadioGroup の cards バリアント。">
+        <RadioGroup
           variant="cards"
           orientation="horizontal"
           items={CHOICES}
@@ -144,7 +144,7 @@ export const Comparison: Story = {
       </ExampleSection>
 
       <ExampleSection title="Radio Table" guidance="候補を人数・金額のような複数の属性で並べて比較させたい場合。列が要らないなら Card Choice で足りる。">
-        <ApplicationRadioTable<Plan>
+        <RadioTable<Plan>
           columns={PLAN_COLUMNS}
           rows={PLANS}
           rowValue={(plan) => plan.id}

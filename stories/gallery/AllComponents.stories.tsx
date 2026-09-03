@@ -2,28 +2,28 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Calendar, FileText, MoreVertical, Plus, Search } from "lucide-react";
 import * as React from "react";
 import {
-  ApplicationBadge,
-  ApplicationButton,
-  ApplicationButtonGroup,
-  ApplicationCheckbox,
-  ApplicationCombobox,
-  ApplicationConfirmDialog,
-  ApplicationDatePicker,
-  ApplicationDialog,
-  ApplicationDropdown,
-  ApplicationFormDialog,
-  ApplicationFormField,
-  ApplicationInput,
-  ApplicationNavItem,
-  ApplicationPagination,
-  ApplicationRadioGroup,
-  ApplicationSearchInput,
-  ApplicationSelect,
-  ApplicationTable,
-  type ApplicationTableColumn,
-  ApplicationTabs,
-  ApplicationThemeToggle,
-  ApplicationToast,
+  Badge,
+  Button,
+  ButtonGroup,
+  Checkbox,
+  Combobox,
+  ConfirmDialog,
+  DatePicker,
+  Dialog,
+  Dropdown,
+  FormDialog,
+  FormField,
+  Input,
+  NavItem,
+  Pagination,
+  RadioGroup,
+  SearchInput,
+  Select,
+  Table,
+  type TableColumn,
+  Tabs,
+  ThemeToggle,
+  toast,
   Card,
   CardContent,
   CardHeader,
@@ -81,7 +81,7 @@ const meta = {
 各見本の上に付いている名前が、そのまま公開 API の名前です。
 
 \`\`\`tsx
-import { ApplicationButton } from 'application-ui-kit'
+import { Button } from 'application-ui-kit'
 \`\`\`
 
 ## ここに載せないもの
@@ -112,14 +112,14 @@ const ROWS: Request[] = [
   { id: 3, code: "SYS-2026-0003", title: "書籍購入", status: "done" },
 ];
 
-const COLUMNS: ApplicationTableColumn<Request>[] = [
+const COLUMNS: TableColumn<Request>[] = [
   { key: "code", header: "申請番号", className: "w-36", cell: (r) => r.code },
   { key: "title", header: "件名", cell: (r) => r.title },
   {
     key: "status",
     header: "ステータス",
     className: "w-24",
-    cell: (r) => <ApplicationBadge tone={r.status}>{STATUS_LABEL[r.status]}</ApplicationBadge>,
+    cell: (r) => <Badge tone={r.status}>{STATUS_LABEL[r.status]}</Badge>,
   },
 ];
 
@@ -152,15 +152,15 @@ export const AllComponents: Story = {
           note="操作の意味は色で表す。削除は danger、キャンセルは secondary。primary は 1 画面に 1 つ。"
         >
           <Grid className="sm:grid-cols-3">
-            <Labeled label="ApplicationButton">
+            <Labeled label="Button">
               <Cluster>
-                <ApplicationButton>保存</ApplicationButton>
-                <ApplicationButton variant="secondary">キャンセル</ApplicationButton>
-                <ApplicationButton variant="danger">削除</ApplicationButton>
+                <Button>保存</Button>
+                <Button variant="secondary">キャンセル</Button>
+                <Button variant="danger">削除</Button>
               </Cluster>
             </Labeled>
-            <Labeled label="ApplicationButtonGroup">
-              <ApplicationButtonGroup
+            <Labeled label="ButtonGroup">
+              <ButtonGroup
                 items={[
                   { value: "day", label: "日" },
                   { value: "week", label: "週" },
@@ -171,12 +171,12 @@ export const AllComponents: Story = {
                 aria-label="期間"
               />
             </Labeled>
-            <Labeled label="ApplicationDropdown">
-              <ApplicationDropdown
+            <Labeled label="Dropdown">
+              <Dropdown
                 trigger={
-                  <ApplicationButton variant="secondary" size="icon" aria-label="操作メニュー">
+                  <Button variant="secondary" size="icon" aria-label="操作メニュー">
                     <MoreVertical className="w-4 h-4" />
-                  </ApplicationButton>
+                  </Button>
                 }
                 items={[
                   { key: "edit", label: "編集" },
@@ -185,83 +185,83 @@ export const AllComponents: Story = {
                 ]}
               />
             </Labeled>
-            <Labeled label="ApplicationThemeToggle">
-              <ApplicationThemeToggle />
+            <Labeled label="ThemeToggle">
+              <ThemeToggle />
             </Labeled>
           </Grid>
         </Section>
 
         <Section
           title="Inputs"
-          note="ラベル・必須・エラーは ApplicationFormField が持つ。入力部品に直接書かない。"
+          note="ラベル・必須・エラーは FormField が持つ。入力部品に直接書かない。"
         >
           <Grid className="sm:grid-cols-2 lg:grid-cols-3">
-            <Labeled label="ApplicationInput">
-              <ApplicationInput placeholder="例: 備品購入の申請" aria-label="件名" />
+            <Labeled label="Input">
+              <Input placeholder="例: 備品購入の申請" aria-label="件名" />
             </Labeled>
-            <Labeled label="ApplicationSearchInput">
-              <ApplicationSearchInput placeholder="件名で検索" aria-label="検索" />
+            <Labeled label="SearchInput">
+              <SearchInput placeholder="件名で検索" aria-label="検索" />
             </Labeled>
-            <Labeled label="ApplicationSelect">
-              <ApplicationSelect items={PRIORITIES} placeholder="優先度を選択" aria-label="優先度" />
+            <Labeled label="Select">
+              <Select items={PRIORITIES} placeholder="優先度を選択" aria-label="優先度" />
             </Labeled>
-            <Labeled label="ApplicationCombobox">
-              <ApplicationCombobox items={SHOPS} placeholder="店舗を選択" aria-label="店舗" />
+            <Labeled label="Combobox">
+              <Combobox items={SHOPS} placeholder="店舗を選択" aria-label="店舗" />
             </Labeled>
-            <Labeled label="ApplicationDatePicker">
-              <ApplicationDatePicker mode="single" placeholder="日付を選択" />
+            <Labeled label="DatePicker">
+              <DatePicker mode="single" placeholder="日付を選択" />
             </Labeled>
             <Labeled label="Textarea（shadcn/ui）">
               <Textarea placeholder="申請の内容" aria-label="内容" rows={2} />
             </Labeled>
-            <Labeled label="ApplicationCheckbox">
+            <Labeled label="Checkbox">
               <Stack className="space-y-2">
-                <ApplicationCheckbox label="メール通知を受け取る" defaultChecked />
-                <ApplicationCheckbox label="社内にも共有する" />
+                <Checkbox label="メール通知を受け取る" defaultChecked />
+                <Checkbox label="社内にも共有する" />
               </Stack>
             </Labeled>
-            <Labeled label="ApplicationRadioGroup">
-              <ApplicationRadioGroup items={PRIORITIES} defaultValue="mid" orientation="horizontal" />
+            <Labeled label="RadioGroup">
+              <RadioGroup items={PRIORITIES} defaultValue="mid" orientation="horizontal" />
             </Labeled>
-            <Labeled label="ApplicationFormField">
-              <ApplicationFormField label="件名" required error="件名は必須です">
-                <ApplicationInput error defaultValue="" />
-              </ApplicationFormField>
+            <Labeled label="FormField">
+              <FormField label="件名" required error="件名は必須です">
+                <Input error defaultValue="" />
+              </FormField>
             </Labeled>
           </Grid>
         </Section>
 
         <Section title="Feedback" note="結果はトースト、確認はダイアログ、進行中はスピナー。使い分けを固定する。">
           <Grid className="sm:grid-cols-2 lg:grid-cols-3">
-            <Labeled label="ApplicationToast">
+            <Labeled label="toast">
               <Cluster>
-                <ApplicationButton
+                <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => ApplicationToast.success("保存しました")}
+                  onClick={() => toast.success("保存しました")}
                 >
                   成功
-                </ApplicationButton>
-                <ApplicationButton
+                </Button>
+                <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => ApplicationToast.error("保存に失敗しました", "再試行してください")}
+                  onClick={() => toast.error("保存に失敗しました", "再試行してください")}
                 >
                   失敗
-                </ApplicationButton>
+                </Button>
               </Cluster>
             </Labeled>
-            <Labeled label="ApplicationDialog / ConfirmDialog / FormDialog">
+            <Labeled label="Dialog / ConfirmDialog / FormDialog">
               <Cluster>
-                <ApplicationButton variant="secondary" size="sm" onClick={() => setDialog("dialog")}>
+                <Button variant="secondary" size="sm" onClick={() => setDialog("dialog")}>
                   詳細
-                </ApplicationButton>
-                <ApplicationButton variant="secondary" size="sm" onClick={() => setDialog("confirm")}>
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => setDialog("confirm")}>
                   確認
-                </ApplicationButton>
-                <ApplicationButton variant="secondary" size="sm" onClick={() => setDialog("form")}>
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => setDialog("form")}>
                   入力
-                </ApplicationButton>
+                </Button>
               </Cluster>
             </Labeled>
             <Labeled label="Spinner / Progress（shadcn/ui）">
@@ -282,8 +282,8 @@ export const AllComponents: Story = {
 
         <Section title="Data Display" note="一覧は 0 件のときの表示まで含めて 1 つの部品として考える。">
           <div className="space-y-4">
-            <Labeled label="ApplicationTable">
-              <ApplicationTable<Request>
+            <Labeled label="Table">
+              <Table<Request>
                 columns={COLUMNS}
                 rows={ROWS}
                 rowKey={(r) => r.id}
@@ -291,16 +291,16 @@ export const AllComponents: Story = {
               />
             </Labeled>
             <Grid className="sm:grid-cols-3">
-              <Labeled label="ApplicationBadge">
+              <Labeled label="Badge">
                 <Cluster>
-                  <ApplicationBadge tone="new">未対応</ApplicationBadge>
-                  <ApplicationBadge tone="active">対応中</ApplicationBadge>
-                  <ApplicationBadge tone="done">完了</ApplicationBadge>
-                  <ApplicationBadge tone="danger">却下</ApplicationBadge>
+                  <Badge tone="new">未対応</Badge>
+                  <Badge tone="active">対応中</Badge>
+                  <Badge tone="done">完了</Badge>
+                  <Badge tone="danger">却下</Badge>
                 </Cluster>
               </Labeled>
-              <Labeled label="ApplicationPagination">
-                <ApplicationPagination page={page} totalPages={10} onPageChange={setPage} />
+              <Labeled label="Pagination">
+                <Pagination page={page} totalPages={10} onPageChange={setPage} />
               </Labeled>
               <Labeled label="Card（shadcn/ui）">
                 <Card>
@@ -337,8 +337,8 @@ export const AllComponents: Story = {
 
         <Section title="Navigation" note="同一画面の切り替えはタブ、画面遷移はナビゲーション。混ぜない。">
           <Grid>
-            <Labeled label="ApplicationTabs">
-              <ApplicationTabs
+            <Labeled label="Tabs">
+              <Tabs
                 items={[
                   {
                     value: "overview",
@@ -353,17 +353,17 @@ export const AllComponents: Story = {
                 ]}
               />
             </Labeled>
-            <Labeled label="ApplicationNavItem">
+            <Labeled label="NavItem">
               <div className="w-56 space-y-1 rounded-xl border border-border bg-card p-2">
-                <ApplicationNavItem
+                <NavItem
                   href="#"
                   active
                   icon={<FileText className="w-4 h-4" />}
                   label="申請一覧"
                   badge={12}
                 />
-                <ApplicationNavItem href="#" icon={<Calendar className="w-4 h-4" />} label="予定" />
-                <ApplicationNavItem href="#" icon={<Search className="w-4 h-4" />} label="検索" />
+                <NavItem href="#" icon={<Calendar className="w-4 h-4" />} label="予定" />
+                <NavItem href="#" icon={<Search className="w-4 h-4" />} label="検索" />
               </div>
             </Labeled>
           </Grid>
@@ -385,16 +385,16 @@ export const AllComponents: Story = {
                       </EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
-                      <ApplicationButton leftIcon={<Plus className="w-4 h-4" />}>
+                      <Button leftIcon={<Plus className="w-4 h-4" />}>
                         新規申請
-                      </ApplicationButton>
+                      </Button>
                     </EmptyContent>
                   </Empty>
                 </CardContent>
               </Card>
             </Labeled>
-            <Labeled label="ApplicationTable（0 件）">
-              <ApplicationTable<Request>
+            <Labeled label="Table（0 件）">
+              <Table<Request>
                 columns={COLUMNS}
                 rows={[]}
                 emptyMessage="申請がありません"
@@ -405,7 +405,7 @@ export const AllComponents: Story = {
           </Grid>
         </Section>
 
-        <ApplicationDialog
+        <Dialog
           open={dialog === "dialog"}
           onOpenChange={(next) => !next && setDialog(null)}
           title="申請の詳細"
@@ -414,9 +414,9 @@ export const AllComponents: Story = {
           onCancel={() => setDialog(null)}
         >
           <p className="text-sm text-muted-foreground">申請番号 SYS-2026-0001 の内容です。</p>
-        </ApplicationDialog>
+        </Dialog>
 
-        <ApplicationConfirmDialog
+        <ConfirmDialog
           open={dialog === "confirm"}
           onOpenChange={(next) => !next && setDialog(null)}
           type="danger"
@@ -426,7 +426,7 @@ export const AllComponents: Story = {
           onConfirm={() => setDialog(null)}
         />
 
-        <ApplicationFormDialog
+        <FormDialog
           open={dialog === "form"}
           onOpenChange={(next) => !next && setDialog(null)}
           title="新規申請の作成"
@@ -436,13 +436,13 @@ export const AllComponents: Story = {
           }}
           onCancel={() => setDialog(null)}
         >
-          <ApplicationFormField label="件名" required>
-            <ApplicationInput name="title" placeholder="例: 備品購入の申請" />
-          </ApplicationFormField>
-          <ApplicationFormField label="優先度" required>
-            <ApplicationSelect name="priority" items={PRIORITIES} placeholder="優先度を選択" />
-          </ApplicationFormField>
-        </ApplicationFormDialog>
+          <FormField label="件名" required>
+            <Input name="title" placeholder="例: 備品購入の申請" />
+          </FormField>
+          <FormField label="優先度" required>
+            <Select name="priority" items={PRIORITIES} placeholder="優先度を選択" />
+          </FormField>
+        </FormDialog>
       </Showcase>
     );
   },
