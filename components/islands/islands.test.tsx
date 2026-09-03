@@ -1,7 +1,9 @@
 import { render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { getCsrfHeaders, getCsrfToken } from "../../lib/csrf";
+import { toast } from "../application/Toast";
 import { DatePickerIsland } from "./DatePickerIsland";
+import { ToastListenerIsland } from "./ToastListenerIsland";
 import { parseProps } from "./parse-props";
 import {
   getIslandComponent,
@@ -111,5 +113,23 @@ describe("DatePickerIsland", () => {
     expect(to.value).toBe("2026-08-31");
     from.remove();
     to.remove();
+  });
+});
+
+describe("ToastListenerIsland", () => {
+  afterEach(() => {
+    window.ApplicationToast = undefined;
+  });
+
+  /* グローバルの名前は Django テンプレート / 素の JS との実行時契約で、
+   * package の export 名（`toast`）とは別に固定されている。型でも
+   * コンパイラでも守られないため、名前と形をここで押さえる。 */
+  it("registers the imperative API as window.ApplicationToast", () => {
+    render(<ToastListenerIsland />);
+
+    expect(window.ApplicationToast).toBe(toast);
+    for (const method of ["success", "error", "warning", "info", "show"] as const) {
+      expect(typeof window.ApplicationToast?.[method]).toBe("function");
+    }
   });
 });
