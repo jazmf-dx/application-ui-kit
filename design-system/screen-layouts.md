@@ -4,6 +4,9 @@
 これらは実装コードをコピーする Template ではなく、ナビゲーションや主要操作位置を
 揃えるための Layout Profile。
 
+実物は Storybook「テンプレート/標準アプリ」「テンプレート/シンプルアプリ」「テンプレート/フォーカスアプリ」
+（[templates/README.md](../templates/README.md)）。一覧・詳細・エラーページの構成例も同じ区分にある。
+
 ## Standard App — 一般的な業務システム、管理画面、マスタ管理
 
 ```

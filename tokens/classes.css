@@ -981,6 +981,43 @@
   }
 
   /* ========================================
+   * MARK: Filter Bar — 一覧の上の絞り込み（テンプレート/一覧画面（テンプレート版））
+   *
+   * <form class="filter-bar" hx-get="…" hx-target="#table" hx-trigger="change, input delay:400ms" hx-push-url="true">
+   *   <label class="filter-bar-field"><span>ステータス</span><select class="input-field">…</select></label>
+   *   <a class="btn-secondary btn-sm" href="…">条件をクリア</a>
+   *   <span class="htmx-indicator">読み込み中…</span>
+   * </form>
+   *
+   * React 側の対応部品は無い（レイアウト。パターン/一覧表の絞り込み行と同じ配置）。
+   * ======================================== */
+
+  .filter-bar {
+    @apply flex flex-wrap items-end gap-3 rounded-lg border p-4;
+    border-color: var(--color-border);
+    background-color: var(--color-card);
+  }
+
+  .filter-bar-field {
+    @apply flex min-w-40 flex-col gap-1 text-xs font-medium;
+    color: var(--color-muted-foreground);
+  }
+
+  .filter-bar-field > .input-field {
+    @apply w-auto;
+  }
+
+  /* htmx のリクエスト中だけ見せる（htmx が .htmx-request を付ける） */
+  .htmx-indicator {
+    opacity: 0;
+    transition: opacity var(--motion-duration-fast) var(--motion-ease-default);
+  }
+  .htmx-request .htmx-indicator,
+  .htmx-request.htmx-indicator {
+    opacity: 1;
+  }
+
+  /* ========================================
    * MARK: field-visibility Island の初期描画（FOUC 抑止）
    *
    * data-visible-when を持つ塊は、Island が条件を評価して

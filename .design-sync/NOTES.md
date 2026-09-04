@@ -84,3 +84,10 @@ check が報告するが、実際には修正不要な指摘。**毎回の sync 
 - **`ActiveIndicator` is invisible to this sync.** It exists in the compiled `dist/`/exports but has no story anywhere under `stories/`, so the converter never considers it (not `added`, not `removed` — just never seen). Confirm with the team whether it's meant to be Catalog-visible; if so it needs a story.
 - **This session started from a lost local `.design-sync/` state.** The Claude Design project this repo syncs into already held a complete prior sync, but this repo checkout had no `.design-sync/config.json`, no `NOTES.md`, and no `previews/` overrides — they were apparently never committed before a prior session's container was recycled (this is an ephemeral remote-execution repo). No owned preview overrides were needed this run (every component rendered correctly from the generated wrapper), but there's no history of *why* past fixes were made. This NOTES.md is the first durable record — keep it committed on every future sync.
 - **`docs: 0/21 components matched` in the build log.** The converter's doc discovery (`cfg.docsMap`/`cfg.dtsPropsFor`) found no matching source docs for any component, so `.prompt.md` content is generated from `.d.ts` + story source only, not from the components' own JSDoc comments (which are often rich, e.g. `Button.tsx`'s variant descriptions). Not a blocker, but a future sync could investigate `cfg.componentSrcMap`/`cfg.docsMap` to surface those JSDoc blocks in the generated prompt docs.
+
+## Templates group (added 2026-09)
+
+- `stories/templates/*.stories.tsx` はタイトルが `テンプレート/<Name>` の 2 階層で、Components とは別グループ。
+  同期側は `Templates/<Name>` として扱われる想定。画面全体を描くため 900x700 の既定ビューポートでは
+  切れる。`cfg.overrides.<Name>.viewport` を 1280x800 以上にするか、Templates グループを同期対象から外す。
+- `stories/templates/_shell.tsx` は `_` 始まりで Story 収集対象外（Storybook 専用のシェル見本）。

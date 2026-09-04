@@ -125,6 +125,7 @@ Empty / Item / Field / Label / Separator / Accordion / Collapsible / Switch / To
 | `.steps` / `.step` / `.step-done` / `.step-current` / `.step-error` | Steps | 手順の進み具合 |
 | `textarea.input-field` | Textarea | 複数行入力（React 版は文字数カウンタも持つ） |
 | `.avatar-sm` / `.avatar-md` / `.avatar-lg` | Avatar | 人・システムの丸いアイコン（20 / 28 / 36px） |
+| `.filter-bar` / `.filter-bar-field` / `.htmx-indicator` | 対応なし（レイアウト。パターン/一覧表の絞り込み行と同じ配置） | 一覧の上の絞り込み |
 
 - テンプレートでは上のクラスを使い、同じ部品を raw utility の組み合わせや独自 CSS で再実装しない。
   自前の同名クラスがある場合は `styles.css` を読み込んだうえで削除する（残すと読み込み順で自前が勝つ）
