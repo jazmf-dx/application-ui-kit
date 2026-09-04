@@ -2,6 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Calendar, FileText, MoreVertical, Plus, Search } from "lucide-react";
 import * as React from "react";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   Alert,
   Badge,
   Breadcrumbs,
@@ -13,6 +17,7 @@ import {
   DatePicker,
   Dialog,
   Dropdown,
+  FileDropZone,
   FormDialog,
   FormField,
   Input,
@@ -227,6 +232,14 @@ export const AllComponents: Story = {
             <Labeled label="RadioGroup">
               <RadioGroup items={PRIORITIES} defaultValue="mid" orientation="horizontal" />
             </Labeled>
+            <Labeled label="FileDropZone">
+              <FileDropZone
+                files={[]}
+                onFilesChange={() => {}}
+                accept=".pdf"
+                description="PDF のみ。10MB まで"
+              />
+            </Labeled>
             <Labeled label="FormField">
               <FormField label="件名" required error="件名は必須です">
                 <Input error defaultValue="" />
@@ -370,6 +383,18 @@ export const AllComponents: Story = {
               <Breadcrumbs
                 items={[{ label: "ホーム", href: "#" }, { label: "アイデア", href: "#" }, { label: "モニターの増設" }]}
               />
+            </Labeled>
+            <Labeled label="Accordion（shadcn/ui）">
+              <Accordion defaultValue={["faq-1"]}>
+                <AccordionItem value="faq-1">
+                  <AccordionTrigger>配送について</AccordionTrigger>
+                  <AccordionContent>通常 2〜3 営業日でお届けします。</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="faq-2">
+                  <AccordionTrigger>返品・交換</AccordionTrigger>
+                  <AccordionContent>到着後 14 日以内であれば承ります。</AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </Labeled>
             <Labeled label="Tabs">
               <Tabs

@@ -587,6 +587,48 @@
   }
 
   /* ========================================
+   * MARK: Tabs — Islands の tabs と、React の Tabs（cn-tabs*）と同じ形状
+   *
+   * <div class="tabs" role="tablist">
+   *   <button type="button" class="tab tab-active" role="tab" aria-selected="true">概要</button>
+   *   <button type="button" class="tab" role="tab" aria-selected="false">履歴</button>
+   *   <a class="tab" href="/history/">送信履歴</a>
+   * </div>
+   *
+   * 選択中は .tab-active か aria-selected="true" のどちらでも当たる
+   * （サーバーが描く場合と Island が描く場合の両方に対応）。
+   * ======================================== */
+
+  .tabs {
+    @apply inline-flex items-center gap-1 border-b;
+    border-color: var(--color-border);
+  }
+
+  .tab {
+    @apply -mb-px inline-flex items-center gap-1.5 border-b-2 border-transparent px-3 py-2
+           text-sm font-medium transition-colors;
+    color: var(--color-muted-foreground);
+    &:hover {
+      color: var(--color-foreground);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: 2px;
+    }
+    &:disabled,
+    &[aria-disabled="true"] {
+      cursor: not-allowed;
+      color: var(--color-disabled-foreground);
+    }
+  }
+
+  .tab-active,
+  .tab[aria-selected="true"] {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  /* ========================================
    * MARK: field-visibility Island の初期描画（FOUC 抑止）
    *
    * data-visible-when を持つ塊は、Island が条件を評価して

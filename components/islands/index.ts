@@ -38,6 +38,23 @@ export type { DatePickerIslandProps } from "./DatePickerIsland";
 export { CopyFieldIsland } from "./CopyFieldIsland";
 export type { CopyFieldIslandProps } from "./CopyFieldIsland";
 
+export { ConfirmHostIsland } from "./ConfirmHostIsland";
+export type { ConfirmHostIslandProps } from "./ConfirmHostIsland";
+
+export { FileDropZoneIsland } from "./FileDropZoneIsland";
+export type { FileDropZoneIslandProps } from "./FileDropZoneIsland";
+
+export { TabsIsland } from "./TabsIsland";
+export type { TabsIslandProps, TabsIslandLink } from "./TabsIsland";
+
+export { DisclosureIsland } from "./DisclosureIsland";
+export type { DisclosureIslandProps } from "./DisclosureIsland";
+
+export { FieldVisibilityIsland } from "./FieldVisibilityIsland";
+
+export { runConfirmedRequest } from "../../lib/confirm-request";
+export type { ConfirmRequestSpec, HttpMethod } from "../../lib/confirm-request";
+
 export {
   getIslandComponent,
   getRegisteredIslandComponents,
@@ -48,4 +65,9 @@ export { parseProps } from "./parse-props";
 
 export { DEFAULT_CSRF_COOKIE_NAME, getCsrfHeaders, getCsrfToken } from "../../lib/csrf";
 
-export type { HtmxApi } from "./types";
+export type {
+  ApplicationToastDetail,
+  ConfirmModalDetail,
+  HtmxApi,
+  HtmxConfirmDetail,
+} from "./types";

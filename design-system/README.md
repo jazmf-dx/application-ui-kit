@@ -86,11 +86,12 @@ Django + React Islands で実装困難な構成を避ける。Django テンプ�
 | Alert | 継続して伝える注意・案内（フォーム全体のエラー、未完了の設定、権限による制限）。ページ幅のお知らせは `variant="banner"` |
 | PageHeader / Breadcrumbs | 画面の見出し領域（見出し・説明・主操作・タブ）と現在位置 |
 | Stat | KPI・統計タイル（ラベル・値・単位・増減） |
+| FileDropZone | ファイルの選択・ドロップ・事前チェック（種類・サイズ・件数）。Django の input と組むなら Islands の `file-drop-zone` |
 | Dropdown | メニュー |
 | ThemeToggle | ライト/ダーク切替 |
 
 **shadcn/ui をそのまま公開している部品:** Card / Spinner / Textarea / Progress /
-Empty / Item / Field / Label / Separator（API は shadcn/ui のドキュメントと同じ）。
+Empty / Item / Field / Label / Separator / Accordion / Collapsible（API は shadcn/ui のドキュメントと同じ）。
 `FieldSet` はこちらではなく上の表にある。グループ入力のラベル・エラー配置を
 引き受ける実装をこのキットが持つため。
 
@@ -108,13 +109,15 @@ Empty / Item / Field / Label / Separator（API は shadcn/ui のドキュメン�
 | `.page-header` | PageHeader | 画面の見出し領域。主操作は `.page-header-actions` |
 | `.stat` | Stat | KPI・統計タイル |
 | `.data-table` | Table | 一覧 |
-| `.disclosure`（`<details>`） | Accordion / Collapsible（予定） | 開閉 |
-| `.tabs`（予定） | Tabs（見た目）+ Islands `tabs`（切替） | 画面内の切替 |
+| `.disclosure`（`<details>`） | Accordion / Collapsible。件数の動的更新が要るなら Islands `disclosure` | 開閉 |
+| `.tabs` / `.tab` / `.tab-active` | Tabs（React の中身）/ Islands `tabs`（サーバー描画パネルの切替） | 画面内の切替 |
+| — | FileDropZone / Islands `file-drop-zone` | ファイル添付（テンプレートでは Island を使う） |
 | `.switch` / `.pagination` / `.description-list` / `.steps`（予定） | Switch / Pagination / DescriptionList / Steps | フェーズ 3 で追加 |
 
 - テンプレートでは上のクラスを使い、同じ部品を raw utility の組み合わせや独自 CSS で再実装しない。
   自前の同名クラスがある場合は `styles.css` を読み込んだうえで削除する（残すと読み込み順で自前が勝つ）
-- 見せ方だけの切替（タブ・開閉・入力欄の出し分け）は Islands の `tabs` / `disclosure` / `field-visibility`（フェーズ 2）。パネルの中身は Django テンプレートのまま
+- 見せ方だけの切替（タブ・開閉・入力欄の出し分け）は Islands の `tabs` / `disclosure` / `field-visibility`。パネルの中身は Django テンプレートのまま
+- 確認ダイアログはテンプレートを書き換えずに寄せられる: base.html に `confirm-host` を 1 つ置けば、`hx-confirm` と `confirm-modal` イベントがそのままキットのダイアログになる
 - 見本は Storybook「基礎/テンプレート用クラス」
 
 **置いていないもの:** 社員選択・組織ツリーなどの業務ドメイン UI（ドメインを所有する

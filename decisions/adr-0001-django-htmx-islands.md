@@ -46,3 +46,16 @@ Island APIを変更する場合も、UI packageの公開契約としてSemVerで
 ## 見直し
 
 WebSocket等、異なる接続方式が複数Applicationで繰り返される場合は、同じpackage内の別entryへ分けるか、独立packageが必要かを利用実績に基づいて判断します。
+
+## 追記（2026-09）: 見せ方だけの島と、ページに1つ置く窓口
+
+このADRが想定していた標準Islandは「値を書き戻す・fetchする」ものだけだった。
+[ADR-0007](adr-0007-template-class-contract-and-presentation-islands.md) で次の2種類を加えた。
+
+| 種類 | Island | 性質 |
+|---|---|---|
+| 見せ方だけの島 | `tabs` / `disclosure` / `field-visibility` | サーバーが描いたHTMLの `hidden` を切り替えるだけ。中身をReactへ持ち上げない |
+| ページに1つ置く窓口 | `toast-listener` / `confirm-host` | ページ全体の通知・確認要求を1箇所で受ける。2つ目は警告して何もしない |
+
+決定1〜6は変えない。`confirm-host` の `hx-confirm` 横取りはオプトイン（`data-intercept-hx-confirm`）とし、
+利用側が既に自前のリスナーを持っていても壊れないようにした。

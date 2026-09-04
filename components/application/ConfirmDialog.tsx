@@ -238,9 +238,9 @@ export const ConfirmDialog = ({
           {detail && <p className="mt-2 text-sm text-muted-foreground">{detail}</p>}
 
           {errorMessage && (
-            <div className="mt-3 flex items-start gap-2 rounded-md bg-red-50 dark:bg-red-950/50 px-3 py-2">
-              <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-600 dark:text-red-400" />
-              <p className="text-sm text-red-600 dark:text-red-400">{errorMessage}</p>
+            <div className="mt-3 flex items-start gap-2 rounded-md bg-danger/10 px-3 py-2">
+              <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-danger" />
+              <p className="text-sm text-danger">{errorMessage}</p>
             </div>
           )}
         </div>

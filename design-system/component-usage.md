@@ -15,7 +15,10 @@
 | 一覧 | Table。空状態を必ず考慮する |
 | 画面横断の検索（人も組織も探す） | ScopeSearch。候補は props で渡す |
 | 候補を見比べて1つ選ぶ | 説明で足りる: RadioGroup `variant="cards"` / 列で比較する: RadioTable |
-| 画面内の切替 | Tabs |
+| 画面内の切替 | Tabs（React の中身）。サーバーが描いたパネルなら Islands の `tabs` + `.tabs` |
+| 見出し付きの開閉 | Accordion（テンプレートなら `<details class="disclosure">`、件数の動的更新は Islands の `disclosure`） |
+| ファイル添付 | FileDropZone（Django の input には Islands の `file-drop-zone`）。種類・サイズ・件数はここで先に弾く |
+| 削除などの確認（テンプレート側） | base.html の `confirm-host` 1 つ。`hx-confirm` と `confirm-modal` イベントを受ける。ボタンごとの宣言的な指定は `confirm-dialog` |
 | 状態表示 | Badge / ActiveIndicator |
 | 日付入力 | DatePicker |
 | ページ送り | Pagination |

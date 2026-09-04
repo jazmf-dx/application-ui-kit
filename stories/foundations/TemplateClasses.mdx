@@ -25,7 +25,8 @@ React コンポーネントの中ではこれらのクラスを書かず、対�
     [<Code>page-header</Code>, <Code>PageHeader</Code>, '画面の見出し領域'],
     [<Code>stat</Code>, <Code>Stat</Code>, 'KPI・統計タイル'],
     [<Code>data-table</Code>, <Code>Table</Code>, '一覧'],
-    [<Code>disclosure</Code>, <Code>Accordion / Collapsible</Code>, '開閉（details 要素）'],
+    [<Code>tabs / tab / tab-active</Code>, <><Code>Tabs</Code> / Islands <Code>tabs</Code></>, '画面内の切替'],
+    [<Code>disclosure</Code>, <><Code>Accordion / Collapsible</Code> / Islands <Code>disclosure</Code></>, '開閉（details 要素）'],
     [<Code>avatar-sm / avatar-md / avatar-lg</Code>, '—', 'アバター（React 版は予定）'],
   ]}
 />
@@ -137,6 +138,17 @@ React コンポーネントの中ではこれらのクラスを書かず、対�
   <div class="stat-hint">2026-09-01 時点</div>
 </div>`}
   note="値は intcomma / floatformat で整形して渡す。stat-delta-* は増減の色で、値には色を付けない。"
+/>
+
+## タブ
+
+<ClassSample
+  sample={`<div class="tabs" role="tablist" aria-label="コースの設定">
+  <button type="button" class="tab tab-active" role="tab" aria-selected="true">基本情報</button>
+  <button type="button" class="tab" role="tab" aria-selected="false">教材 (12)</button>
+  <a class="tab" href="#">送信履歴</a>
+</div>`}
+  note="切替の動作は Islands の tabs（はじめに/Django Islands）が持つ。ここは見た目だけ。選択中は tab-active か aria-selected=true のどちらでも当たる。"
 />
 
 ## 開閉（details）

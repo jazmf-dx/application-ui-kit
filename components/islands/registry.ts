@@ -2,7 +2,7 @@
  * React Island レジストリ
  *
  * `data-react="component-name"` と React コンポーネントの対応表です。
- * このパッケージ標準の 4 Island は auto-mount エントリが自動登録します。
+ * このパッケージ標準の Island（auto-mount.tsx の一覧を参照）は auto-mount エントリが自動登録します。
  * アプリ固有の Island は registerIslandComponents() で追加してください
  * （業務ドメイン固有の UI はこのパッケージには追加せず、アプリ側で登録します）。
  */

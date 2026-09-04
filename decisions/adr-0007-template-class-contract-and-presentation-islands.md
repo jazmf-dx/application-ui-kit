@@ -123,7 +123,7 @@ ADR-0001の標準Island（toast / confirm / form-dialog / date-picker / copy-fie
 | フェーズ | 内容 |
 |---|---|
 | 1（このADRと同時） | theme.css分割、`.alert*` / `.breadcrumbs` / `.page-header*` / `.stat*` / `.badge-{tone}` / `.disclosure*`、Alert / Breadcrumbs / PageHeader / Stat、status Token |
-| 2 | `tabs` / `disclosure` / `field-visibility` / `confirm-host` / `file-drop-zone` Island、`.tabs*`、FileDropZone、Accordion / Collapsible |
+| 2（実装済み） | `tabs` / `disclosure` / `field-visibility` / `confirm-host` / `file-drop-zone` Island、`.tabs*`、FileDropZone、Accordion / Collapsible、toast-listener の別名登録と `application-toast` イベント |
 | 3 | Tableの並び替え状態・行選択・固定ヘッダ、Paginationの件数表示、`.switch` / `.pagination*` / `.description-list` / `.steps*`、Steps / Switch / Tooltip / DescriptionList |
 | 4 | Storybook Templates（Standard / Simple / Focus App、一覧テンプレート版、詳細、エラーページ） |
 

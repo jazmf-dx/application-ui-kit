@@ -1697,6 +1697,131 @@
     color: var(--color-muted-foreground);
   }
 
+  /* ========================================================================
+   * MARK: Accordion / Collapsible — classes.css の .disclosure と同じ形状
+   * ====================================================================== */
+
+  .cn-accordion {
+    @apply rounded-lg border border-border bg-card;
+  }
+
+  .cn-accordion-item {
+    @apply not-last:border-b not-last:border-border;
+  }
+
+  .cn-accordion-trigger {
+    @apply w-full gap-2 px-4 py-2.5 text-left text-sm font-medium
+           hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset;
+  }
+
+  .cn-accordion-trigger-icon {
+    @apply size-4 text-muted-foreground;
+  }
+
+  .cn-accordion-content {
+    @apply text-sm;
+  }
+
+  .cn-accordion-content-inner {
+    @apply px-4 pb-3 pt-1;
+  }
+
+  /* Islands の disclosure（見出しボタン + 件数 + chevron）。React 版は Accordion。 */
+  .cn-disclosure-toggle {
+    @apply mb-3 flex w-full items-center gap-2 text-left;
+    &:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: 2px;
+      border-radius: 0.25rem;
+    }
+  }
+
+  .cn-disclosure-toggle-label {
+    @apply text-base font-semibold;
+  }
+
+  .cn-disclosure-toggle-icon {
+    @apply size-4 text-muted-foreground transition-transform;
+  }
+
+  /* ========================================================================
+   * MARK: File Drop Zone
+   * ====================================================================== */
+
+  .cn-file-drop-zone {
+    @apply flex flex-col gap-3;
+  }
+
+  .cn-file-drop-zone-area {
+    @apply flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed
+           px-6 py-8 text-center transition-colors;
+    border-color: var(--color-border);
+    background-color: var(--color-card);
+  }
+  .cn-file-drop-zone[data-dragging] .cn-file-drop-zone-area {
+    border-color: var(--color-primary);
+    background-color: color-mix(in oklab, var(--color-primary) 6%, var(--color-card));
+  }
+  .cn-file-drop-zone[aria-invalid="true"] .cn-file-drop-zone-area {
+    border-color: var(--color-danger);
+  }
+  .cn-file-drop-zone[data-disabled] .cn-file-drop-zone-area {
+    border-color: var(--color-disabled-border);
+    background-color: var(--color-disabled);
+    color: var(--color-disabled-foreground);
+  }
+
+  .cn-file-drop-zone-icon {
+    @apply size-6 text-muted-foreground;
+  }
+
+  .cn-file-drop-zone-text {
+    @apply space-y-0.5;
+  }
+
+  .cn-file-drop-zone-label {
+    @apply text-sm font-medium;
+  }
+
+  .cn-file-drop-zone-description {
+    @apply text-xs text-muted-foreground;
+  }
+
+  .cn-file-drop-zone-error {
+    @apply m-0 list-none space-y-0.5 rounded-md px-3 py-2 text-sm;
+    color: var(--color-danger-hover);
+    background-color: color-mix(in oklab, var(--color-danger) 10%, var(--color-card));
+  }
+
+  .cn-file-drop-zone-list {
+    @apply m-0 list-none divide-y divide-border rounded-lg border border-border;
+  }
+
+  .cn-file-drop-zone-item {
+    @apply flex items-center gap-2 px-3 py-2 text-sm;
+  }
+
+  .cn-file-drop-zone-item-icon {
+    @apply size-4 shrink-0 text-muted-foreground;
+  }
+
+  .cn-file-drop-zone-item-name {
+    @apply min-w-0 flex-1 truncate;
+  }
+
+  .cn-file-drop-zone-item-size {
+    @apply shrink-0 text-xs tabular-nums text-muted-foreground;
+  }
+
+  .cn-file-drop-zone-remove {
+    @apply inline-flex size-7 shrink-0 items-center justify-center rounded-md
+           text-muted-foreground transition-colors hover:bg-accent hover:text-foreground
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  }
+  .cn-file-drop-zone-remove :where(svg:not([class*="size-"])) {
+    @apply size-4;
+  }
+
   /* cn-pagination / cn-pagination-link / cn-pagination-*-text および
    * cn-field-orientation-* は .tsx 側にインラインで実体があるマーカークラス。
    * 上流も CSS 定義を持たないため、ここでも定義しない。 */

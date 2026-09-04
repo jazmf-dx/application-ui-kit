@@ -20,58 +20,117 @@ React コンポーネントとして直接使う場合（`.tsx` の中）はこ�
 import 'application-ui-kit/islands/auto-mount'`}</Code>
 
 これだけで、ページ内の `data-react` 要素（htmx スワップで後から入ったものも含む）が
-自動でマウントされます。
+自動でマウントされます。**htmx は entry より前に読み込みます**（auto-mount は読み込み時に
+`window.htmx` を見て `htmx:afterSwap` の再スキャンを付けるため）。
+
+自前の registry を持つアプリは、`application-ui-kit/islands` から Island を import して
+自分の registry に登録します（default export が要る場合は 1 行のラッパーを書く）。
 
 ## 標準 Island
+
+Island は 3 種類あります。
+
+### 値を書き戻す・fetch する島
 
 <SpecTable
   head={['data-react', '目的', '主な data-* 属性']}
   rows={[
-    ['toast-listener', '全ページトースト。window.ApplicationToast の登録と Django messages の表示。base.html に 1 つだけ置く', 'data-messages'],
-    ['confirm-dialog', '確認ダイアログ。確定時の fetch・CSRF・成功トーストを内包', 'data-id / data-title / data-message / data-type / data-url / data-method / data-success-message'],
+    ['confirm-dialog', 'ボタンごとの確認ダイアログ。確定時の fetch・CSRF・成功トーストを内包', 'data-id / data-title / data-message / data-type / data-url / data-method / data-success-message'],
     ['form-dialog', 'ダイアログの枠だけを React が持ち、中身は htmx が Django Form HTML を取得して表示', 'data-id / data-title / data-form-url / data-success-event'],
     ['date-picker', 'Django Form の hidden input の値を書き換える日付選択（single / range）', 'data-mode / data-target / data-value / data-target-from / data-target-to'],
     ['copy-field', 'ワンタイム URL・トークン等のコピー欄（readonly 入力 + コピーボタン + 案内行）。secure context でなくても動くフォールバック付き', 'data-props（value / copy-label / selected-message / input-aria-label）'],
+    ['file-drop-zone', 'Django の <input type="file"> にドロップ枠・選択済み一覧・事前チェックを付け、選んだファイルを元の input に書き戻す', 'data-target（input の id）/ data-accept / data-multiple / data-max-size / data-max-files / data-description'],
+  ]}
+/>
+
+### 見せ方だけの島
+
+サーバーが描いた HTML の**見せ方だけ**を切り替えます。中身は Django テンプレートのまま
+（Django Form・権限・htmx 属性をそのまま活かす）。初期非表示のパネルには**サーバー側で `hidden`**
+を付けます。隠れた入力欄の値も POST されるので、捨てる判断は Django Form の `clean()` に置きます。
+
+<SpecTable
+  head={['data-react', '目的', 'テンプレート側の約束']}
+  rows={[
+    ['tabs', 'パネルの data-tab-label からタブバーを描き、hidden を切り替える。件数・キーボード操作・tabs:change イベント付き', '親に data-tab-host、パネルに data-tab-panel="key" data-tab-label="…"（件数は data-tab-count-id）。props: initial / links / label / urlParam'],
+    ['disclosure', '見出し + 件数のボタンを描き、対象要素の hidden を切り替える', 'data-props（targetId / label / count / initialOpen）。JS 不要なら <details class="disclosure">'],
+    ['field-visibility', 'data-visible-when の条件で塊を出し分ける。何も描かない', 'form 内に <span data-react="field-visibility" hidden>。塊に data-visible-when=\'{"kind": ["video","pdf"]}\'（AND、配列はいずれか、{"not": …}、真偽値）'],
+  ]}
+/>
+
+### ページに 1 つ置く窓口
+
+<SpecTable
+  head={['data-react', '目的', '主な data-* 属性']}
+  rows={[
+    ['toast-listener', '全ページトースト。window.ApplicationToast の登録、Django messages の表示、application-toast イベントの受信。base.html に 1 つだけ置く', 'data-messages / data-global-aliases（既存コードの別名。例 ["DxToast"]）'],
+    ['confirm-host', 'ページ全体の確認要求を 1 つの ConfirmDialog で受ける。hx-confirm の横取り（オプトイン）と confirm-modal CustomEvent。base.html に 1 つだけ置く', 'data-intercept-hx-confirm / data-csrf-cookie-name / data-default-type'],
   ]}
 />
 
 ## テンプレート例
 
-<Code>{`<!-- base.html に一度だけ（全ページトースト） -->
+<Code>{`<!-- base.html に一度だけ（全ページトースト・確認の窓口） -->
 <div data-react="toast-listener"></div>
+<div data-react="confirm-host" data-intercept-hx-confirm="true"></div>
 
-<!-- 確認ダイアログ -->
-<div data-react="confirm-dialog" data-id="delete-15" data-title="削除しますか？"
-     data-type="danger" data-url="/ideas/15/delete/"></div>
-<button onclick="window.openConfirmDialog['delete-15']()">削除</button>
+<!-- hx-confirm がそのまま kit のダイアログになる -->
+<button hx-delete="/ideas/15/" hx-confirm="このアイデアを削除しますか？"
+        data-confirm-title="アイデアの削除" data-confirm-text="削除">削除</button>
 
-<!-- フォームダイアログ -->
-<div data-react="form-dialog" data-id="task-create" data-title="新規タスク作成"
-     data-form-url="{% url 'tasks:create_form' %}"></div>
+<!-- 既存の confirm-modal イベントもそのまま受かる -->
+<button @click="$dispatch('confirm-modal', {title: '削除', message: '取り消せません。',
+        confirmText: '削除', confirmClass: 'danger',
+        onConfirm: () => document.getElementById('delete-form').submit()})">削除</button>
+
+<!-- タブ（パネルはサーバーが描く） -->
+<div data-tab-host>
+  <div data-react="tabs" data-props='{"initial": "materials", "label": "コースの設定"}'></div>
+  <section data-tab-panel="basic" data-tab-label="基本情報">…</section>
+  <section data-tab-panel="materials" data-tab-label="教材"
+           data-tab-count-id="material-count" hidden>…</section>
+</div>
+
+<!-- 入力欄の出し分け -->
+<form>
+  <span data-react="field-visibility" hidden></span>
+  {{ form.kind }}
+  <div data-visible-when='{"kind": ["video", "pdf"]}'>{{ form.url }}</div>
+</form>
+
+<!-- ファイル添付 -->
+{{ form.attachment }}
+<div data-react="file-drop-zone" data-target="{{ form.attachment.id_for_label }}"
+     data-max-size="10485760" data-description="PDF のみ。10MB まで"></div>
 
 <!-- 日付選択 -->
 {{ form.start_date }}
 <div data-react="date-picker" data-mode="single"
-     data-target="{{ form.start_date.id_for_label }}"></div>
-
-<!-- コピー欄（ワンタイム URL など。autoescape が有効なら属性への埋め込みは安全） -->
-<div data-react="copy-field" data-value="{{ issued_link }}"></div>`}</Code>
+     data-target="{{ form.start_date.id_for_label }}"></div>`}</Code>
 
 ## 通知の流れ
 
 - Django View: `messages.success(request, "保存しました")` → `data-messages` 経由でページ読込時にトースト表示
 - 素の JS / htmx: `window.ApplicationToast.success("保存しました")`
+- htmx の部分更新の結果: サーバーが `HX-Trigger: {"application-toast": {"type": "success", "title": "保存しました"}}` を返す
 - form-dialog の送信成功: Django View が `HX-Trigger: application-form-success` を返す
+- React マウント前の呼び出し: base.html のスタブが `window.__applicationToastQueue.push(["success", "…"])` しておけば、マウント時に消化される
 
 ## 注意事項
 
 - 表示領域（Toaster）を持つのは toast-listener だけです。成功トーストを使う Island がある
   ページには toast-listener が必要です（通常は base.html に置くので満たされます）。
+- confirm-host は 1 ページに 1 つ。2 つ目は警告を出して何もしません
+  （複数が `htmx:confirm` を握ると 1 回の削除が複数回飛ぶため）。
+  自前で `htmx:confirm` を握っているアプリは、そのリスナーを外してから `data-intercept-hx-confirm` を付けます。
 - CSRF cookie 名を変更しているプロジェクトは `data-csrf-cookie-name` を渡してください
   （既定は Django 標準の `csrftoken`）。エンドポイントや認証方式は焼き込みません。
+- 見せ方だけの島は、パネル・対象要素を差し替える htmx スワップの後も動きます（tabs は
+  `htmx:afterSettle` でパネル集合と件数を読み直す）。Island 自身の要素が差し替わった場合は再マウントされます。
 - 業務ドメイン固有の Island はこのパッケージに追加せず、アプリ側で
   `registerIslandComponents()` を使って登録します。
 - `data-props` に Django の値を渡すときは、文字列連結で JSON を組み立てず
   `json_script` 等の安全なシリアライズ手段を使ってください。
 
-詳細な設計判断は リポジトリの `decisions/adr-0001-django-htmx-islands.md` を参照してください。
+詳細な設計判断は リポジトリの `decisions/adr-0001-django-htmx-islands.md` と
+`decisions/adr-0007-template-class-contract-and-presentation-islands.md` を参照してください。

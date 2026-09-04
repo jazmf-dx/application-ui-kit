@@ -30,12 +30,14 @@
  *
  * 成功トースト（successMessage）を使う場合は、base.html に toast-listener Island を
  * 置いてください（表示領域はページに 1 つだけ持つ設計のため）。
+ *
+ * ボタンごとに Island を置かず、`hx-confirm` や `confirm-modal` CustomEvent で
+ * ページ全体の確認を 1 つのダイアログで受けたい場合は ConfirmHostIsland を使います。
  */
 
 import { useEffect, useState } from "react";
-import { getCsrfHeaders } from "../../lib/csrf";
+import { runConfirmedRequest } from "../../lib/confirm-request";
 import { ConfirmDialog } from "../application/ConfirmDialog";
-import { toast } from "../application/Toast";
 import "./types";
 
 export interface ConfirmDialogIslandProps {
@@ -173,45 +175,19 @@ export function ConfirmDialogIsland({
     };
   }, [id]);
 
-  const handleConfirm = async () => {
-    // URL が指定されていない場合は単に閉じる
-    if (!url) {
-      if (successMessage) {
-        toast.success(successMessage);
-      }
-      return;
-    }
-
-    // fetch でリクエストを送信（reject すると ConfirmDialog が
-    // ダイアログ内にエラーを表示する）
-    const response = await fetch(url, {
+  // 確定後の処理（fetch・CSRF・toast・htmx trigger・reload）は ConfirmHostIsland と共通。
+  // reject すると ConfirmDialog がダイアログ内にエラーを表示する。
+  const handleConfirm = () =>
+    runConfirmedRequest({
+      url,
       method,
-      headers: {
-        "Content-Type": "application/json",
-        ...getCsrfHeaders(csrfCookieName),
-      },
-      body: body ? JSON.stringify(body) : undefined,
+      body,
+      csrfCookieName,
+      successMessage,
+      htmxTrigger,
+      reloadOnSuccess,
+      redirectUrl,
     });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText || `リクエストに失敗しました (${response.status})`);
-    }
-
-    if (successMessage) {
-      toast.success(successMessage);
-    }
-
-    if (htmxTrigger && typeof window.htmx !== "undefined") {
-      window.htmx.trigger(document.body, htmxTrigger);
-    }
-
-    if (reloadOnSuccess) {
-      window.location.reload();
-    } else if (redirectUrl) {
-      window.location.href = redirectUrl;
-    }
-  };
 
   return (
     <ConfirmDialog

@@ -148,6 +148,9 @@ export type { PageHeaderProps } from "./PageHeader";
 export { Stat } from "./Stat";
 export type { StatProps, StatTone } from "./Stat";
 
+export { FileDropZone } from "./FileDropZone";
+export type { FileDropZoneProps } from "./FileDropZone";
+
 /* ==========================================================================
  * shadcn/ui をそのまま公開しているもの
  *
@@ -212,6 +215,13 @@ export {
 } from "../ui/field";
 export { Label } from "../ui/label";
 export { Separator } from "../ui/separator";
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "../ui/accordion";
+export { Collapsible, CollapsibleTrigger, CollapsibleContent } from "../ui/collapsible";
 
 /* ==========================================================================
  * 旧名（Application* 接頭辞つき）の後方互換エイリアス

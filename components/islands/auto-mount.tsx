@@ -16,17 +16,26 @@
  *   - data-props='{"key": "value"}'（JSON 文字列）
  *   - 個別の data-* 属性（例: data-title="Hello"）
  *
- * このパッケージ標準の 5 Island は自動登録されます:
- *   confirm-dialog / form-dialog / toast-listener / date-picker / copy-field
+ * このパッケージ標準の Island は自動登録されます（decisions/adr-0001 / adr-0007）:
+ *
+ *   値を書き戻す・fetch する島   date-picker / copy-field / file-drop-zone / confirm-dialog / form-dialog
+ *   見せ方だけの島               tabs / disclosure / field-visibility
+ *   ページに 1 つ置く窓口         toast-listener / confirm-host
+ *
  * アプリ固有の Island は registerIslandComponents() で追加します。
  */
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ConfirmDialogIsland } from "./ConfirmDialogIsland";
+import { ConfirmHostIsland } from "./ConfirmHostIsland";
 import { CopyFieldIsland } from "./CopyFieldIsland";
 import { DatePickerIsland } from "./DatePickerIsland";
+import { DisclosureIsland } from "./DisclosureIsland";
+import { FieldVisibilityIsland } from "./FieldVisibilityIsland";
+import { FileDropZoneIsland } from "./FileDropZoneIsland";
 import { FormDialogIsland } from "./FormDialogIsland";
+import { TabsIsland } from "./TabsIsland";
 import { ToastListenerIsland } from "./ToastListenerIsland";
 import { parseProps } from "./parse-props";
 import {
@@ -39,11 +48,26 @@ import "./types";
 // このパッケージ標準の Island を登録する
 registerIslandComponents({
   "confirm-dialog": ConfirmDialogIsland,
+  "confirm-host": ConfirmHostIsland,
   "form-dialog": FormDialogIsland,
   "toast-listener": ToastListenerIsland,
   "date-picker": DatePickerIsland,
   "copy-field": CopyFieldIsland,
+  "file-drop-zone": FileDropZoneIsland,
+  tabs: TabsIsland,
+  disclosure: DisclosureIsland,
+  "field-visibility": FieldVisibilityIsland,
 });
+
+/**
+ * JSON として解釈せず、data 属性の文字列をそのまま渡す props。
+ * URL・トークン・大きな数値 ID・要素 id を含み得るもの。
+ */
+const RAW_ATTRIBUTES: Record<string, readonly string[]> = {
+  "copy-field": ["value"],
+  "file-drop-zone": ["target", "accept"],
+  disclosure: ["targetId"],
+};
 
 /**
  * 1 つの要素へ React コンポーネントをマウントする
@@ -60,12 +84,7 @@ export function mountIsland(element: HTMLElement, componentName: string): void {
   }
 
   try {
-    const props = parseProps(
-      element,
-      // copy-field の value はURL・トークン・大きな数値IDを含み得るため、
-      // JSON scalarとして解釈せずdata属性の文字列をそのまま使う。
-      componentName === "copy-field" ? ["value"] : undefined,
-    );
+    const props = parseProps(element, RAW_ATTRIBUTES[componentName]);
     const root = createRoot(element);
     element.dataset.reactMounted = "true";
 
