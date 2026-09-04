@@ -4,9 +4,26 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+// <important>
+// containerClassName / containerStyle は上流との差分。application/Table.tsx の
+// stickyHeader（スクロール容器の高さ制限）を外側の div に渡すために必要。
+// 上流を取り込み直すときは再適用すること。
+// </important>
+function Table({
+  className,
+  containerClassName,
+  containerStyle,
+  ...props
+}: React.ComponentProps<"table"> & {
+  containerClassName?: string
+  containerStyle?: React.CSSProperties
+}) {
   return (
-    <div data-slot="table-container" className="cn-table-container">
+    <div
+      data-slot="table-container"
+      className={cn("cn-table-container", containerClassName)}
+      style={containerStyle}
+    >
       <table
         data-slot="table"
         className={cn("cn-table", className)}

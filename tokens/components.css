@@ -1822,6 +1822,287 @@
     @apply size-4;
   }
 
+  /* ========================================================================
+   * MARK: Switch — classes.css の input.switch と同じ形状（36 × 20px / sm 28 × 16px）
+   * ====================================================================== */
+
+  .cn-switch {
+    @apply shrink-0 rounded-full border border-transparent
+           focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+           data-checked:bg-primary data-unchecked:bg-input
+           aria-invalid:border-danger
+           data-[size=default]:h-5 data-[size=default]:w-9
+           data-[size=sm]:h-4 data-[size=sm]:w-7;
+  }
+
+  .cn-switch-thumb {
+    @apply rounded-full bg-background shadow-sm;
+  }
+  .cn-switch[data-size="default"] .cn-switch-thumb {
+    @apply size-4 data-checked:translate-x-4 data-unchecked:translate-x-0;
+  }
+  .cn-switch[data-size="sm"] .cn-switch-thumb {
+    @apply size-3 data-checked:translate-x-3 data-unchecked:translate-x-0;
+  }
+
+  /* ========================================================================
+   * MARK: Tooltip — 短い補足。操作や長文は Popover
+   * ====================================================================== */
+
+  .cn-tooltip-content {
+    @apply inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs
+           data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95
+           data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95;
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .cn-tooltip-arrow {
+    @apply size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px];
+    background-color: var(--color-foreground);
+    fill: var(--color-foreground);
+  }
+
+  /* ========================================================================
+   * MARK: Avatar — classes.css の .avatar-sm / -md / -lg と同じ寸法（20 / 28 / 36px）
+   * ====================================================================== */
+
+  .cn-avatar {
+    @apply rounded-full data-[size=default]:size-7 data-[size=sm]:size-5 data-[size=lg]:size-9;
+  }
+
+  .cn-avatar-image {
+    @apply rounded-full;
+  }
+
+  .cn-avatar-fallback {
+    @apply rounded-full bg-muted text-xs font-medium text-muted-foreground
+           group-data-[size=sm]/avatar:text-[10px] group-data-[size=lg]/avatar:text-sm;
+  }
+
+  .cn-avatar-group-count {
+    @apply size-7 rounded-full bg-muted text-xs font-medium text-muted-foreground
+           group-has-data-[size=lg]/avatar-group:size-9 group-has-data-[size=sm]/avatar-group:size-5;
+  }
+
+  /* ========================================================================
+   * MARK: Table の並び替え・固定ヘッダ・選択行 — classes.css の .data-table th[aria-sort] 等と同じ
+   * ====================================================================== */
+
+  .cn-table-head-sortable {
+    @apply p-0;
+  }
+
+  .cn-table-sort {
+    @apply inline-flex w-full items-center gap-1 px-4 py-2.5 text-left text-xs font-semibold
+           text-muted-foreground transition-colors hover:text-foreground
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring
+           data-sorted:text-foreground;
+  }
+  .cn-table-sort :where(svg:not([class*="size-"])) {
+    @apply size-3.5 shrink-0;
+  }
+  .cn-table-sort-idle {
+    @apply opacity-50;
+  }
+
+  .cn-table-container-sticky {
+    @apply overflow-y-auto;
+  }
+  .cn-table-container-sticky .cn-table-header th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--color-muted);
+    box-shadow: inset 0 -1px 0 var(--color-border);
+  }
+
+  .cn-table-row[aria-selected="true"] {
+    background-color: var(--color-accent);
+  }
+
+  /* ========================================================================
+   * MARK: Pagination の件数表記・表示件数 — classes.css の .pagination と同じ
+   * ====================================================================== */
+
+  .cn-pagination-bar {
+    @apply flex flex-wrap items-center justify-between gap-3 text-sm;
+  }
+
+  .cn-pagination-meta {
+    @apply flex flex-wrap items-center gap-4;
+  }
+
+  .cn-pagination-summary {
+    @apply m-0 tabular-nums text-muted-foreground;
+  }
+
+  .cn-pagination-size {
+    @apply inline-flex items-center gap-2 text-sm text-muted-foreground;
+  }
+  .cn-pagination-size > select {
+    @apply h-7 rounded-lg border border-input bg-card px-2 text-sm text-foreground;
+  }
+
+  /* ========================================================================
+   * MARK: Description List — classes.css の .description-list と同じ
+   * ====================================================================== */
+
+  .cn-description-list {
+    @apply m-0 grid gap-x-6 gap-y-3;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .cn-description-list[data-columns="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cn-description-list[data-columns="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cn-description-list-item {
+    @apply min-w-0;
+  }
+
+  .cn-description-list-term {
+    @apply text-xs font-medium text-muted-foreground;
+  }
+
+  .cn-description-list-description {
+    @apply m-0 mt-0.5 break-words text-sm text-foreground;
+  }
+
+  .cn-description-list[data-layout="inline"] .cn-description-list-item {
+    @apply grid items-baseline gap-3 border-b border-border py-2;
+    grid-template-columns: minmax(7rem, auto) 1fr;
+  }
+  .cn-description-list[data-layout="inline"] .cn-description-list-description {
+    @apply mt-0;
+  }
+
+  .cn-description-list-empty {
+    @apply text-muted-foreground;
+  }
+
+  /* ========================================================================
+   * MARK: Steps — classes.css の .steps と同じ
+   * ====================================================================== */
+
+  .cn-steps {
+    @apply m-0 flex list-none gap-2 p-0;
+  }
+
+  .cn-steps[data-orientation="vertical"] {
+    @apply flex-col gap-0;
+  }
+
+  .cn-step {
+    @apply relative flex min-w-0 flex-1;
+  }
+
+  .cn-step-button {
+    @apply flex w-full min-w-0 flex-col items-center gap-2 text-center;
+  }
+  button.cn-step-button {
+    @apply rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+           focus-visible:ring-offset-2;
+  }
+
+  .cn-steps[data-orientation="horizontal"] .cn-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 0.875rem;
+    left: calc(50% + 1.125rem);
+    right: calc(-50% + 1.125rem);
+    height: 2px;
+    background-color: var(--color-border);
+  }
+  .cn-steps[data-orientation="horizontal"] .cn-step[data-status="done"]:not(:last-child)::after {
+    background-color: var(--color-primary);
+  }
+
+  .cn-steps[data-orientation="vertical"] .cn-step {
+    @apply pb-4;
+  }
+  .cn-steps[data-orientation="vertical"] .cn-step-button {
+    @apply flex-row items-start gap-3 text-left;
+  }
+  .cn-steps[data-orientation="vertical"] .cn-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 2rem;
+    bottom: 0.25rem;
+    left: calc(0.875rem - 1px);
+    width: 2px;
+    background-color: var(--color-border);
+  }
+  .cn-steps[data-orientation="vertical"] .cn-step[data-status="done"]:not(:last-child)::after {
+    background-color: var(--color-primary);
+  }
+
+  .cn-step-marker {
+    @apply flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold;
+    border-color: var(--color-border);
+    background-color: var(--color-card);
+    color: var(--color-muted-foreground);
+  }
+  .cn-step-marker :where(svg:not([class*="size-"])) {
+    @apply size-4;
+  }
+
+  .cn-step[data-status="done"] .cn-step-marker {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+  .cn-step[data-status="current"] .cn-step-marker {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-primary) 15%, transparent);
+  }
+  .cn-step[data-status="error"] .cn-step-marker {
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+    color: var(--color-danger-foreground);
+  }
+
+  .cn-step-text {
+    @apply flex min-w-0 flex-col;
+  }
+
+  .cn-step-label {
+    @apply text-sm font-medium text-muted-foreground;
+  }
+  .cn-step[data-status="done"] .cn-step-label,
+  .cn-step[data-status="current"] .cn-step-label {
+    @apply text-foreground;
+  }
+  .cn-step[data-status="error"] .cn-step-label {
+    color: var(--color-danger-hover);
+  }
+
+  .cn-step-description {
+    @apply text-xs text-muted-foreground;
+  }
+
+  /* ========================================================================
+   * MARK: 文字数カウンタ（Input / Textarea の showCount）
+   * ====================================================================== */
+
+  .cn-input-count {
+    @apply text-xs tabular-nums text-muted-foreground;
+  }
+
+  .cn-textarea-wrapper {
+    @apply relative flex flex-col gap-1;
+  }
+
+  .cn-textarea-count {
+    @apply self-end text-xs tabular-nums text-muted-foreground;
+  }
+  .cn-textarea-count[data-over] {
+    color: var(--color-danger);
+  }
+
   /* cn-pagination / cn-pagination-link / cn-pagination-*-text および
    * cn-field-orientation-* は .tsx 側にインラインで実体があるマーカークラス。
    * 上流も CSS 定義を持たないため、ここでも定義しない。 */

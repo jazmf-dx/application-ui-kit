@@ -88,7 +88,7 @@ export type {
 } from "./ButtonGroup";
 
 export { Table } from "./Table";
-export type { TableProps, TableColumn } from "./Table";
+export type { TableProps, TableColumn, TableSort, TableSelection, TableRowKey } from "./Table";
 
 export { FormField } from "./FormField";
 export type { FormFieldProps } from "./FormField";
@@ -151,6 +151,17 @@ export type { StatProps, StatTone } from "./Stat";
 export { FileDropZone } from "./FileDropZone";
 export type { FileDropZoneProps } from "./FileDropZone";
 
+export { Steps } from "./Steps";
+export type { StepsProps, StepItem, StepStatus } from "./Steps";
+
+export { DescriptionList } from "./DescriptionList";
+export type { DescriptionListProps, DescriptionItem } from "./DescriptionList";
+
+/* Textarea は shadcn/ui の re-export から移動した（error と文字数カウンタを持つため）。
+ * 名前は変わらないので利用側の import はそのまま動く。 */
+export { Textarea } from "./Textarea";
+export type { TextareaProps } from "./Textarea";
+
 /* ==========================================================================
  * shadcn/ui をそのまま公開しているもの
  *
@@ -174,7 +185,17 @@ export {
   CardFooter,
 } from "../ui/card";
 export { Spinner } from "../ui/spinner";
-export { Textarea } from "../ui/textarea";
+export { Switch } from "../ui/switch";
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+export {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "../ui/popover";
+export { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarImage } from "../ui/avatar";
 export {
   Progress,
   ProgressTrack,

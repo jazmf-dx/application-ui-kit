@@ -28,6 +28,12 @@ export interface InputProps extends Omit<React.ComponentPropsWithoutRef<"input">
 
   /** 入力欄の後ろに表示するアイコン・ボタン（クリアボタン等） */
   rightIcon?: React.ReactNode;
+
+  /**
+   * 文字数カウンタ（「12 / 50」）を入力欄の右端に出す。`maxLength` と組で使う。
+   * @default false
+   */
+  showCount?: boolean;
 }
 
 /**
@@ -57,7 +63,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       error = false,
       leftIcon,
       rightIcon,
+      showCount = false,
       type = "text",
+      maxLength,
+      value,
+      defaultValue,
+      onChange,
       /* FormField は error が無いときも aria-invalid: undefined を
        * 渡してくる。rest spread に混ぜるとこちらが立てた値を消すため、
        * 明示的に受け取って合成する（ButtonGroup と同じ理由）。 */
@@ -70,14 +81,37 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     // 色と支援技術への伝達を 1 つの属性に束ねられるため、独自クラスは足さない。
     const invalid = ariaInvalid || error || undefined;
 
-    // アイコンがなければ余計な wrapper を作らない（レイアウトへの影響を避ける）
-    if (!leftIcon && !rightIcon) {
+    // 文字数カウンタ（controlled / uncontrolled の両方に対応）
+    const [uncontrolledLength, setUncontrolledLength] = React.useState(
+      String(defaultValue ?? "").length,
+    );
+    const length = value !== undefined ? String(value).length : uncontrolledLength;
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (value === undefined) setUncontrolledLength(event.target.value.length);
+      onChange?.(event);
+    };
+    const counter = showCount ? (
+      <span className="cn-input-count" aria-live="polite">
+        {maxLength !== undefined ? `${length} / ${maxLength}` : `${length} 文字`}
+      </span>
+    ) : null;
+
+    const valueProps = {
+      maxLength,
+      value,
+      defaultValue,
+      onChange: showCount ? handleChange : onChange,
+    };
+
+    // アイコンもカウンタもなければ余計な wrapper を作らない（レイアウトへの影響を避ける）
+    if (!leftIcon && !rightIcon && !counter) {
       return (
         <InputPrimitive
           ref={ref}
           type={type}
           aria-invalid={invalid}
           className={className}
+          {...valueProps}
           {...props}
         />
       );
@@ -90,8 +124,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {leftIcon}
           </InputGroupAddon>
         )}
-        <InputGroupInput ref={ref} type={type} aria-invalid={invalid} {...props} />
-        {rightIcon && <InputGroupAddon align="inline-end">{rightIcon}</InputGroupAddon>}
+        <InputGroupInput ref={ref} type={type} aria-invalid={invalid} {...valueProps} {...props} />
+        {(rightIcon || counter) && (
+          <InputGroupAddon align="inline-end">
+            {counter}
+            {rightIcon}
+          </InputGroupAddon>
+        )}
       </InputGroup>
     );
   },

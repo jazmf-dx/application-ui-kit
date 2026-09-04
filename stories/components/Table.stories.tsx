@@ -2,11 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MoreVertical } from "lucide-react";
 import * as React from "react";
 import {
+  Badge,
+  type BadgeTone,
   Button,
   Checkbox,
   Dropdown,
   Table,
   type TableColumn,
+  type TableSort,
 } from "../../components/application";
 import { Section, Showcase } from "../_showcase";
 
@@ -19,10 +22,10 @@ type Request = {
   amount: number;
 };
 
-const STATUS_LABEL: Record<Request["status"], { label: string; cls: string }> = {
-  new: { label: "未対応", cls: "bg-yellow-50 text-yellow-600" },
-  in_progress: { label: "対応中", cls: "bg-sky-50 text-sky-500" },
-  done: { label: "完了", cls: "bg-emerald-50 text-emerald-600" },
+const STATUS_LABEL: Record<Request["status"], { label: string; tone: BadgeTone }> = {
+  new: { label: "未対応", tone: "new" },
+  in_progress: { label: "対応中", tone: "active" },
+  done: { label: "完了", tone: "done" },
 };
 
 const ROWS: Request[] = [
@@ -72,9 +75,7 @@ const COLUMNS: TableColumn<Request>[] = [
     key: "status",
     header: "ステータス",
     className: "w-28",
-    cell: (r) => (
-      <span className={`badge ${STATUS_LABEL[r.status].cls}`}>{STATUS_LABEL[r.status].label}</span>
-    ),
+    cell: (r) => <Badge tone={STATUS_LABEL[r.status].tone}>{STATUS_LABEL[r.status].label}</Badge>,
   },
   { key: "applicant", header: "申請者", className: "w-32", cell: (r) => r.applicant },
   {
@@ -155,6 +156,11 @@ type TableColumn<T> = {
   同じ画面に表が複数あるときは付けたほうが区別できる
 - 横スクロールは内部の \`overflow-x-auto\` が受ける。列を詰め込みすぎないこと
 - モバイルでは列数を減らす検討をする（\`className\` に \`hidden md:table-cell\` を付ける）
+- **並び替えはロジックを持たない。** 列に \`sortable\`、Table に \`sort\` / \`onSortChange\` を渡すと
+  ヘッダーがボタンになり矢印と \`aria-sort\` を描く。rows を並び替えるのは呼び出し側（またはサーバー）
+- **行選択は \`selection\`（\`rowKey\` 必須）。** 選択中の key 一式で \`onChange\` が呼ばれる。
+  一括操作のボタンは表の**上**に置く
+- **固定ヘッダは \`stickyHeader\` + \`maxHeight\`。** 表がスクロール容器になるため高さ制限が要る
         `,
       },
     },
@@ -424,4 +430,82 @@ export const Responsive: Story = {
   parameters: {
     viewport: { defaultViewport: "mobile" },
   },
+};
+
+/**
+ * 並び替えの状態表示。Table は矢印と aria-sort を描くだけで、rows の並び替えは画面側。
+ * サーバーで並び替える画面では onSortChange で URL（?sort=&dir=）を書き換えて再取得する。
+ */
+export const Sortable: Story = {
+  render: () => {
+    const [sort, setSort] = React.useState<TableSort | null>({ key: "amount", direction: "desc" });
+    const sortedRows = React.useMemo(() => {
+      if (!sort) return ROWS;
+      const dir = sort.direction === "asc" ? 1 : -1;
+      return [...ROWS].sort((a, b) => {
+        const av = a[sort.key as keyof Request];
+        const bv = b[sort.key as keyof Request];
+        return (av > bv ? 1 : av < bv ? -1 : 0) * dir;
+      });
+    }, [sort]);
+    const columns: TableColumn<Request>[] = COLUMNS.map((c) =>
+      c.key === "code" || c.key === "amount" || c.key === "applicant" ? { ...c, sortable: true } : c,
+    );
+    return (
+      <Table<Request>
+        columns={columns}
+        rows={sortedRows}
+        rowKey={(r) => r.id}
+        sort={sort}
+        onSortChange={setSort}
+        caption="申請の一覧（並び替え可能）"
+      />
+    );
+  },
+};
+
+/**
+ * 行選択。`selection` を渡すと先頭に選択列が付き、全選択（中間状態つき）も部品が持つ。
+ * 選択に対する操作は表の上に置く。
+ */
+export const Selectable: Story = {
+  render: () => {
+    const [selected, setSelected] = React.useState<(string | number)[]>([2]);
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm text-muted-foreground">{selected.length} 件を選択中</p>
+          <Button variant="danger" size="sm" disabled={selected.length === 0}>
+            一括削除
+          </Button>
+        </div>
+        <Table<Request>
+          columns={COLUMNS}
+          rows={ROWS}
+          rowKey={(r) => r.id}
+          selection={{
+            selectedKeys: selected,
+            onChange: setSelected,
+            isRowSelectable: (r) => r.status !== "done",
+            ariaLabel: (r) => `${r.title} を選択`,
+          }}
+          caption="申請の一覧（選択可能。完了は選べない）"
+        />
+      </div>
+    );
+  },
+};
+
+/** 固定ヘッダ。表がスクロール容器になるので maxHeight と組で使う。 */
+export const StickyHeader: Story = {
+  render: () => (
+    <Table<Request>
+      columns={COLUMNS}
+      rows={[...ROWS, ...ROWS, ...ROWS].map((r, i) => ({ ...r, id: i + 1, code: `SYS-2026-${String(i + 1).padStart(4, "0")}` }))}
+      rowKey={(r) => r.id}
+      stickyHeader
+      maxHeight={240}
+      caption="申請の一覧（固定ヘッダ）"
+    />
+  ),
 };

@@ -94,6 +94,18 @@ describe("tokens/classes.css（テンプレート用クラスの公開契約）"
     },
   );
 
+  it("input.switch は checked で primary、ノブは ::before で描く", () => {
+    const body = ruleBody('input[type="checkbox"].switch', classesCss);
+    expect(body).toMatch(/appearance-none/);
+    const start = classesCss.indexOf('input[type="checkbox"].switch {');
+    const block = classesCss.slice(
+      start,
+      classesCss.indexOf('input[type="checkbox"].switch-sm', start),
+    );
+    expect(block).toMatch(/&:checked \{\s*background-color:\s*var\(--color-primary\)/);
+    expect(block).toMatch(/::before/);
+  });
+
   /* field-visibility Island が評価するまで data-visible-when の塊を描かない。 */
   it("data-visible-when の FOUC 抑止ルールを持つ", () => {
     expect(classesCss).toMatch(/\[data-visible-when\]:not\(\[data-visible-when-ready\]\)/);
@@ -190,6 +202,12 @@ describe("tokens/components.css", () => {
       [".cn-breadcrumb-page", '.breadcrumbs [aria-current="page"]'],
       [".cn-page-header-title", ".page-header-title"],
       [".cn-stat-value", ".stat-value"],
+      [".cn-switch", 'input[type="checkbox"].switch'],
+      [".cn-pagination-summary", ".pagination-summary"],
+      [".cn-description-list", ".description-list"],
+      [".cn-steps", ".steps"],
+      [".cn-step-marker", ".step-marker"],
+      [".cn-table-container-sticky", ".data-table-scroll"],
     ])("%s（React）と %s（テンプレート）の両方が定義されている", (cnSelector, templateSelector) => {
       expect(css.includes(`${cnSelector} {`), `${cnSelector} が無い`).toBe(true);
       expect(classesCss.includes(`${templateSelector} {`), `${templateSelector} が無い`).toBe(true);

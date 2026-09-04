@@ -7,9 +7,12 @@ import {
   AccordionItem,
   AccordionTrigger,
   Alert,
+  Avatar,
+  AvatarFallback,
   Badge,
   Breadcrumbs,
   Button,
+  DescriptionList,
   ButtonGroup,
   Checkbox,
   Combobox,
@@ -54,7 +57,13 @@ import {
   Separator,
   Spinner,
   Stat,
+  Steps,
+  Switch,
   Textarea,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "../../components/application";
 import { Cluster, Grid, Labeled, Section, Showcase, Stack } from "../_showcase";
 
@@ -240,6 +249,12 @@ export const AllComponents: Story = {
                 description="PDF のみ。10MB まで"
               />
             </Labeled>
+            <Labeled label="Switch（shadcn/ui）">
+              <div className="flex items-center gap-2">
+                <Switch id="gallery-switch" defaultChecked />
+                <Label htmlFor="gallery-switch">公開する</Label>
+              </div>
+            </Labeled>
             <Labeled label="FormField">
               <FormField label="件名" required error="件名は必須です">
                 <Input error defaultValue="" />
@@ -257,6 +272,16 @@ export const AllComponents: Story = {
               <Alert tone="warning" title="通知先が設定されていません">
                 設定するまで担当者へメールが届きません。
               </Alert>
+            </Labeled>
+            <Labeled label="Tooltip（shadcn/ui）">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger render={<Button variant="secondary" size="sm" />}>
+                    ホバーして表示
+                  </TooltipTrigger>
+                  <TooltipContent>短い補足</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </Labeled>
             <Labeled label="toast">
               <Cluster>
@@ -318,6 +343,31 @@ export const AllComponents: Story = {
             <Grid className="sm:grid-cols-3">
               <Labeled label="Stat">
                 <Stat label="未対応" value="12" unit="件" delta="+3 前週比" tone="negative" />
+              </Labeled>
+              <Labeled label="DescriptionList">
+                <DescriptionList
+                  items={[
+                    { term: "申請番号", description: "SYS-2026-0001" },
+                    { term: "申請者", description: "山田 太郎" },
+                    { term: "承認日", description: null },
+                  ]}
+                />
+              </Labeled>
+              <Labeled label="Steps">
+                <Steps items={[{ label: "取り込み" }, { label: "加工" }, { label: "出力" }]} current={1} />
+              </Labeled>
+              <Labeled label="Avatar（shadcn/ui）">
+                <Cluster>
+                  <Avatar size="sm">
+                    <AvatarFallback>山</AvatarFallback>
+                  </Avatar>
+                  <Avatar>
+                    <AvatarFallback>山</AvatarFallback>
+                  </Avatar>
+                  <Avatar size="lg">
+                    <AvatarFallback>山</AvatarFallback>
+                  </Avatar>
+                </Cluster>
               </Labeled>
               <Labeled label="Badge">
                 <Cluster>

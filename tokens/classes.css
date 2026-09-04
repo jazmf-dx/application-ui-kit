@@ -629,6 +629,358 @@
   }
 
   /* ========================================
+   * MARK: Switch — React の <Switch> と 1:1
+   *
+   * <label class="flex items-center gap-2">
+   *   <input type="checkbox" class="switch" name="is_public" checked>
+   *   <span>公開する</span>
+   * </label>
+   *
+   * 即時反映の ON / OFF に使う。送信で反映するものは素のチェックボックス。
+   * .toggle という名前は使わない（Base UI の Toggle = 押しボタンと混同するため）。
+   * ======================================== */
+
+  input[type="checkbox"].switch {
+    @apply relative inline-block h-5 w-9 shrink-0 cursor-pointer appearance-none rounded-full
+           border border-transparent align-middle transition-colors;
+    background-color: var(--color-input);
+    &::before {
+      content: "";
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 9999px;
+      background-color: var(--color-background);
+      box-shadow: 0 1px 2px rgb(0 0 0 / 0.15);
+      transition: transform var(--motion-duration-fast) var(--motion-ease-default);
+    }
+    &:checked {
+      background-color: var(--color-primary);
+      &::before {
+        transform: translateX(1rem);
+      }
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: 2px;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      background-color: var(--color-disabled);
+      &::before {
+        background-color: var(--color-disabled-foreground);
+      }
+    }
+  }
+
+  input[type="checkbox"].switch-sm {
+    @apply h-4 w-7;
+    &::before {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+    &:checked::before {
+      transform: translateX(0.75rem);
+    }
+  }
+
+  /* ========================================
+   * MARK: Pagination — React の <Pagination> と 1:1
+   *
+   * <nav class="pagination" aria-label="ページネーション">
+   *   <p class="pagination-summary">238 件中 21–40 件</p>
+   *   <ul class="pagination-list">
+   *     <li><a class="pagination-item" href="?page=1" aria-label="前のページ">‹</a></li>
+   *     <li><a class="pagination-item" href="?page=1">1</a></li>
+   *     <li><span class="pagination-item" aria-current="page">2</span></li>
+   *     <li><span class="pagination-ellipsis">…</span></li>
+   *     <li><a class="pagination-item" href="?page=12">12</a></li>
+   *     <li><span class="pagination-item" aria-disabled="true">›</span></li>
+   *   </ul>
+   * </nav>
+   *
+   * サーバーが描くページ送り。並び替え・絞り込みの条件は URL に載せる（一覧画面 Standard §3）。
+   * ======================================== */
+
+  .pagination {
+    @apply flex flex-wrap items-center justify-between gap-3 text-sm;
+  }
+
+  .pagination-summary {
+    @apply m-0 tabular-nums;
+    color: var(--color-muted-foreground);
+  }
+
+  .pagination-list {
+    @apply m-0 flex list-none items-center gap-1 p-0;
+  }
+
+  .pagination-item {
+    @apply inline-flex h-7 min-w-7 items-center justify-center rounded-lg px-2 text-sm font-medium
+           transition-colors;
+    color: var(--color-foreground);
+    &:hover {
+      background-color: var(--color-accent);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: 2px;
+    }
+    &[aria-current="page"] {
+      background-color: var(--color-primary);
+      color: var(--color-primary-foreground);
+    }
+    &:disabled,
+    &[aria-disabled="true"] {
+      pointer-events: none;
+      color: var(--color-disabled-foreground);
+    }
+  }
+
+  .pagination-ellipsis {
+    @apply inline-flex h-7 min-w-7 items-center justify-center text-sm;
+    color: var(--color-muted-foreground);
+  }
+
+  .pagination-size {
+    @apply inline-flex items-center gap-2 text-sm;
+    color: var(--color-muted-foreground);
+    & > select {
+      @apply h-7 rounded-lg px-2 text-sm;
+      color: var(--color-foreground);
+      background-color: var(--color-card);
+      border: 1px solid var(--color-input);
+    }
+  }
+
+  /* ========================================
+   * MARK: data-table の並び替え・固定ヘッダ・選択行 — React の Table の sort / stickyHeader / selection と 1:1
+   *
+   * <th aria-sort="ascending"><a href="?sort=name&dir=desc">名前</a></th>
+   * <th aria-sort="none"><a href="?sort=amount&dir=asc">金額</a></th>
+   *
+   * 並び替えはサーバー側。ここは「どの列がどちら向きか」の表示だけ。
+   * 固定ヘッダは .data-table を包む要素に .data-table-scroll を付け、高さを与える。
+   * ======================================== */
+
+  .data-table th[aria-sort] {
+    padding: 0;
+  }
+
+  .data-table th[aria-sort] > :is(a, button) {
+    @apply inline-flex w-full items-center gap-1 px-4 py-2.5 text-left;
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      color: var(--color-foreground);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: -2px;
+    }
+    &::after {
+      content: "\2195";
+      font-size: 0.75rem;
+      opacity: 0.5;
+    }
+  }
+
+  .data-table th[aria-sort="ascending"] > :is(a, button) {
+    color: var(--color-foreground);
+    &::after {
+      content: "\2191";
+      opacity: 1;
+    }
+  }
+
+  .data-table th[aria-sort="descending"] > :is(a, button) {
+    color: var(--color-foreground);
+    &::after {
+      content: "\2193";
+      opacity: 1;
+    }
+  }
+
+  .data-table-scroll {
+    @apply overflow-y-auto;
+    max-height: var(--table-max-height, 60vh);
+  }
+
+  .data-table-scroll .data-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--color-card);
+    box-shadow: inset 0 -1px 0 var(--color-border);
+  }
+
+  .data-table tbody tr[aria-selected="true"] {
+    background-color: var(--color-accent);
+  }
+
+  /* ========================================
+   * MARK: Description List — React の <DescriptionList> と 1:1
+   *
+   * <dl class="description-list" data-columns="2">
+   *   <div><dt>申請番号</dt><dd>SYS-2026-0001</dd></div>
+   *   <div><dt>申請者</dt><dd>山田 太郎</dd></div>
+   *   <div style="grid-column: span 2"><dt>備考</dt><dd>—</dd></div>
+   * </dl>
+   *
+   * data-layout="inline" で項目名の右に値を置く。
+   * ======================================== */
+
+  .description-list {
+    @apply m-0 grid gap-x-6 gap-y-3;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .description-list[data-columns="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .description-list[data-columns="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .description-list > div {
+    @apply min-w-0;
+  }
+
+  .description-list dt {
+    @apply text-xs font-medium;
+    color: var(--color-muted-foreground);
+  }
+
+  .description-list dd {
+    @apply m-0 mt-0.5 break-words text-sm;
+    color: var(--color-foreground);
+  }
+
+  .description-list[data-layout="inline"] > div {
+    @apply grid items-baseline gap-3 border-b py-2;
+    grid-template-columns: minmax(7rem, auto) 1fr;
+    border-color: var(--color-border);
+    & > dd {
+      @apply mt-0;
+    }
+  }
+
+  .description-list .description-list-empty {
+    color: var(--color-muted-foreground);
+  }
+
+  /* ========================================
+   * MARK: Steps — React の <Steps> と 1:1
+   *
+   * <ol class="steps">
+   *   <li class="step step-done"><span class="step-marker">1</span><span class="step-text"><span class="step-label">取り込み</span></span></li>
+   *   <li class="step step-current" aria-current="step"><span class="step-marker">2</span><span class="step-text"><span class="step-label">加工</span><span class="step-description">列を整える</span></span></li>
+   *   <li class="step"><span class="step-marker">3</span><span class="step-text"><span class="step-label">出力</span></span></li>
+   * </ol>
+   *
+   * .steps-vertical で縦並び。状態は step-done / step-current / step-error（無印は未着手）。
+   * ======================================== */
+
+  .steps {
+    @apply m-0 flex list-none gap-2 p-0;
+  }
+
+  .step {
+    @apply relative flex min-w-0 flex-1 flex-col items-center gap-2 text-center;
+  }
+
+  .steps:not(.steps-vertical) .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 0.875rem;
+    left: calc(50% + 1.125rem);
+    right: calc(-50% + 1.125rem);
+    height: 2px;
+    background-color: var(--color-border);
+  }
+
+  .steps:not(.steps-vertical) .step-done:not(:last-child)::after {
+    background-color: var(--color-primary);
+  }
+
+  .steps-vertical {
+    @apply flex-col gap-0;
+  }
+
+  .steps-vertical .step {
+    @apply flex-row items-start gap-3 pb-4 text-left;
+  }
+
+  .steps-vertical .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 2rem;
+    bottom: 0.25rem;
+    left: calc(0.875rem - 1px);
+    width: 2px;
+    background-color: var(--color-border);
+  }
+
+  .steps-vertical .step-done:not(:last-child)::after {
+    background-color: var(--color-primary);
+  }
+
+  .step-marker {
+    @apply flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold;
+    border-color: var(--color-border);
+    background-color: var(--color-card);
+    color: var(--color-muted-foreground);
+  }
+
+  .step-marker > svg {
+    @apply size-4;
+  }
+
+  .step-done .step-marker {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+
+  .step-current .step-marker {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-primary) 15%, transparent);
+  }
+
+  .step-error .step-marker {
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+    color: var(--color-danger-foreground);
+  }
+
+  .step-text {
+    @apply flex min-w-0 flex-col;
+  }
+
+  .step-label {
+    @apply text-sm font-medium;
+    color: var(--color-muted-foreground);
+  }
+
+  .step-done .step-label,
+  .step-current .step-label {
+    color: var(--color-foreground);
+  }
+
+  .step-error .step-label {
+    color: var(--color-danger-hover);
+  }
+
+  .step-description {
+    @apply text-xs;
+    color: var(--color-muted-foreground);
+  }
+
+  /* ========================================
    * MARK: field-visibility Island の初期描画（FOUC 抑止）
    *
    * data-visible-when を持つ塊は、Island が条件を評価して

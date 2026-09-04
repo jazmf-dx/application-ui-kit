@@ -27,7 +27,12 @@ React コンポーネントの中ではこれらのクラスを書かず、対�
     [<Code>data-table</Code>, <Code>Table</Code>, '一覧'],
     [<Code>tabs / tab / tab-active</Code>, <><Code>Tabs</Code> / Islands <Code>tabs</Code></>, '画面内の切替'],
     [<Code>disclosure</Code>, <><Code>Accordion / Collapsible</Code> / Islands <Code>disclosure</Code></>, '開閉（details 要素）'],
-    [<Code>avatar-sm / avatar-md / avatar-lg</Code>, '—', 'アバター（React 版は予定）'],
+    [<Code>switch / switch-sm</Code>, <Code>Switch</Code>, '即時反映の ON / OFF（input[type=checkbox]）'],
+    [<Code>pagination / pagination-summary / pagination-list / pagination-item</Code>, <Code>Pagination</Code>, 'ページ送り・件数表記'],
+    [<Code>data-table th[aria-sort] / data-table-scroll</Code>, <><Code>Table</Code> の sort / stickyHeader</>, '並び替えの状態表示・固定ヘッダ'],
+    [<Code>description-list</Code>, <Code>DescriptionList</Code>, '詳細画面の項目名と値'],
+    [<Code>steps / step / step-done / step-current / step-error</Code>, <Code>Steps</Code>, '手順の進み具合'],
+    [<Code>avatar-sm / avatar-md / avatar-lg</Code>, <Code>Avatar</Code>, 'アバター（20 / 28 / 36px）'],
   ]}
 />
 
@@ -151,6 +156,57 @@ React コンポーネントの中ではこれらのクラスを書かず、対�
   note="切替の動作は Islands の tabs（はじめに/Django Islands）が持つ。ここは見た目だけ。選択中は tab-active か aria-selected=true のどちらでも当たる。"
 />
 
+## スイッチ
+
+<ClassSample
+  sample={`<label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" class="switch" checked> 公開する</label>
+<label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" class="switch switch-sm"> メール通知</label>
+<label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" class="switch" disabled> 無効</label>`}
+  note="押した瞬間に保存される ON / OFF に使う（hx-post で即時保存）。送信でまとめて保存する項目は素のチェックボックス。"
+/>
+
+## ページ送り
+
+<ClassSample
+  sample={`<nav class="pagination" aria-label="ページネーション" style="width: 100%">
+  <p class="pagination-summary">238 件中 21–40 件</p>
+  <ul class="pagination-list">
+    <li><a class="pagination-item" href="#" aria-label="前のページ">‹</a></li>
+    <li><a class="pagination-item" href="#">1</a></li>
+    <li><span class="pagination-item" aria-current="page">2</span></li>
+    <li><a class="pagination-item" href="#">3</a></li>
+    <li><span class="pagination-ellipsis">…</span></li>
+    <li><a class="pagination-item" href="#">12</a></li>
+    <li><a class="pagination-item" href="#" aria-label="次のページ">›</a></li>
+  </ul>
+</nav>`}
+  note="ページ番号・並び替え・絞り込みは URL の query に載せる（一覧画面 Standard §3）。表示件数の切替は pagination-size の select。"
+/>
+
+## 手順（ステッパー）
+
+<ClassSample
+  sample={`<ol class="steps" style="width: 100%">
+  <li class="step step-done"><span class="step-marker">1</span><span class="step-text"><span class="step-label">取り込み</span><span class="step-description">CSV を選ぶ</span></span></li>
+  <li class="step step-current" aria-current="step"><span class="step-marker">2</span><span class="step-text"><span class="step-label">加工</span><span class="step-description">列を整える</span></span></li>
+  <li class="step"><span class="step-marker">3</span><span class="step-text"><span class="step-label">出力</span></span></li>
+</ol>`}
+  note="状態は step-done / step-current / step-error（無印は未着手）。steps-vertical で縦並び。"
+/>
+
+## 項目名と値（詳細画面）
+
+<ClassSample
+  sample={`<dl class="description-list" data-columns="2" style="width: 100%">
+  <div><dt>申請番号</dt><dd>SYS-2026-0001</dd></div>
+  <div><dt>申請者</dt><dd>山田 太郎</dd></div>
+  <div><dt>部署</dt><dd>情報システム部</dd></div>
+  <div><dt>承認日</dt><dd><span class="description-list-empty">—</span></dd></div>
+  <div style="grid-column: span 2"><dt>備考</dt><dd>モニターは 27 インチ 2 台。設置は 9 月第 2 週を希望。</dd></div>
+</dl>`}
+  note="空の値は「—」で描き、行を消さない。data-layout=inline で項目名の右に値。"
+/>
+
 ## 開閉（details）
 
 <ClassSample
@@ -182,4 +238,23 @@ React コンポーネントの中ではこれらのクラスを書かず、対�
   </tbody>
 </table>`}
   note="並び替え・ページングはサーバー側。0 件のときの表示（Empty State）を必ず用意する。"
+/>
+
+<ClassSample
+  sample={`<div class="data-table-scroll" style="--table-max-height: 10rem; width: 100%">
+<table class="data-table">
+  <thead><tr>
+    <th aria-sort="ascending"><a href="#">申請番号</a></th>
+    <th aria-sort="none"><a href="#">件名</a></th>
+    <th>ステータス</th>
+  </tr></thead>
+  <tbody>
+    <tr aria-selected="true"><td>SYS-2026-0001</td><td>備品購入（モニター 2 台）</td><td><span class="badge badge-new">未対応</span></td></tr>
+    <tr><td>SYS-2026-0002</td><td>出張費精算（大阪）</td><td><span class="badge badge-active">対応中</span></td></tr>
+    <tr><td>SYS-2026-0003</td><td>書籍購入</td><td><span class="badge badge-done">完了</span></td></tr>
+    <tr><td>SYS-2026-0004</td><td>研修参加費</td><td><span class="badge badge-done">完了</span></td></tr>
+  </tbody>
+</table>
+</div>`}
+  note="並び替えは th[aria-sort] の中のリンク（サーバーへ ?sort= を送る）。ascending / descending / none で矢印が変わる。固定ヘッダは data-table-scroll で包み --table-max-height を与える。選択行は tr[aria-selected=true]。"
 />

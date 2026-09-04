@@ -37,7 +37,7 @@ application の \`input-field\` クラスと同じ余白（\`px-3.5 py-2.5\`）�
 |---|---|
 | テンプレート（.html）の入力欄 | widget に \`class="input-field"\` を指定 |
 | ラベル・エラー・ヘルプも必要 | \`FormField\` で包む（余白と aria が自動で付く） |
-| 複数行の入力 | \`<textarea className="input-field">\`（React 版は未提供） |
+| 複数行の入力 | \`Textarea\`（error と文字数カウンタも同じ） |
 | 選択肢から選ぶ | \`Select\` |
 | 日付の入力 | \`DatePicker\` |
 | 検索して選ぶ（社員選択など） | \`Combobox\`（React） / ネイティブの \`<select>\`（テンプレート） |

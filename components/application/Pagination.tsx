@@ -7,6 +7,9 @@
  * 自分で組み立てる必要がある。こちらはコールバック（onPageChange）で動く SPA 向けで、
  * 省略記号のレンジ計算を内蔵している。マークアップは shadcn/ui の nav > ul > li に揃える。
  *
+ * `totalCount` を渡すと「N 件中 a–b 件」の件数表記と、`pageSizeOptions` で表示件数の切替も描く。
+ * テンプレート側の `.pagination`（tokens/classes.css）と 1:1。
+ *
  * <important>
  * ページ番号の計算・現在ページの保持は画面側（またはサーバー）の責務。
  * このコンポーネントは見た目とキーボード操作だけを提供する。
@@ -28,14 +31,32 @@ export interface PaginationProps {
   /** 現在のページ（1 始まり） */
   page: number;
 
-  /** 総ページ数 */
-  totalPages: number;
+  /** 総ページ数。省略時は totalCount / pageSize から求める */
+  totalPages?: number;
 
   /** ページが変わったときに呼ばれる */
   onPageChange: (page: number) => void;
 
   /** 現在ページの前後に表示するページ数 */
   siblingCount?: number;
+
+  /** 総件数。渡すと「N 件中 a–b 件」を描く（1 ページでも描く） */
+  totalCount?: number;
+
+  /** 1 ページの件数（totalCount と組で使う） */
+  pageSize?: number;
+
+  /** 表示件数の選択肢。渡すと切替の select を描く */
+  pageSizeOptions?: number[];
+
+  /** 表示件数が変わったときに呼ばれる */
+  onPageSizeChange?: (pageSize: number) => void;
+
+  /**
+   * 件数表記の書式
+   * @default (from, to, total) => `${total} 件中 ${from}–${to} 件`
+   */
+  formatSummary?: (from: number, to: number, total: number) => string;
 
   className?: string;
 }
@@ -59,22 +80,71 @@ function getPageRange(page: number, totalPages: number, siblingCount: number) {
   return range;
 }
 
+function defaultFormatSummary(from: number, to: number, total: number): string {
+  if (total === 0) return "0 件";
+  return `${total.toLocaleString()} 件中 ${from.toLocaleString()}–${to.toLocaleString()} 件`;
+}
+
 /**
  * Pagination コンポーネント
  *
  * @example
  * ```tsx
+ * // ページ送りだけ
  * <Pagination page={page} totalPages={12} onPageChange={setPage} />
+ *
+ * // 件数表記 + 表示件数の切替（totalPages は totalCount / pageSize から求まる）
+ * <Pagination
+ *   page={page}
+ *   totalCount={238}
+ *   pageSize={pageSize}
+ *   pageSizeOptions={[20, 50, 100]}
+ *   onPageChange={setPage}
+ *   onPageSizeChange={setPageSize}
+ * />
  * ```
  */
 export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
-  ({ page, totalPages, onPageChange, siblingCount = 1, className }, ref) => {
-    if (totalPages <= 1) return null;
+  (
+    {
+      page,
+      totalPages,
+      onPageChange,
+      siblingCount = 1,
+      totalCount,
+      pageSize,
+      pageSizeOptions,
+      onPageSizeChange,
+      formatSummary = defaultFormatSummary,
+      className,
+    },
+    ref,
+  ) => {
+    const resolvedTotalPages =
+      totalPages ??
+      (totalCount !== undefined && pageSize
+        ? Math.max(1, Math.ceil(totalCount / pageSize))
+        : undefined);
 
-    const items = getPageRange(page, totalPages, siblingCount);
+    if (resolvedTotalPages === undefined) {
+      console.warn("[Pagination] totalPages か、totalCount と pageSize の組を指定してください");
+      return null;
+    }
 
-    return (
-      <PaginationPrimitive ref={ref} aria-label="ページネーション" className={cn(className)}>
+    const showSummary = totalCount !== undefined;
+    const showSizeSelect = Boolean(pageSizeOptions?.length && onPageSizeChange && pageSize);
+    const showNav = resolvedTotalPages > 1;
+
+    // 件数も切替も無く 1 ページなら、従来どおり何も描かない
+    if (!showSummary && !showSizeSelect && !showNav) return null;
+
+    const from = totalCount && pageSize ? (page - 1) * pageSize + 1 : 0;
+    const to = totalCount && pageSize ? Math.min(page * pageSize, totalCount) : 0;
+
+    const items = getPageRange(page, resolvedTotalPages, siblingCount);
+
+    const nav = (
+      <PaginationPrimitive ref={ref} aria-label="ページネーション">
         <PaginationContent className="gap-1">
           <PaginationItem>
             <Button
@@ -113,7 +183,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
               variant="ghost"
               size="icon-sm"
               aria-label="次のページ"
-              disabled={page >= totalPages}
+              disabled={page >= resolvedTotalPages}
               onClick={() => onPageChange(page + 1)}
             >
               <ChevronRightIcon />
@@ -121,6 +191,38 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           </PaginationItem>
         </PaginationContent>
       </PaginationPrimitive>
+    );
+
+    if (!showSummary && !showSizeSelect) {
+      return <div className={cn("cn-pagination-bar", className)}>{nav}</div>;
+    }
+
+    return (
+      <div className={cn("cn-pagination-bar", className)}>
+        <div className="cn-pagination-meta">
+          {showSummary && (
+            <p className="cn-pagination-summary" aria-live="polite">
+              {formatSummary(from, to, totalCount ?? 0)}
+            </p>
+          )}
+          {showSizeSelect && (
+            <label className="cn-pagination-size">
+              <span>表示件数</span>
+              <select
+                value={pageSize}
+                onChange={(event) => onPageSizeChange?.(Number(event.target.value))}
+              >
+                {pageSizeOptions?.map((size) => (
+                  <option key={size} value={size}>
+                    {size} 件
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+        </div>
+        {showNav && nav}
+      </div>
     );
   },
 );

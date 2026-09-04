@@ -87,11 +87,17 @@ Django + React Islands で実装困難な構成を避ける。Django テンプ�
 | PageHeader / Breadcrumbs | 画面の見出し領域（見出し・説明・主操作・タブ）と現在位置 |
 | Stat | KPI・統計タイル（ラベル・値・単位・増減） |
 | FileDropZone | ファイルの選択・ドロップ・事前チェック（種類・サイズ・件数）。Django の input と組むなら Islands の `file-drop-zone` |
+| Steps | 手順の進み具合（done / current / error / upcoming）。ウィザードや申請フロー |
+| DescriptionList | 詳細画面の項目名と値。空は「—」 |
+| Textarea | 複数行入力。`error` と `maxLength` + `showCount` の文字数カウンタ（Input も `showCount` を持つ） |
+| Table（`sort` / `selection` / `stickyHeader`） | 並び替えの状態表示（ロジックは呼び出し側）、行選択、固定ヘッダ |
+| Pagination（`totalCount` / `pageSizeOptions`） | 件数表記「N 件中 a–b 件」と表示件数の切替 |
 | Dropdown | メニュー |
 | ThemeToggle | ライト/ダーク切替 |
 
-**shadcn/ui をそのまま公開している部品:** Card / Spinner / Textarea / Progress /
-Empty / Item / Field / Label / Separator / Accordion / Collapsible（API は shadcn/ui のドキュメントと同じ）。
+**shadcn/ui をそのまま公開している部品:** Card / Spinner / Progress /
+Empty / Item / Field / Label / Separator / Accordion / Collapsible / Switch / Tooltip / Popover / Avatar
+（API は shadcn/ui のドキュメントと同じ）。
 `FieldSet` はこちらではなく上の表にある。グループ入力のラベル・エラー配置を
 引き受ける実装をこのキットが持つため。
 
@@ -112,7 +118,13 @@ Empty / Item / Field / Label / Separator / Accordion / Collapsible（API は sha
 | `.disclosure`（`<details>`） | Accordion / Collapsible。件数の動的更新が要るなら Islands `disclosure` | 開閉 |
 | `.tabs` / `.tab` / `.tab-active` | Tabs（React の中身）/ Islands `tabs`（サーバー描画パネルの切替） | 画面内の切替 |
 | — | FileDropZone / Islands `file-drop-zone` | ファイル添付（テンプレートでは Island を使う） |
-| `.switch` / `.pagination` / `.description-list` / `.steps`（予定） | Switch / Pagination / DescriptionList / Steps | フェーズ 3 で追加 |
+| `input[type=checkbox].switch`（`.switch-sm`） | Switch | 即時反映の ON / OFF |
+| `.pagination` / `.pagination-summary` / `.pagination-list` / `.pagination-item` | Pagination | サーバーが描くページ送り・件数表記 |
+| `.data-table th[aria-sort]` / `.data-table-scroll` / `tr[aria-selected]` | Table の `sort` / `stickyHeader` / `selection` | 並び替えの状態表示・固定ヘッダ・選択行 |
+| `.description-list` | DescriptionList | 詳細画面の項目名と値 |
+| `.steps` / `.step` / `.step-done` / `.step-current` / `.step-error` | Steps | 手順の進み具合 |
+| `textarea.input-field` | Textarea | 複数行入力（React 版は文字数カウンタも持つ） |
+| `.avatar-sm` / `.avatar-md` / `.avatar-lg` | Avatar | 人・システムの丸いアイコン（20 / 28 / 36px） |
 
 - テンプレートでは上のクラスを使い、同じ部品を raw utility の組み合わせや独自 CSS で再実装しない。
   自前の同名クラスがある場合は `styles.css` を読み込んだうえで削除する（残すと読み込み順で自前が勝つ）

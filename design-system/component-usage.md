@@ -18,6 +18,13 @@
 | 画面内の切替 | Tabs（React の中身）。サーバーが描いたパネルなら Islands の `tabs` + `.tabs` |
 | 見出し付きの開閉 | Accordion（テンプレートなら `<details class="disclosure">`、件数の動的更新は Islands の `disclosure`） |
 | ファイル添付 | FileDropZone（Django の input には Islands の `file-drop-zone`）。種類・サイズ・件数はここで先に弾く |
+| 即時反映の ON / OFF | Switch（テンプレートなら `input.switch`）。送信で反映するなら Checkbox |
+| 短い補足・アイコンボタンの名前 | Tooltip（`title` 属性は使わない）。操作や長文を含むなら Popover |
+| 手順の進み具合 | Steps。同じ階層の切替は Tabs、進捗率は Progress |
+| 詳細画面の項目名と値 | DescriptionList。値が主役なら Stat |
+| 複数行入力・文字数の上限 | Textarea（`maxLength` + `showCount`）。1 行なら Input の `showCount` |
+| 一覧の並び替え・行選択 | Table の `sort` / `onSortChange` / `selection`。並び替えのロジックは呼び出し側（またはサーバー） |
+| 一覧の件数と表示件数 | Pagination の `totalCount` / `pageSizeOptions` |
 | 削除などの確認（テンプレート側） | base.html の `confirm-host` 1 つ。`hx-confirm` と `confirm-modal` イベントを受ける。ボタンごとの宣言的な指定は `confirm-dialog` |
 | 状態表示 | Badge / ActiveIndicator |
 | 日付入力 | DatePicker |

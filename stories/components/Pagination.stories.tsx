@@ -32,8 +32,8 @@ const meta = {
 
 | 場面 | 代わりに使うもの |
 |---|---|
-| テンプレート（.html）の一覧 | \`includes/molecules/pagination.html\`（既存のサーバーレンダリング版） |
-| 件数が少なくページングが不要 | 使わない（\`totalPages <= 1\` では自動的に何も描画されない） |
+| テンプレート（.html）の一覧 | \`<nav class="pagination">\`（基礎/テンプレート用クラス）。ページ番号は URL の query に載せる |
+| 件数が少なくページングが不要 | \`totalCount\` を渡さなければ \`totalPages <= 1\` で何も描画されない。件数だけ見せたいなら \`totalCount\` を渡す |
 | 無限スクロール | 使わない（別途実装） |
 
 ## 注意事項
@@ -41,6 +41,8 @@ const meta = {
 - ページ番号は **1 始まり**
 - \`totalPages\` が大きい場合は現在ページ周辺だけを表示し、省略記号（…）で省く
 - \`siblingCount\` で現在ページの前後に表示する数を調整できる（既定は 1）
+- \`totalCount\` と \`pageSize\` を渡すと「N 件中 a–b 件」を描き、\`totalPages\` は省略できる
+- \`pageSizeOptions\` + \`onPageSizeChange\` で表示件数の切替を描く。切替時はページを 1 に戻す（呼び出し側）
         `,
       },
     },
